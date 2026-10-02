@@ -1,0 +1,47 @@
+{
+  "scene": {
+    "id": "w1_4f_makerspace",
+    "name": "W1 4F Makerspace",
+    "geometry_status": "approximate_not_surveyed",
+    "notes": "Dimensions and placements are schematic approximations pending a surveyed floor plan."
+  },
+  "map": {
+    "width_m": 20.0,
+    "height_m": 14.0,
+    "resolution_m": 0.25,
+    "origin_m": [0.0, 0.0],
+    "default_occupancy": "FREE"
+  },
+  "obstacles": [
+    {"id": "wall_south", "type": "wall", "rect_m": [0.0, 0.0, 20.0, 0.25]},
+    {"id": "wall_north", "type": "wall", "rect_m": [0.0, 13.75, 20.0, 0.25]},
+    {"id": "wall_west", "type": "wall", "rect_m": [0.0, 0.0, 0.25, 14.0]},
+    {"id": "wall_east_lower", "type": "wall", "rect_m": [19.75, 0.0, 0.25, 5.5]},
+    {"id": "wall_east_upper", "type": "wall", "rect_m": [19.75, 6.5, 0.25, 7.5]},
+    {"id": "partition_vertical_lower", "type": "wall", "rect_m": [8.0, 0.25, 0.25, 5.25]},
+    {"id": "partition_vertical_upper", "type": "wall", "rect_m": [8.0, 6.5, 0.25, 7.25]},
+    {"id": "partition_horizontal_left", "type": "wall", "rect_m": [8.25, 8.0, 2.75, 0.25]},
+    {"id": "partition_horizontal_right", "type": "wall", "rect_m": [12.0, 8.0, 7.75, 0.25]},
+    {"id": "bench_a", "type": "workbench", "rect_m": [2.0, 4.0, 3.5, 1.0]},
+    {"id": "bench_b", "type": "workbench", "rect_m": [2.0, 7.0, 3.5, 1.0]},
+    {"id": "bench_c", "type": "workbench", "rect_m": [10.0, 2.0, 4.0, 1.0]},
+    {"id": "equipment_bank", "type": "equipment", "rect_m": [15.5, 9.5, 2.5, 2.0]}
+  ],
+  "unknown_regions": [],
+  "semantic_objects": [
+    {"id": "door_internal_vertical", "type": "door", "position_m": [8.125, 6.0]},
+    {"id": "door_internal_horizontal", "type": "door", "position_m": [11.5, 8.125]}
+  ],
+  "exits": [
+    {"id": "exit_east", "position_m": [19.25, 6.0]},
+    {"id": "exit_north", "position_m": [10.0, 13.5]}
+  ],
+  "fixed_sensors": [
+    {"id": "sensor_west", "position_m": [4.0, 10.5]},
+    {"id": "sensor_central", "position_m": [10.0, 6.0]},
+    {"id": "sensor_east", "position_m": [16.5, 5.5]}
+  ],
+  "ugv_initial_pose": {"x_m": 1.5, "y_m": 1.5, "yaw_rad": 0.0},
+  "microwave_ignition": {"id": "microwave", "position_m": [3.0, 11.0]}
+}
+

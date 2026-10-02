@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "model_name": "w1_4f_physics_prior",
+  "assumption_status": "synthetic_research_parameters_not_calibrated",
+  "time_step_s": 0.1,
+  "ambient_temperature_c": 22.0,
+  "ventilation_mps": [0.20, 0.05],
+  "diffusion_m2_per_s": {
+    "temperature": 0.060,
+    "smoke": 0.040,
+    "co": 0.038
+  },
+  "decay_per_s": {
+    "smoke": 0.040,
+    "co": 0.030
+  },
+  "temperature_relaxation_per_s": 0.220,
+  "source": {
+    "enabled": true,
+    "source_type": "microwave_electrical_fault",
+    "semantic_id": "microwave",
+    "fire_growth_rate_kw_per_s2": 12.0,
+    "max_heat_release_rate_kw": 360.0,
+    "temperature_gain_c_per_kw_s": 0.065,
+    "smoke_yield_per_kw_s": 0.0035,
+    "co_yield_per_kw_s": 0.0010
+  },
+  "visibility": {
+    "clear_air_visibility_m": 30.0,
+    "smoke_extinction_per_concentration": 1.6
+  },
+  "notes": "Synthetic reduced-order prior with deliberately lower growth, ventilation, diffusion, and yields than ground truth."
+}

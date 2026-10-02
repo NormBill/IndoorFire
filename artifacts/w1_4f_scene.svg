@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="630" viewBox="0 0 900 630">
+<rect width="100%" height="100%" fill="#f7f5ef"/>
+<rect x="0.0" y="618.75" width="900.0" height="11.25" fill="#30343b"/>
+<rect x="0.0" y="0.0" width="900.0" height="11.25" fill="#30343b"/>
+<rect x="0.0" y="0.0" width="11.25" height="630.0" fill="#30343b"/>
+<rect x="888.75" y="382.5" width="11.25" height="247.5" fill="#30343b"/>
+<rect x="888.75" y="0.0" width="11.25" height="337.5" fill="#30343b"/>
+<rect x="360.0" y="382.5" width="11.25" height="236.25" fill="#30343b"/>
+<rect x="360.0" y="11.25" width="11.25" height="326.25" fill="#30343b"/>
+<rect x="371.25" y="258.75" width="123.75" height="11.25" fill="#30343b"/>
+<rect x="540.0" y="258.75" width="348.75" height="11.25" fill="#30343b"/>
+<rect x="90.0" y="405.0" width="157.5" height="45.0" fill="#9b7048"/>
+<text x="94.0" y="420.0" font-size="11" fill="white">bench_a</text>
+<rect x="90.0" y="270.0" width="157.5" height="45.0" fill="#9b7048"/>
+<text x="94.0" y="285.0" font-size="11" fill="white">bench_b</text>
+<rect x="450.0" y="495.0" width="180.0" height="45.0" fill="#9b7048"/>
+<text x="454.0" y="510.0" font-size="11" fill="white">bench_c</text>
+<rect x="697.5" y="112.5" width="112.5" height="90.0" fill="#64748b"/>
+<text x="701.5" y="127.5" font-size="11" fill="white">equipment_bank</text>
+<circle cx="365.625" cy="360.0" r="8" fill="#d9a441" stroke="white" stroke-width="2"/>
+<text x="375.625" y="364.0" font-size="12" font-family="sans-serif" fill="#111">D: door_internal_vertical</text>
+<circle cx="517.5" cy="264.375" r="8" fill="#d9a441" stroke="white" stroke-width="2"/>
+<text x="527.5" y="268.375" font-size="12" font-family="sans-serif" fill="#111">D: door_internal_horizontal</text>
+<circle cx="866.25" cy="360.0" r="8" fill="#168a45" stroke="white" stroke-width="2"/>
+<text x="876.25" y="364.0" font-size="12" font-family="sans-serif" fill="#111">EXIT: exit_east</text>
+<circle cx="450.0" cy="22.5" r="8" fill="#168a45" stroke="white" stroke-width="2"/>
+<text x="460.0" y="26.5" font-size="12" font-family="sans-serif" fill="#111">EXIT: exit_north</text>
+<circle cx="180.0" cy="157.5" r="8" fill="#2563b9" stroke="white" stroke-width="2"/>
+<text x="190.0" y="161.5" font-size="12" font-family="sans-serif" fill="#111">S: sensor_west</text>
+<circle cx="450.0" cy="360.0" r="8" fill="#2563b9" stroke="white" stroke-width="2"/>
+<text x="460.0" y="364.0" font-size="12" font-family="sans-serif" fill="#111">S: sensor_central</text>
+<circle cx="742.5" cy="382.5" r="8" fill="#2563b9" stroke="white" stroke-width="2"/>
+<text x="752.5" y="386.5" font-size="12" font-family="sans-serif" fill="#111">S: sensor_east</text>
+<circle cx="135.0" cy="135.0" r="8" fill="#d33b32" stroke="white" stroke-width="2"/>
+<text x="145.0" y="139.0" font-size="12" font-family="sans-serif" fill="#111">MW: microwave</text>
+<circle cx="67.5" cy="562.5" r="8" fill="#7c3aed" stroke="white" stroke-width="2"/>
+<text x="77.5" y="566.5" font-size="12" font-family="sans-serif" fill="#111">UGV: ugv_start</text>
+<text x="12" y="24" font-size="18" font-family="sans-serif" font-weight="bold">W1 4F Makerspace (approximate)</text>
+</svg>
