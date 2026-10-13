@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "scenario_id": "p6_hidden_plume_route_change",
+  "scene_config": "scene_w1_4f.yaml",
+  "truth_config": "fire_truth_p6.yaml",
+  "prior_config": "fire_prior_p6.yaml",
+  "hazard_config": "hazard.yaml",
+  "inspection_time_s": 6.0,
+  "random_seed": 20261013,
+  "sensor": {
+    "temperature_std": 0.0,
+    "co_std": 0.0,
+    "smoke_std": 0.0,
+    "visibility_std": 0.0
+  },
+  "uncertainty": {
+    "meaning": "Per-cell diagonal epistemic variance proxy in squared native units; not a calibrated probability distribution.",
+    "temperature_initial": 25.0,
+    "co_initial": 0.01,
+    "smoke_initial": 0.04,
+    "visibility_initial": 25.0
+  },
+  "assimilation": {
+    "gain": 0.90,
+    "kernel_sigma_m": 0.35,
+    "max_radius_m": 0.50,
+    "uncertainty_reduction_fraction": 0.60,
+    "minimum_temperature_c": -273.15
+  },
+  "inspection_waypoint": {
+    "id": "route_a_hidden_plume_probe",
+    "pose": {"x_m": 3.125, "y_m": 9.875, "yaw_rad": 0.0}
+  },
+  "mission": {
+    "entry_start": {"id": "ugv_entry", "position_m": [1.5, 1.5]},
+    "inspection_target": {"id": "microwave_inspection", "position_m": [3.0, 11.0]},
+    "retreat_exit_ids": ["exit_east", "exit_north"]
+  },
+  "planning": {
+    "base_cost": 1.0,
+    "hazard_weight": 50.0,
+    "uncertainty_weight": 0.25,
+    "untenable_hazard_threshold": 0.95,
+    "forbidden_representation": "infinity"
+  },
+  "local_comparison_radius_m": 0.75,
+  "require_route_change": true,
+  "notes": "All P6 parameters are declared before simulation. The high but fixed hazard-to-uncertainty ratio prevents posterior uncertainty reduction from masking the hidden plume; no path-specific penalty or post-hoc tuning is used."
+}

@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "model_name": "w1_4f_p6_physics_prior",
+  "assumption_status": "synthetic_controlled_mismatch_not_calibrated",
+  "time_step_s": 0.1,
+  "ambient_temperature_c": 22.0,
+  "ventilation_mps": [0.0, 0.0],
+  "diffusion_m2_per_s": {
+    "temperature": 0.040,
+    "smoke": 0.040,
+    "co": 0.035
+  },
+  "decay_per_s": {
+    "smoke": 0.050,
+    "co": 0.040
+  },
+  "temperature_relaxation_per_s": 0.250,
+  "source": {
+    "enabled": true,
+    "source_type": "microwave_electrical_fault",
+    "semantic_id": "microwave",
+    "fire_growth_rate_kw_per_s2": 2.0,
+    "max_heat_release_rate_kw": 100.0,
+    "temperature_gain_c_per_kw_s": 0.010,
+    "smoke_yield_per_kw_s": 0.0005,
+    "co_yield_per_kw_s": 0.0001
+  },
+  "visibility": {
+    "clear_air_visibility_m": 30.0,
+    "smoke_extinction_per_concentration": 1.6
+  },
+  "notes": "Synthetic P6 prior: ignition is represented but growth, transport, and yields are deliberately underestimated relative to hidden truth."
+}

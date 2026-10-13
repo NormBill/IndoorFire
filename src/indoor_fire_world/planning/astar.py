@@ -102,6 +102,45 @@ class GridAStarPlanner:
                 )
         return RouteResult.rejected("goal_unreachable")
 
+    def evaluate_path(
+        self,
+        path: tuple[GridCell, ...],
+        planning_cost_field: NDArray[np.floating],
+        forbidden_mask: NDArray[np.bool_],
+        navigation: NavigationLayer,
+        hazard_field: NDArray[np.floating],
+        uncertainty_field: NDArray[np.floating],
+    ) -> RouteResult:
+        """Evaluate a fixed path without searching for or altering a route."""
+        cost = np.asarray(planning_cost_field, dtype=np.float64)
+        forbidden = np.asarray(forbidden_mask, dtype=np.bool_)
+        hazard = np.asarray(hazard_field, dtype=np.float64)
+        uncertainty = np.asarray(uncertainty_field, dtype=np.float64)
+        geometry = navigation.occupancy.geometry
+        shape = (geometry.rows, geometry.cols)
+        if any(array.shape != shape for array in (cost, forbidden, hazard, uncertainty)):
+            raise ValueError("All planning fields must match navigation geometry")
+        if not path:
+            return RouteResult.rejected("path_empty")
+        for index, cell in enumerate(path):
+            if not geometry.contains_cell(cell):
+                return RouteResult.rejected(f"path_cell_{index}_out_of_bounds")
+            if not navigation.is_traversable(cell):
+                return RouteResult.rejected(f"path_cell_{index}_not_traversable")
+            if forbidden[cell] or not math.isfinite(float(cost[cell])):
+                return RouteResult.rejected(f"path_cell_{index}_forbidden")
+            if index > 0:
+                previous = path[index - 1]
+                if abs(cell[0] - previous[0]) + abs(cell[1] - previous[1]) != 1:
+                    return RouteResult.rejected(f"path_step_{index}_not_four_connected")
+        return self._route_result(
+            path,
+            cost,
+            hazard,
+            uncertainty,
+            geometry.resolution_m,
+        )
+
     def _validate_endpoint(
         self,
         name: str,

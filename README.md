@@ -1,9 +1,10 @@
 # IndoorFireWorld
 
-Phases P0-P5 establish a deterministic digital scene, reduced-order fire
+Phases P0-P6 establish a deterministic digital scene, reduced-order fire
 simulation, UGV point sensing, local belief correction, and separate hazard,
 uncertainty, and planning-cost fields for the approximate W1 4F Makerspace,
-followed by risk-aware entry and retreat planning.
+followed by risk-aware entry/retreat planning and a controlled closed-loop
+replanning experiment.
 The authoritative geometry is
 [`configs/scene_w1_4f.yaml`](configs/scene_w1_4f.yaml); the file uses the JSON
 subset of YAML so it can be loaded with the Python standard library and without
@@ -26,6 +27,7 @@ python scripts/run_p3_assimilation_demo.py
 python scripts/run_p4_hazard_demo.py
 python scripts/run_p5_weight_sensitivity.py
 python scripts/run_p5_planning_demo.py
+python scripts/run_p6_closed_loop_demo.py
 ```
 
 The visualization is written to `artifacts/w1_4f_scene.svg`. Use `--show` to
@@ -33,11 +35,12 @@ open it in the default browser.
 
 P2 numerical snapshots are written under `artifacts/p2_fire/`. Development
 machines that cannot execute code should instead synchronize the repository to
-HPC and run `bash scripts/hpc_validate_p5.sh` there. The P3 demo writes its
+HPC and run `bash scripts/hpc_validate_p6.sh` there. The P3 demo writes its
 machine-readable comparison to `artifacts/p3_assimilation/result.json`; the P4
 demo writes arrays and `summary.json` under `artifacts/p4_hazard/`. P5 writes
 the mission result plus JSON/CSV weight-sensitivity summaries under
-`artifacts/p5_planning/`.
+`artifacts/p5_planning/`. P6 writes its causal before/after report to
+`artifacts/p6/summary.json`.
 
 ## Current scope
 
@@ -50,8 +53,32 @@ belief mean while reducing a separate uncertainty field. Hazard and
 planning-cost concepts remain distinct. P4 converts the posterior belief into
 an interpretable physical hazard field, separately normalizes heterogeneous
 uncertainty, and combines both only in a decision-cost field. P5 performs
-static deterministic route search over those precomputed fields. Dynamic route
-switching and active sensing are not implemented.
+static deterministic route search over those precomputed fields. P6 adds one
+controlled, single-observation replan using the same P2-P5 components; it does
+not add a new planning algorithm, continuous/time-dependent route switching, or
+active sensing.
+
+## P6 controlled closed-loop replanning
+
+`configs/p6_closed_loop.yaml` freezes the observation time and location,
+assimilation settings, mission, and planning weights before simulation. Its
+referenced truth and prior fire configs encode a deterministic hidden mismatch:
+the prior underestimates growth, pollutant yields, and plume transport near the
+predefined Route A probe. The fixed planning weights emphasize physical hazard
+over the uncertainty reduction so the observation is not rewarded merely for
+making the local estimate more certain.
+
+The P6 demo first plans Route A from the physics-prior belief. A predefined UGV
+waypoint then samples hidden truth, the existing spatial assimilator updates the
+belief, and the existing hazard, uncertainty, planning-cost, and A* components
+produce the posterior Route B. No hazard cells, path penalties, or weights are
+changed after the observation.
+
+The JSON report includes parameter fingerprints, observation residuals,
+prior/posterior local fields, both optimized missions, and four fixed-path
+counterfactuals: A and B evaluated under both prior and posterior fields. Its
+acceptance block machine-checks the causal chain and requires a route-hash
+change only for this declared controlled scenario.
 
 ## P5 entry and retreat planning
 
