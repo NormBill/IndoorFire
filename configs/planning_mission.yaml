@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "entry_start": {
+    "id": "ugv_entry",
+    "position_m": [1.5, 1.5]
+  },
+  "inspection_target": {
+    "id": "microwave_inspection",
+    "position_m": [3.0, 11.0]
+  },
+  "retreat_exit_ids": ["exit_east", "exit_north"],
+  "weight_sensitivity": {
+    "hazard_weights": [5.0, 10.0, 20.0],
+    "uncertainty_weights": [0.0, 2.0, 5.0]
+  },
+  "notes": "Explicit synthetic P5 mission endpoints. Weight combinations are reported without automatic selection."
+}

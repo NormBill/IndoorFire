@@ -42,8 +42,12 @@ class HazardResult:
             raise ValueError("Hazard severity values must remain in [0, 1]")
         if not np.allclose(arrays[0], np.maximum.reduce(arrays[1:])):
             raise ValueError("Hazard field must equal the maximum modality severity")
-        if not np.all(np.isin(dominant, ("temperature", "co", "smoke", "visibility"))):
+        if not np.all(
+            np.isin(dominant, ("none", "temperature", "co", "smoke", "visibility"))
+        ):
             raise ValueError("Dominant hazard modality contains an unsupported label")
+        if not np.array_equal(dominant == "none", arrays[0] == 0.0):
+            raise ValueError("Dominant hazard modality must be 'none' exactly at zero hazard")
         dominant.setflags(write=False)
         for name, array in zip(names, arrays):
             object.__setattr__(self, name, array)

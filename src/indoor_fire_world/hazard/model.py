@@ -53,9 +53,12 @@ class PhysicalHazardModel:
         stacked = np.stack([severities[name] for name in MODALITIES], axis=0)
         dominant_indices = np.argmax(stacked, axis=0)
         modality_names = np.asarray(MODALITIES)
+        field = np.max(stacked, axis=0)
+        dominant = modality_names[dominant_indices]
+        dominant = np.where(field == 0.0, "none", dominant)
         return HazardResult(
-            field=np.max(stacked, axis=0),
-            dominant_modality=modality_names[dominant_indices],
+            field=field,
+            dominant_modality=dominant,
             **severities,
         )
 
