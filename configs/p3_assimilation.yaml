@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "random_seed": 20261013,
+  "sensor": {
+    "temperature_std": 0.0,
+    "co_std": 0.0,
+    "smoke_std": 0.0,
+    "visibility_std": 0.0
+  },
+  "uncertainty": {
+    "meaning": "Per-cell diagonal epistemic variance proxy in squared native units; not a calibrated probability distribution.",
+    "temperature_initial": 25.0,
+    "co_initial": 0.01,
+    "smoke_initial": 0.04,
+    "visibility_initial": 25.0
+  },
+  "assimilation": {
+    "gain": 0.65,
+    "kernel_sigma_m": 0.75,
+    "max_radius_m": 2.0,
+    "uncertainty_reduction_fraction": 0.70,
+    "minimum_temperature_c": -273.15
+  },
+  "inspection_waypoints": [
+    {
+      "id": "microwave_inspection",
+      "pose": {"x_m": 3.0, "y_m": 11.0, "yaw_rad": 0.0}
+    },
+    {
+      "id": "central_inspection",
+      "pose": {"x_m": 10.0, "y_m": 6.0, "yaw_rad": 0.0}
+    }
+  ],
+  "demo": {
+    "target_timestamp_s": 6.0,
+    "waypoint_id": "microwave_inspection"
+  },
+  "notes": "Synthetic deterministic P3 baseline. Zero default sensor noise isolates assimilation behavior; nonzero seeded noise is supported."
+}

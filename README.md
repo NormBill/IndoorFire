@@ -1,7 +1,8 @@
 # IndoorFireWorld
 
-Phases P0-P2 establish a deterministic digital scene and reduced-order fire
-simulation for the approximate W1 4F Makerspace. The authoritative geometry is
+Phases P0-P3 establish a deterministic digital scene, reduced-order fire
+simulation, UGV point sensing, and local belief correction for the approximate
+W1 4F Makerspace. The authoritative geometry is
 [`configs/scene_w1_4f.yaml`](configs/scene_w1_4f.yaml); the file uses the JSON
 subset of YAML so it can be loaded with the Python standard library and without
 an environment-specific YAML dependency.
@@ -19,6 +20,7 @@ From the repository root:
 python scripts/visualize_w1_scene.py
 python -m unittest discover -s tests -v
 python scripts/run_p2_fire_simulation.py
+python scripts/run_p3_assimilation_demo.py
 ```
 
 The visualization is written to `artifacts/w1_4f_scene.svg`. Use `--show` to
@@ -26,16 +28,40 @@ open it in the default browser.
 
 P2 numerical snapshots are written under `artifacts/p2_fire/`. Development
 machines that cannot execute code should instead synchronize the repository to
-HPC and run `bash scripts/hpc_validate_p2.sh` there.
+HPC and run `bash scripts/hpc_validate_p3.sh` there. The P3 demo writes its
+machine-readable comparison to `artifacts/p3_assimilation/result.json`.
 
 ## Current scope
 
 The `fire` package implements deterministic temperature, smoke, and CO
 transport with visibility derived from smoke. The hidden ground-truth simulator
 and `world_model.PhysicsPrior` are independent instances driven by deliberately
-mismatched synthetic configurations. Belief, uncertainty, hazard, and
-planning-cost concepts remain distinct. No observation assimilation, hazard
-scoring, or planning behavior is implemented.
+mismatched synthetic configurations. A predefined-waypoint UGV can sample an
+immutable truth snapshot, and the deterministic P3 baseline corrects a separate
+belief mean while reducing a separate uncertainty field. Hazard and
+planning-cost concepts remain distinct. No hazard scoring, route planning, or
+active sensing is implemented.
+
+## P3 sensing and correction
+
+`configs/p3_assimilation.yaml` contains sensor standard deviations, random
+seed, initial per-cell uncertainty, predefined inspection waypoints, Gaussian
+kernel parameters, and correction gain. The default controlled demo uses zero
+noise; nonzero noise uses a seeded NumPy generator.
+
+For an observed modality with residual `r`, the posterior mean is
+`mean_post = mean_prior + gain * K(distance) * r`, where
+`K(d) = exp(-d^2 / (2*sigma^2))` inside the configured radius and zero outside.
+Only free cells and observed modalities are updated. CO, smoke, and visibility
+are clamped non-negative; temperature is bounded below by the configured
+physical minimum. Ground-truth and physics-prior visibility remain derived from
+smoke as in P2; the P3 belief keeps visibility as a separate observed estimate
+so a visibility measurement can be corrected without silently changing smoke.
+
+Uncertainty values are diagonal epistemic variance proxies in squared native
+units, not calibrated probabilities. For each observed modality,
+`U_post = U_prior * (1 - reduction_fraction*K)`. They remain non-negative and
+are not used as hazard or planning-cost values.
 
 ## P2 numerical model
 

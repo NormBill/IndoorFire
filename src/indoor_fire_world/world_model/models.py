@@ -1,12 +1,7 @@
-"""Belief container kept independent from hidden simulator truth."""
+"""Compatibility exports for belief-domain models."""
 
-from dataclasses import dataclass
-from indoor_fire_world.fire import FireField
+from .belief import BeliefMean, BeliefState
+from .uncertainty import UncertaintyField
 
-
-@dataclass(frozen=True)
-class BeliefState:
-    timestamp: float
-    fire_field: FireField | None = None
-    uncertainty_field: object | None = None
+__all__ = ["BeliefMean", "BeliefState", "UncertaintyField"]
 
