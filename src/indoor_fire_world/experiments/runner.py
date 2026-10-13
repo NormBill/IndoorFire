@@ -43,10 +43,6 @@ def _snapshot_hash(snapshot: dict[str, Any]) -> str:
 
 def artifact_directory_name(suite: ExperimentSuite, spec: ExperimentSpec) -> str:
     snapshot = _snapshot(suite, spec)
-    snapshot["effective_parameters"] = output.summary["scenario_parameters"]
-    snapshot["planner_field_source"] = output.summary[
-        "planning_field_provenance"
-    ]["planner_field_source"]
     return f"{spec.scenario_id}-{_snapshot_hash(snapshot)[:12]}"
 
 
@@ -221,6 +217,10 @@ def run_experiment(
         random_seed=spec.seed,
     )
     snapshot = _snapshot(suite, spec)
+    snapshot["effective_parameters"] = output.summary["scenario_parameters"]
+    snapshot["planner_field_source"] = output.summary[
+        "planning_field_provenance"
+    ]["planner_field_source"]
     fields = _field_metrics(output)
     routes = _route_metrics(output)
     path_hashes = {
