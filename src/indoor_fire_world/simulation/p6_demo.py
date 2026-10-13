@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 import hashlib
 import json
 import math
@@ -309,10 +309,34 @@ def _local_comparison(
     return records
 
 
-def run_p6_closed_loop_demo(config_path: str | Path) -> P6DemoOutput:
+def run_p6_closed_loop_demo(
+    config_path: str | Path,
+    *,
+    observation_enabled: bool = True,
+    assimilation_enabled: bool = True,
+    oracle_planning: bool = False,
+    truth_parameter_overrides: dict[str, Any] | None = None,
+    sensor_overrides: dict[str, Any] | None = None,
+    assimilation_overrides: dict[str, Any] | None = None,
+    planning_overrides: dict[str, Any] | None = None,
+    random_seed: int | None = None,
+) -> P6DemoOutput:
     parameters = load_p6_parameters(config_path)
+    parameters = replace(
+        parameters,
+        random_seed=parameters.random_seed if random_seed is None else random_seed,
+        sensor=replace(parameters.sensor, **(sensor_overrides or {})),
+        assimilation=replace(
+            parameters.assimilation,
+            **(assimilation_overrides or {}),
+        ),
+        planning=replace(parameters.planning, **(planning_overrides or {})),
+    )
     scene = load_scene(parameters.scene_config)
-    truth_parameters = load_fire_parameters(parameters.truth_config)
+    truth_parameters = replace(
+        load_fire_parameters(parameters.truth_config),
+        **(truth_parameter_overrides or {}),
+    )
     prior_parameters = load_fire_parameters(parameters.prior_config)
     hazard_parameters = load_hazard_parameters(parameters.hazard_config)
     parameter_snapshot = _parameter_snapshot(
@@ -321,6 +345,11 @@ def run_p6_closed_loop_demo(config_path: str | Path) -> P6DemoOutput:
         prior_parameters,
         hazard_parameters,
     )
+    parameter_snapshot["run_controls"] = {
+        "observation_enabled": observation_enabled,
+        "assimilation_enabled": assimilation_enabled,
+        "oracle_planning": oracle_planning,
+    }
     parameters_hash_before = _snapshot_hash(parameter_snapshot)
 
     truth = GroundTruthSimulator(scene, truth_parameters)
@@ -358,15 +387,20 @@ def run_p6_closed_loop_demo(config_path: str | Path) -> P6DemoOutput:
 
     ugv = UGV(scene)
     ugv.move_to(parameters.inspection_waypoint.pose)
-    observation = UGVSensor(
-        scene,
-        parameters.sensor,
-        parameters.random_seed,
-    ).observe(truth.current_state, ugv.pose)
-    posterior_belief = SpatialAssimilator(scene, parameters.assimilation).assimilate(
-        prior_belief,
-        observation,
-    )
+    observation = None
+    if observation_enabled:
+        observation = UGVSensor(
+            scene,
+            parameters.sensor,
+            parameters.random_seed,
+        ).observe(truth.current_state, ugv.pose)
+    if observation is not None and assimilation_enabled:
+        posterior_belief = SpatialAssimilator(
+            scene,
+            parameters.assimilation,
+        ).assimilate(prior_belief, observation)
+    else:
+        posterior_belief = prior_belief
     posterior_fields = _decision_fields(
         posterior_belief,
         hazard_model,
@@ -374,19 +408,41 @@ def run_p6_closed_loop_demo(config_path: str | Path) -> P6DemoOutput:
         cost_model,
         scene,
     )
+    planning_fields = posterior_fields
+    if oracle_planning:
+        zero_uncertainty = replace(
+            parameters.initial_uncertainty,
+            temperature=0.0,
+            co=0.0,
+            smoke=0.0,
+            visibility=0.0,
+            meaning="Perfect-information oracle uses zero epistemic uncertainty.",
+        )
+        truth_belief = initialize_belief(truth.current_state, zero_uncertainty)
+        planning_fields = _decision_fields(
+            truth_belief,
+            hazard_model,
+            uncertainty_model,
+            cost_model,
+            scene,
+        )
     posterior_mission = mission_planner.plan(
-        posterior_fields.cost.field,
-        posterior_fields.cost.forbidden,
-        posterior_fields.hazard.field,
-        posterior_fields.uncertainty.field,
+        planning_fields.cost.field,
+        planning_fields.cost.forbidden,
+        planning_fields.hazard.field,
+        planning_fields.uncertainty.field,
         scene.navigation,
         entry,
         target,
         exits,
     )
 
-    observation_cell = scene.navigation.metric_to_grid(*observation.position)
-    observed = {name: float(getattr(observation, name)) for name in MODALITIES}
+    observation_cell = scene.navigation.metric_to_grid(ugv.pose.x, ugv.pose.y)
+    observed = (
+        {name: float(getattr(observation, name)) for name in MODALITIES}
+        if observation is not None
+        else None
+    )
     prior_prediction = {
         name: float(getattr(prior_belief.mean, name)[observation_cell])
         for name in MODALITIES
@@ -395,12 +451,19 @@ def run_p6_closed_loop_demo(config_path: str | Path) -> P6DemoOutput:
         name: float(getattr(posterior_belief.mean, name)[observation_cell])
         for name in MODALITIES
     }
-    prior_error = {
-        name: abs(observed[name] - prior_prediction[name]) for name in MODALITIES
-    }
-    posterior_error = {
-        name: abs(observed[name] - posterior_prediction[name]) for name in MODALITIES
-    }
+    prior_error = (
+        {name: abs(observed[name] - prior_prediction[name]) for name in MODALITIES}
+        if observed is not None
+        else None
+    )
+    posterior_error = (
+        {
+            name: abs(observed[name] - posterior_prediction[name])
+            for name in MODALITIES
+        }
+        if observed is not None
+        else None
+    )
     uncertainty_before = {
         name: float(getattr(prior_belief.uncertainty, name)[observation_cell])
         for name in MODALITIES
@@ -414,13 +477,13 @@ def run_p6_closed_loop_demo(config_path: str | Path) -> P6DemoOutput:
         initial_mission, prior_fields, route_planner, scene
     )
     route_a_under_posterior = _evaluate_fixed_mission(
-        initial_mission, posterior_fields, route_planner, scene
+        initial_mission, planning_fields, route_planner, scene
     )
     route_b_under_prior = _evaluate_fixed_mission(
         posterior_mission, prior_fields, route_planner, scene
     )
     route_b_under_posterior = _evaluate_fixed_mission(
-        posterior_mission, posterior_fields, route_planner, scene
+        posterior_mission, planning_fields, route_planner, scene
     )
     route_changed = _mission_identity(initial_mission) != _mission_identity(
         posterior_mission
@@ -449,7 +512,7 @@ def run_p6_closed_loop_demo(config_path: str | Path) -> P6DemoOutput:
         parameters,
         initial_mission,
         prior_fields,
-        posterior_fields,
+        planning_fields,
         observation_cell,
     )
     local_observation = next(record for record in local if record["is_observation_cell"])
@@ -458,41 +521,45 @@ def run_p6_closed_loop_demo(config_path: str | Path) -> P6DemoOutput:
     )
     geometry = scene.navigation.occupancy.geometry
     field_finite = np.isfinite(prior_fields.cost.field) & np.isfinite(
-        posterior_fields.cost.field
+        planning_fields.cost.field
     )
     planning_field_changed = bool(
         np.any(
             np.abs(
-                posterior_fields.cost.field[field_finite]
+                planning_fields.cost.field[field_finite]
                 - prior_fields.cost.field[field_finite]
             )
             > 1e-12
         )
-        or np.any(prior_fields.cost.forbidden != posterior_fields.cost.forbidden)
+        or np.any(prior_fields.cost.forbidden != planning_fields.cost.forbidden)
     )
-    parameters_hash_after = _snapshot_hash(
-        _parameter_snapshot(
-            parameters,
-            truth.parameters,
-            prior_model.parameters,
-            hazard_model.parameters,
-        )
+    parameter_snapshot_after = _parameter_snapshot(
+        parameters,
+        truth.parameters,
+        prior_model.parameters,
+        hazard_model.parameters,
     )
+    parameter_snapshot_after["run_controls"] = parameter_snapshot["run_controls"]
+    parameters_hash_after = _snapshot_hash(parameter_snapshot_after)
     posterior_recheck = _evaluate_fixed_mission(
         posterior_mission,
-        posterior_fields,
+        planning_fields,
         route_planner,
         scene,
     )
     acceptance = {
-        "observation_differs_from_prior": any(
-            value > 1e-12 for value in prior_error.values()
+        "observation_differs_from_prior": (
+            prior_error is not None
+            and any(value > 1e-12 for value in prior_error.values())
         ),
-        "posterior_error_lower": all(
-            posterior_error[name] < prior_error[name] for name in MODALITIES
+        "posterior_error_lower": (
+            posterior_error is not None
+            and prior_error is not None
+            and assimilation_enabled
+            and all(posterior_error[name] < prior_error[name] for name in MODALITIES)
         ),
         "local_uncertainty_decreases": (
-            posterior_fields.uncertainty.field[observation_cell]
+            planning_fields.uncertainty.field[observation_cell]
             < prior_fields.uncertainty.field[observation_cell]
         ).item(),
         "posterior_hazard_near_route_a_increases": (
@@ -517,7 +584,7 @@ def run_p6_closed_loop_demo(config_path: str | Path) -> P6DemoOutput:
         "parameters_frozen": parameters_hash_before == parameters_hash_after,
         "no_manual_route_penalty": (
             _matches_standard_cost(prior_fields, parameters)
-            and _matches_standard_cost(posterior_fields, parameters)
+            and _matches_standard_cost(planning_fields, parameters)
         ),
     }
     acceptance["controlled_scenario_pass"] = all(
@@ -528,20 +595,38 @@ def run_p6_closed_loop_demo(config_path: str | Path) -> P6DemoOutput:
 
     arrays: dict[str, NDArray[Any]] = {
         "prior_hazard": prior_fields.hazard.field,
-        "posterior_hazard": posterior_fields.hazard.field,
+        "posterior_hazard": planning_fields.hazard.field,
+        "belief_posterior_hazard": posterior_fields.hazard.field,
         "prior_uncertainty": prior_fields.uncertainty.field,
-        "posterior_uncertainty": posterior_fields.uncertainty.field,
+        "posterior_uncertainty": planning_fields.uncertainty.field,
+        "belief_posterior_uncertainty": posterior_fields.uncertainty.field,
         "prior_planning_cost": prior_fields.cost.field,
-        "posterior_planning_cost": posterior_fields.cost.field,
+        "posterior_planning_cost": planning_fields.cost.field,
         "prior_forbidden": prior_fields.cost.forbidden,
-        "posterior_forbidden": posterior_fields.cost.forbidden,
+        "posterior_forbidden": planning_fields.cost.forbidden,
     }
+    for name in MODALITIES:
+        arrays[f"truth_{name}"] = getattr(truth.current_state, name)
+        arrays[f"prior_mean_{name}"] = getattr(prior_belief.mean, name)
+        arrays[f"posterior_mean_{name}"] = getattr(posterior_belief.mean, name)
+        arrays[f"prior_uncertainty_{name}"] = getattr(prior_belief.uncertainty, name)
+        arrays[f"posterior_uncertainty_{name}"] = getattr(
+            posterior_belief.uncertainty,
+            name,
+        )
+    arrays["free_mask"] = np.array(
+        [
+            [scene.navigation.is_traversable((row, col)) for col in range(geometry.cols)]
+            for row in range(geometry.rows)
+        ],
+        dtype=np.bool_,
+    )
     return P6DemoOutput(
         summary={
             "scenario_parameters": parameter_snapshot,
             "parameter_fingerprint_before": parameters_hash_before,
             "parameter_fingerprint_after": parameters_hash_after,
-            "timestamp": observation.timestamp,
+            "timestamp": truth.current_state.timestamp,
             "grid_resolution_m": geometry.resolution_m,
             "ugv_observation": {
                 "waypoint_id": parameters.inspection_waypoint.id,
@@ -571,6 +656,9 @@ def run_p6_closed_loop_demo(config_path: str | Path) -> P6DemoOutput:
                 "formula": "base_cost + hazard_weight*hazard + uncertainty_weight*uncertainty",
                 "manual_route_penalty": False,
                 "weights_loaded_before_simulation": True,
+                "planner_field_source": (
+                    "ground_truth_oracle" if oracle_planning else "posterior_belief"
+                ),
             },
         },
         arrays=arrays,

@@ -1,10 +1,10 @@
 # IndoorFireWorld
 
-Phases P0-P6 establish a deterministic digital scene, reduced-order fire
+Phases P0-P7 establish a deterministic digital scene, reduced-order fire
 simulation, UGV point sensing, local belief correction, and separate hazard,
 uncertainty, and planning-cost fields for the approximate W1 4F Makerspace,
 followed by risk-aware entry/retreat planning and a controlled closed-loop
-replanning experiment.
+replanning experiment and a reproducible evaluation suite.
 The authoritative geometry is
 [`configs/scene_w1_4f.yaml`](configs/scene_w1_4f.yaml); the file uses the JSON
 subset of YAML so it can be loaded with the Python standard library and without
@@ -28,6 +28,8 @@ python scripts/run_p4_hazard_demo.py
 python scripts/run_p5_weight_sensitivity.py
 python scripts/run_p5_planning_demo.py
 python scripts/run_p6_closed_loop_demo.py
+python scripts/run_experiment.py --config configs/experiments/p7_baseline.yaml
+python scripts/run_experiment_suite.py
 ```
 
 The visualization is written to `artifacts/w1_4f_scene.svg`. Use `--show` to
@@ -35,12 +37,13 @@ open it in the default browser.
 
 P2 numerical snapshots are written under `artifacts/p2_fire/`. Development
 machines that cannot execute code should instead synchronize the repository to
-HPC and run `bash scripts/hpc_validate_p6.sh` there. The P3 demo writes its
+HPC and run `bash scripts/hpc_validate_p7.sh` there. The P3 demo writes its
 machine-readable comparison to `artifacts/p3_assimilation/result.json`; the P4
 demo writes arrays and `summary.json` under `artifacts/p4_hazard/`. P5 writes
 the mission result plus JSON/CSV weight-sensitivity summaries under
 `artifacts/p5_planning/`. P6 writes its causal before/after report to
-`artifacts/p6/summary.json`.
+`artifacts/p6/summary.json`. P7 writes per-run artifacts plus aggregate JSON and
+CSV results under `artifacts/p7/`.
 
 ## Current scope
 
@@ -79,6 +82,32 @@ prior/posterior local fields, both optimized missions, and four fixed-path
 counterfactuals: A and B evaluated under both prior and posterior fields. Its
 acceptance block machine-checks the causal chain and requires a route-hash
 change only for this declared controlled scenario.
+
+## P7 reproducible experiments and metrics
+
+`configs/experiments/p7_suite.yaml` freezes Baseline v1 and all declared P7
+ablations. The reusable runner applies only validated configuration overrides
+to the existing P6 pipeline. Normal runs plan from the posterior belief; the
+perfect-information reference is explicitly marked and is the only mode that
+may provide the hidden truth field to the planner.
+
+The suite includes no-assimilation, no-observation, hazard-only, baseline
+uncertainty-aware, and perfect-information runs; low/medium/high model mismatch;
+zero/low/medium seeded sensor noise; and sensitivity runs over existing
+assimilation gain, kernel, and uncertainty-reduction parameters. These values
+are predefined for sensitivity analysis and are not automatically optimized.
+
+Every run receives a directory named from its scenario ID and configuration
+hash. It contains the exact config snapshot, complete summary, field metrics,
+route metrics, and path hashes. `results.json` and `results.csv` contain one
+machine-readable row per run, while `aggregate_stats.json` provides concise
+suite statistics. Estimation metrics include local and global MAE against hidden
+truth for evaluation only. Decision improvement is the posterior cost of the
+old route minus the posterior cost of the replanned route.
+
+The frozen P6 regression is represented accurately: A and B have equal prior
+cost, A is selected by deterministic tie-breaking, and B becomes strictly
+cheaper under the posterior field.
 
 ## P5 entry and retreat planning
 

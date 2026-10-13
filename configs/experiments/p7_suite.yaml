@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "suite_id": "p7_reproducible_suite_v1",
+  "base_config": "../p6_closed_loop.yaml",
+  "experiments": [
+    {"scenario_id": "baseline_v1", "ablation_type": "uncertainty_aware_baseline", "mismatch_level": "high", "sensor_noise": "zero", "seed": 20261013, "observation_enabled": true, "assimilation_enabled": true, "oracle_planning": false, "overrides": {}},
+    {"scenario_id": "no_assimilation", "ablation_type": "no_assimilation", "mismatch_level": "high", "sensor_noise": "zero", "seed": 20261013, "observation_enabled": true, "assimilation_enabled": false, "oracle_planning": false, "overrides": {}},
+    {"scenario_id": "no_observation", "ablation_type": "no_observation", "mismatch_level": "high", "sensor_noise": "none", "seed": 20261013, "observation_enabled": false, "assimilation_enabled": false, "oracle_planning": false, "overrides": {}},
+    {"scenario_id": "hazard_only", "ablation_type": "hazard_only_planning", "mismatch_level": "high", "sensor_noise": "zero", "seed": 20261013, "observation_enabled": true, "assimilation_enabled": true, "oracle_planning": false, "overrides": {"planning": {"uncertainty_weight": 0.0}}},
+    {"scenario_id": "perfect_information", "ablation_type": "perfect_information_oracle", "mismatch_level": "high", "sensor_noise": "none", "seed": 20261013, "observation_enabled": false, "assimilation_enabled": false, "oracle_planning": true, "overrides": {}},
+
+    {"scenario_id": "mismatch_low", "ablation_type": "model_mismatch_sweep", "mismatch_level": "low", "sensor_noise": "zero", "seed": 20261013, "observation_enabled": true, "assimilation_enabled": true, "oracle_planning": false, "overrides": {"truth": {"ventilation_y_mps": -0.05, "fire_growth_rate_kw_per_s2": 8.0, "max_heat_release_rate_kw": 300.0, "temperature_gain_c_per_kw_s": 0.04, "smoke_yield_per_kw_s": 0.003, "co_yield_per_kw_s": 0.0008}}},
+    {"scenario_id": "mismatch_medium", "ablation_type": "model_mismatch_sweep", "mismatch_level": "medium", "sensor_noise": "zero", "seed": 20261013, "observation_enabled": true, "assimilation_enabled": true, "oracle_planning": false, "overrides": {"truth": {"ventilation_y_mps": -0.10, "fire_growth_rate_kw_per_s2": 20.0, "max_heat_release_rate_kw": 600.0, "temperature_gain_c_per_kw_s": 0.08, "smoke_yield_per_kw_s": 0.010, "co_yield_per_kw_s": 0.003}}},
+    {"scenario_id": "mismatch_high", "ablation_type": "model_mismatch_sweep", "mismatch_level": "high", "sensor_noise": "zero", "seed": 20261013, "observation_enabled": true, "assimilation_enabled": true, "oracle_planning": false, "overrides": {}},
+
+    {"scenario_id": "sensor_zero", "ablation_type": "sensor_noise_sweep", "mismatch_level": "high", "sensor_noise": "zero", "seed": 20261013, "observation_enabled": true, "assimilation_enabled": true, "oracle_planning": false, "overrides": {}},
+    {"scenario_id": "sensor_low", "ablation_type": "sensor_noise_sweep", "mismatch_level": "high", "sensor_noise": "low", "seed": 20261013, "observation_enabled": true, "assimilation_enabled": true, "oracle_planning": false, "overrides": {"sensor": {"temperature_std": 0.1, "co_std": 0.001, "smoke_std": 0.002, "visibility_std": 0.1}}},
+    {"scenario_id": "sensor_medium", "ablation_type": "sensor_noise_sweep", "mismatch_level": "high", "sensor_noise": "medium", "seed": 20261013, "observation_enabled": true, "assimilation_enabled": true, "oracle_planning": false, "overrides": {"sensor": {"temperature_std": 0.5, "co_std": 0.005, "smoke_std": 0.010, "visibility_std": 0.5}}},
+
+    {"scenario_id": "assimilation_gain_low", "ablation_type": "assimilation_sweep", "mismatch_level": "high", "sensor_noise": "zero", "seed": 20261013, "observation_enabled": true, "assimilation_enabled": true, "oracle_planning": false, "overrides": {"assimilation": {"gain": 0.5}}},
+    {"scenario_id": "assimilation_kernel_narrow", "ablation_type": "assimilation_sweep", "mismatch_level": "high", "sensor_noise": "zero", "seed": 20261013, "observation_enabled": true, "assimilation_enabled": true, "oracle_planning": false, "overrides": {"assimilation": {"kernel_sigma_m": 0.20, "max_radius_m": 0.50}}},
+    {"scenario_id": "assimilation_uncertainty_low", "ablation_type": "assimilation_sweep", "mismatch_level": "high", "sensor_noise": "zero", "seed": 20261013, "observation_enabled": true, "assimilation_enabled": true, "oracle_planning": false, "overrides": {"assimilation": {"uncertainty_reduction_fraction": 0.30}}}
+  ]
+}

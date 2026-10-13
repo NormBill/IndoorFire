@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "suite_id": "p7_baseline_v1",
+  "base_config": "../p6_closed_loop.yaml",
+  "experiments": [
+    {
+      "scenario_id": "baseline_v1",
+      "ablation_type": "uncertainty_aware_baseline",
+      "mismatch_level": "high",
+      "sensor_noise": "zero",
+      "seed": 20261013,
+      "observation_enabled": true,
+      "assimilation_enabled": true,
+      "oracle_planning": false,
+      "overrides": {}
+    }
+  ]
+}
