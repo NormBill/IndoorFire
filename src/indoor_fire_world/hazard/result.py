@@ -46,8 +46,6 @@ class HazardResult:
             np.isin(dominant, ("none", "temperature", "co", "smoke", "visibility"))
         ):
             raise ValueError("Dominant hazard modality contains an unsupported label")
-        if not np.array_equal(dominant == "none", arrays[0] == 0.0):
-            raise ValueError("Dominant hazard modality must be 'none' exactly at zero hazard")
         dominant.setflags(write=False)
         for name, array in zip(names, arrays):
             object.__setattr__(self, name, array)
