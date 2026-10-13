@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "assumption_status": "synthetic_research_thresholds_not_safety_certified",
+  "aggregation": "maximum",
+  "thresholds": {
+    "temperature": {
+      "safe": 30.0,
+      "danger": 80.0,
+      "unit": "degC",
+      "notes": "Prototype research thresholds; not an evacuation or tenability standard."
+    },
+    "co": {
+      "safe": 0.05,
+      "danger": 0.30,
+      "unit": "fire_model_concentration_unit",
+      "notes": "Preserves the synthetic P2 CO field unit; it is not ppm."
+    },
+    "smoke": {
+      "safe": 0.10,
+      "danger": 1.00,
+      "unit": "fire_model_concentration_unit",
+      "notes": "Preserves the synthetic P2 smoke field unit; it is not an optical-density standard."
+    },
+    "visibility": {
+      "safe": 20.0,
+      "danger": 5.0,
+      "unit": "m",
+      "notes": "Reverse transform: lower visibility produces higher severity."
+    }
+  },
+  "uncertainty_reference": {
+    "temperature": {"value": 25.0, "unit": "degC^2"},
+    "co": {"value": 0.01, "unit": "fire_model_concentration_unit^2"},
+    "smoke": {"value": 0.04, "unit": "fire_model_concentration_unit^2"},
+    "visibility": {"value": 25.0, "unit": "m^2"}
+  },
+  "notes": "Thresholds and reference scales are transparent demo assumptions and require domain calibration before operational use."
+}

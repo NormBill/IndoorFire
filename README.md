@@ -1,8 +1,9 @@
 # IndoorFireWorld
 
-Phases P0-P3 establish a deterministic digital scene, reduced-order fire
-simulation, UGV point sensing, and local belief correction for the approximate
-W1 4F Makerspace. The authoritative geometry is
+Phases P0-P4 establish a deterministic digital scene, reduced-order fire
+simulation, UGV point sensing, local belief correction, and separate hazard,
+uncertainty, and planning-cost fields for the approximate W1 4F Makerspace.
+The authoritative geometry is
 [`configs/scene_w1_4f.yaml`](configs/scene_w1_4f.yaml); the file uses the JSON
 subset of YAML so it can be loaded with the Python standard library and without
 an environment-specific YAML dependency.
@@ -21,6 +22,7 @@ python scripts/visualize_w1_scene.py
 python -m unittest discover -s tests -v
 python scripts/run_p2_fire_simulation.py
 python scripts/run_p3_assimilation_demo.py
+python scripts/run_p4_hazard_demo.py
 ```
 
 The visualization is written to `artifacts/w1_4f_scene.svg`. Use `--show` to
@@ -28,8 +30,9 @@ open it in the default browser.
 
 P2 numerical snapshots are written under `artifacts/p2_fire/`. Development
 machines that cannot execute code should instead synchronize the repository to
-HPC and run `bash scripts/hpc_validate_p3.sh` there. The P3 demo writes its
-machine-readable comparison to `artifacts/p3_assimilation/result.json`.
+HPC and run `bash scripts/hpc_validate_p4.sh` there. The P3 demo writes its
+machine-readable comparison to `artifacts/p3_assimilation/result.json`; the P4
+demo writes arrays and `summary.json` under `artifacts/p4_hazard/`.
 
 ## Current scope
 
@@ -39,8 +42,29 @@ and `world_model.PhysicsPrior` are independent instances driven by deliberately
 mismatched synthetic configurations. A predefined-waypoint UGV can sample an
 immutable truth snapshot, and the deterministic P3 baseline corrects a separate
 belief mean while reducing a separate uncertainty field. Hazard and
-planning-cost concepts remain distinct. No hazard scoring, route planning, or
-active sensing is implemented.
+planning-cost concepts remain distinct. P4 converts the posterior belief into
+an interpretable physical hazard field, separately normalizes heterogeneous
+uncertainty, and combines both only in a decision-cost field. No route search
+or active sensing is implemented.
+
+## P4 hazard, uncertainty, and planning cost
+
+`configs/hazard.yaml` defines unit-documented safe/danger thresholds and
+uncertainty reference scales. Temperature, CO, and smoke use increasing
+piecewise-linear severity; visibility uses the reverse direction. Each severity
+is clipped to `[0,1]`, and physical hazard is their conservative maximum. The
+dominant modality is retained for explanations. The synthetic CO and smoke
+units from P2 are preserved rather than relabeled as ppm or optical density.
+
+Raw uncertainty modalities are variance proxies with different units, so each
+is first normalized as `clip(U_i/U_i_ref, 0, 1)`. Normalized uncertainty is the
+maximum across modalities and never enters the physical hazard definition.
+
+`configs/planning_cost.yaml` defines
+`C = base_cost + hazard_weight*H + uncertainty_weight*U`. Occupied, unknown, and
+physically untenable cells at or above the configured threshold receive infinite
+cost. Their underlying hazard values are retained. All thresholds and weights
+are transparent research assumptions, not certified tenability standards.
 
 ## P3 sensing and correction
 

@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "base_cost": 1.0,
+  "hazard_weight": 10.0,
+  "uncertainty_weight": 2.0,
+  "untenable_hazard_threshold": 0.95,
+  "forbidden_representation": "infinity",
+  "notes": "Synthetic P4 decision-cost weights. Infinity is reserved for occupied, unknown, or physically untenable cells."
+}
