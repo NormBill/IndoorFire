@@ -47,8 +47,9 @@ the mission result plus JSON/CSV weight-sensitivity summaries under
 `artifacts/p5_planning/`. P6 writes its causal before/after report to
 `artifacts/p6/summary.json`. P7 writes per-run artifacts plus aggregate JSON and
 CSV results under `artifacts/p7/`.
-P8 writes its 4-by-4 registered-map snapshot matrix, primary-case arrays, and
-route overlay under `artifacts/p8_registered_closed_loop/`.
+P8 writes its 4-by-4 registered-map snapshot matrix, primary-case arrays, a
+three-panel registered overlay, and separate prior, posterior, and delta risk
+maps under `artifacts/p8_registered_closed_loop/`.
 
 ## Current scope
 
@@ -71,6 +72,10 @@ active sensing.
 `configs/p8_registered_closed_loop.yaml` integrates the Gate 1 registered map,
 Gate 2 staged microwave electrical-fire truth/prior pair, a geometry-defined
 UGV observation, local World Model correction, and retreat-only replanning.
+The UGV approach and human/robot retreat are constrained to the directed route
+graph transcribed from the green evacuation arrows in the registered map; the
+planner may not cut across nominally open floor cells or travel against an
+arrow.
 Each case is a snapshot closed loop: UGV travel validates reachability, but the
 fire fields remain frozen during the approach check and prior/posterior route
 comparison. P8 is not a fully time-coupled robot-fire simulation.
@@ -98,6 +103,18 @@ infeasible, no finite delta is invented; the result is reported as a
 feasibility improvement when the updated route is feasible. Invalid geometry
 or approach cases use `invalid_observation_case` and remain distinct from a
 valid scenario with no feasible prior retreat.
+
+The visualization projects prior planning risk/cost, posterior planning
+risk/cost, and their signed difference onto the registered floor plan using a
+shared scale. This decision field combines the separately retained physical
+hazard and uncertainty components. The figure also samples the same field along
+every directed green-route edge and overlays the initial and updated retreat on
+that graph. With the current strict topology, the primary case has
+only the centre-exit branch available after the selected observation point, so
+the posterior route remains unchanged (`delta_j = 0`). This replaces the
+earlier free-grid reroute, which did not respect the evacuation arrows. The
+World Model and risk fields can still change without implying a route change
+when the registered topology offers no alternative downstream branch.
 
 Run the complete P0-P8 validation and artifact generation on HPC with:
 

@@ -43,6 +43,17 @@
     {"id": "south_center_void", "type": "structural_void", "polygon_m": [[19.5, 0.0], [23.5, 0.0], [23.5, 3.1], [22.6, 3.8], [19.5, 3.8]]},
     {"id": "east_structural_void", "type": "structural_void", "rect_m": [35.75, 4.55, 3.2, 6.95]}
   ],
+  "traversable_overrides": [
+    {"id": "evac_top_westbound", "evidence": "green_evacuation_arrow", "rect_m": [0.5, 10.75, 35.0, 0.75]},
+    {"id": "evac_west_exit_drop", "evidence": "green_evacuation_arrow", "rect_m": [0.5, 5.25, 0.75, 6.0]},
+    {"id": "evac_center_drop", "evidence": "green_evacuation_arrow", "rect_m": [23.0, 4.0, 0.75, 7.25]},
+    {"id": "evac_center_lower_westbound", "evidence": "green_evacuation_arrow", "rect_m": [20.0, 4.0, 3.75, 0.75]},
+    {"id": "evac_center_rise", "evidence": "green_evacuation_arrow", "rect_m": [20.0, 4.0, 0.75, 4.75]},
+    {"id": "evac_center_exit_approach", "evidence": "green_evacuation_arrow", "rect_m": [19.0, 8.25, 1.75, 0.75]},
+    {"id": "evac_southeast_drop", "evidence": "green_evacuation_arrow", "rect_m": [34.75, 3.75, 0.75, 7.5]},
+    {"id": "evac_southeast_eastbound", "evidence": "green_evacuation_arrow", "rect_m": [34.75, 3.75, 4.5, 0.75]},
+    {"id": "evac_southeast_exit_drop", "evidence": "green_evacuation_arrow", "rect_m": [38.5, 2.0, 0.75, 2.25]}
+  ],
   "unknown_regions": [],
   "semantic_objects": [
     {"id": "door_center_west", "type": "door", "position_m": [18.95, 8.75]},

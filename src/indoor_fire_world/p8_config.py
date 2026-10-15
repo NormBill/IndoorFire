@@ -35,6 +35,7 @@ class P8ScenarioParameters:
     config_path: Path
     scenario_id: str
     scene_config: Path
+    evacuation_route_config: Path
     truth_config: Path
     prior_config: Path
     hazard_config: Path
@@ -153,6 +154,7 @@ def load_p8_parameters(config_path: str | Path) -> P8ScenarioParameters:
         config_path=path,
         scenario_id=str(data["scenario_id"]),
         scene_config=(root / str(data["scene_config"])).resolve(),
+        evacuation_route_config=(root / str(data["evacuation_route_config"])).resolve(),
         truth_config=(root / str(data["truth_config"])).resolve(),
         prior_config=(root / str(data["prior_config"])).resolve(),
         hazard_config=(root / str(data["hazard_config"])).resolve(),

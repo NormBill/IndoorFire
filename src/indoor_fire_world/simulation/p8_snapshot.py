@@ -23,12 +23,14 @@ from indoor_fire_world.hazard import (
 from indoor_fire_world.p3_config import InitialUncertaintyParameters
 from indoor_fire_world.p8_config import P8ScenarioParameters, load_p8_parameters
 from indoor_fire_world.planning import (
+    DirectedEvacuationGraph,
+    DirectedRoutePlanner,
     GridAStarPlanner,
-    MissionPlanner,
     PlanningCostModel,
     PlanningCostResult,
     RetreatPlan,
     RouteResult,
+    load_directed_evacuation_graph,
 )
 from indoor_fire_world.scene import Pose2D, load_scene
 from indoor_fire_world.scene.models import Scene
@@ -75,6 +77,7 @@ def _file_hash(path: Path) -> str:
 def freeze_observation_points(
     scene: Scene,
     parameters: P8ScenarioParameters,
+    route_graph: DirectedEvacuationGraph,
 ) -> tuple[FrozenObservationPoint, ...]:
     """Resolve configured geometry offsets without accepting any fire-field input."""
     microwave = scene.semantic.by_id("microwave")
@@ -101,15 +104,23 @@ def freeze_observation_points(
                 )
             )
             continue
-        traversable = scene.navigation.is_traversable(cell)
+        route_node = route_graph.nodes.get(item.id)
+        map_traversable = scene.navigation.is_traversable(cell)
+        on_directed_route = route_node is not None and route_node.cell == cell
+        valid = map_traversable and on_directed_route
+        invalid_reason = None
+        if not map_traversable:
+            invalid_reason = "observation_point_occupied"
+        elif not on_directed_route:
+            invalid_reason = "observation_point_not_on_directed_route"
         frozen.append(
             FrozenObservationPoint(
                 id=item.id,
                 offset_m=(item.dx_m, item.dy_m),
                 pose=pose,
                 cell=cell,
-                valid=traversable,
-                invalid_reason=None if traversable else "observation_point_occupied",
+                valid=valid,
+                invalid_reason=invalid_reason,
             )
         )
     return tuple(frozen)
@@ -118,32 +129,35 @@ def freeze_observation_points(
 def _resolve_static_geometry(
     scene: Scene,
     parameters: P8ScenarioParameters,
-) -> tuple[tuple[int, int] | None, dict[str, tuple[int, int]], str | None]:
+    route_graph: DirectedEvacuationGraph,
+) -> tuple[tuple[int, int] | None, str | None]:
     try:
         ugv_start = scene.navigation.metric_to_grid(
             scene.ugv_initial_pose.x,
             scene.ugv_initial_pose.y,
         )
     except ValueError:
-        return None, {}, "invalid_ugv_start"
+        return None, "invalid_ugv_start"
     if not scene.navigation.is_traversable(ugv_start):
-        return None, {}, "invalid_ugv_start"
-    exits: dict[str, tuple[int, int]] = {}
+        return None, "invalid_ugv_start"
+    if "ugv_start" not in route_graph.nodes or route_graph.nodes["ugv_start"].cell != ugv_start:
+        return None, "invalid_ugv_start"
     for exit_id in parameters.retreat_exit_ids:
         try:
             semantic = scene.semantic.by_id(exit_id)
         except KeyError:
-            return ugv_start, {}, "invalid_configured_exit"
+            return ugv_start, "invalid_configured_exit"
         if semantic.kind != "exit" or semantic.position is None:
-            return ugv_start, {}, "invalid_configured_exit"
+            return ugv_start, "invalid_configured_exit"
         try:
             cell = scene.navigation.metric_to_grid(*semantic.position)
         except ValueError:
-            return ugv_start, {}, "invalid_configured_exit"
+            return ugv_start, "invalid_configured_exit"
         if not scene.navigation.is_traversable(cell):
-            return ugv_start, {}, "invalid_configured_exit"
-        exits[exit_id] = cell
-    return ugv_start, exits, None
+            return ugv_start, "invalid_configured_exit"
+        if exit_id not in route_graph.nodes or route_graph.nodes[exit_id].cell != cell:
+            return ugv_start, "invalid_configured_exit"
+    return ugv_start, None
 
 
 def _decision_fields(
@@ -252,6 +266,32 @@ def _horizon_dict(parameters: P8ScenarioParameters) -> dict[str, Any]:
             "not_w1_measured_response_time",
             "not_actual_fire_engine_arrival_time",
             "not_firefighter_interior_deployment_completion_time",
+        ],
+    }
+
+
+def _route_graph_dict(graph: DirectedEvacuationGraph) -> dict[str, Any]:
+    return {
+        "graph_id": graph.graph_id,
+        "scene_id": graph.scene_id,
+        "direction_semantics": graph.direction_semantics,
+        "registration_status": graph.registration_status,
+        "source_evidence": graph.source_evidence,
+        "nodes": {
+            node_id: {
+                "cell": {"row": node.cell[0], "col": node.cell[1]},
+                "position_m": {"x": node.position_m[0], "y": node.position_m[1]},
+            }
+            for node_id, node in graph.nodes.items()
+        },
+        "edges": [
+            {
+                "id": edge.id,
+                "source": edge.source,
+                "target": edge.target,
+                "path": [{"row": row, "col": col} for row, col in edge.path],
+            }
+            for edge in graph.edges
         ],
     }
 
@@ -366,15 +406,19 @@ def run_p8_snapshot_case(
     if fire_time_s not in parameters.evaluation_fire_times_s:
         raise ValueError("P8 fire_time_s must be one of the configured evaluation times")
     scene = load_scene(parameters.scene_config)
+    route_graph = load_directed_evacuation_graph(
+        parameters.evacuation_route_config,
+        scene,
+    )
 
     # This is deliberately completed before a truth simulator is constructed.
-    frozen_points = freeze_observation_points(scene, parameters)
+    frozen_points = freeze_observation_points(scene, parameters, route_graph)
     point_set_hash = _frozen_hash(frozen_points)
     try:
         point = next(item for item in frozen_points if item.id == observation_id)
     except StopIteration as error:
         raise ValueError(f"Unknown P8 observation point {observation_id!r}") from error
-    ugv_start, exits, static_reason = _resolve_static_geometry(scene, parameters)
+    ugv_start, static_reason = _resolve_static_geometry(scene, parameters, route_graph)
     invalid_reason = point.invalid_reason or static_reason
     if invalid_reason is not None or ugv_start is None or point.cell is None:
         return P8CaseOutput(
@@ -412,12 +456,12 @@ def run_p8_snapshot_case(
         PlanningCostModel(approach_parameters),
         scene,
     )
-    approach_planner = GridAStarPlanner(approach_parameters)
+    approach_planner = DirectedRoutePlanner(approach_parameters, route_graph)
     approach = approach_planner.plan(
         approach_fields.cost.field,
         approach_fields.cost.forbidden,
-        ugv_start,
-        point.cell,
+        "ugv_start",
+        point.id,
         scene.navigation,
         approach_fields.hazard.field,
         approach_fields.uncertainty.field,
@@ -446,15 +490,15 @@ def run_p8_snapshot_case(
         scene,
     )
     retreat_planner = GridAStarPlanner(retreat_parameters)
-    mission_planner = MissionPlanner(retreat_planner)
-    prior_retreat = mission_planner.plan_retreat(
+    directed_retreat_planner = DirectedRoutePlanner(retreat_parameters, route_graph)
+    prior_retreat = directed_retreat_planner.plan_retreat(
         prior_fields.cost.field,
         prior_fields.cost.forbidden,
         prior_fields.hazard.field,
         prior_fields.uncertainty.field,
         scene.navigation,
-        point.cell,
-        exits,
+        point.id,
+        parameters.retreat_exit_ids,
     )
 
     # Truth construction occurs only after geometry-only point freezing and approach validation.
@@ -494,14 +538,14 @@ def run_p8_snapshot_case(
         retreat_cost_model,
         scene,
     )
-    updated_retreat = mission_planner.plan_retreat(
+    updated_retreat = directed_retreat_planner.plan_retreat(
         posterior_fields.cost.field,
         posterior_fields.cost.forbidden,
         posterior_fields.hazard.field,
         posterior_fields.uncertainty.field,
         scene.navigation,
-        point.cell,
-        exits,
+        point.id,
+        parameters.retreat_exit_ids,
     )
     counterfactual = _counterfactual(
         prior_retreat,
@@ -557,9 +601,30 @@ def run_p8_snapshot_case(
         "provenance": {
             "scene_config_sha256": _file_hash(parameters.scene_config),
             "p8_config_sha256": _file_hash(parameters.config_path),
+            "evacuation_route_config_sha256": _file_hash(
+                parameters.evacuation_route_config
+            ),
             "planner_field_source": planner_field_source,
             "truth_used_for_observation_point_selection": False,
             "manual_route_penalty": False,
+        },
+        "directed_evacuation_route_graph": _route_graph_dict(route_graph),
+        "route_constraints": {
+            "graph_id": route_graph.graph_id,
+            "semantics": route_graph.direction_semantics,
+            "ugv_approach_directed_conformant": route_graph.path_is_directed(
+                approach.path
+            ),
+            "prior_retreat_directed_conformant": (
+                route_graph.path_is_directed(prior_retreat.route.path)
+                if prior_retreat.route.feasible
+                else None
+            ),
+            "updated_retreat_directed_conformant": (
+                route_graph.path_is_directed(updated_retreat.route.path)
+                if updated_retreat.route.feasible
+                else None
+            ),
         },
         "observation_point": _point_dict(point, point_set_hash),
         "ugv_approach": _route_dict(approach),

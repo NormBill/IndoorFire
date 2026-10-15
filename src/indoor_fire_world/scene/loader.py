@@ -137,6 +137,12 @@ def load_scene(config_path: str | Path) -> Scene:
             SemanticObject(obstacle["id"], obstacle["type"], footprint=footprint)
         )
 
+    # The registered evacuation arrows are authoritative evidence that these
+    # narrow corridors remain traversable.  They intentionally override the
+    # coarse furniture polygons digitized from the same source image.
+    for corridor in data.get("traversable_overrides", []):
+        paint(_footprint(corridor), Occupancy.FREE)
+
     for index, unknown in enumerate(data.get("unknown_regions", [])):
         footprint = _footprint(unknown)
         paint(footprint, Occupancy.UNKNOWN)

@@ -2,20 +2,24 @@ from __future__ import annotations
 
 from dataclasses import replace
 from pathlib import Path
+import tempfile
 import unittest
 from unittest.mock import patch
+import xml.etree.ElementTree as ET
 
 import numpy as np
 
 from indoor_fire_world.hazard import HazardResult, UncertaintyAggregationResult
 from indoor_fire_world.p8_config import ObservationOffset, load_p8_parameters
 from indoor_fire_world.planning import (
+    DirectedRoutePlanner,
     ExitRouteEvaluation,
     GridAStarPlanner,
     PlanningCostModel,
     PlanningCostParameters,
     RetreatPlan,
     RouteResult,
+    load_directed_evacuation_graph,
 )
 from indoor_fire_world.scene import Pose2D, load_scene
 from indoor_fire_world.scene.models import (
@@ -32,7 +36,7 @@ from indoor_fire_world.simulation.p8_snapshot import (
     freeze_observation_points,
     run_p8_snapshot_case,
 )
-from indoor_fire_world.experiments.p8_runner import run_p8_suite
+from indoor_fire_world.experiments.p8_runner import run_p8_suite, write_p8_artifacts
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -44,6 +48,10 @@ class P8SnapshotTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.parameters = load_p8_parameters(CONFIG)
         cls.scene = load_scene(cls.parameters.scene_config)
+        cls.route_graph = load_directed_evacuation_graph(
+            cls.parameters.evacuation_route_config,
+            cls.scene,
+        )
         cls.suite = run_p8_suite(CONFIG)
         cls.primary = cls.suite.primary.summary
 
@@ -61,12 +69,16 @@ class P8SnapshotTests(unittest.TestCase):
         )
 
     def test_observation_points_are_frozen_geometry_offsets(self) -> None:
-        points = freeze_observation_points(self.scene, self.parameters)
+        points = freeze_observation_points(
+            self.scene,
+            self.parameters,
+            self.route_graph,
+        )
         expected = {
-            "geometry_offset_west_far": (18.875, 7.625),
-            "geometry_offset_west_mid": (19.125, 7.625),
-            "geometry_offset_west_near": (19.375, 7.625),
-            "geometry_offset_east_control": (21.0, 8.0),
+            "geometry_route_high": (20.375, 7.625),
+            "geometry_route_mid": (20.375, 7.125),
+            "geometry_route_near": (20.375, 6.625),
+            "geometry_route_low_control": (20.375, 5.625),
         }
         self.assertEqual({point.id for point in points}, set(expected))
         for point in points:
@@ -93,12 +105,19 @@ class P8SnapshotTests(unittest.TestCase):
             },
         )
 
-    def test_primary_case_is_retreat_only_posterior_improvement(self) -> None:
-        self.assertEqual(self.primary["route_outcome"], "same_exit_reroute")
+    def test_primary_case_stays_on_the_directed_route(self) -> None:
+        self.assertEqual(self.primary["route_outcome"], "unchanged")
         prior = self.primary["prior_retreat"]
         updated = self.primary["updated_retreat"]
         self.assertEqual(prior["selected_exit"], updated["selected_exit"])
-        self.assertNotEqual(prior["route"]["path_hash"], updated["route"]["path_hash"])
+        self.assertEqual(prior["route"]["path_hash"], updated["route"]["path_hash"])
+        for route in (
+            self.primary["ugv_approach"],
+            prior["route"],
+            updated["route"],
+        ):
+            path = tuple((item["row"], item["col"]) for item in route["path"])
+            self.assertTrue(self.route_graph.path_is_directed(path))
         comparison = self.primary["posterior_counterfactual"]
         self.assertEqual(
             comparison["field_identity"],
@@ -107,7 +126,32 @@ class P8SnapshotTests(unittest.TestCase):
         old_cost = comparison["old_route_under_posterior"]["total_cost"]
         new_cost = comparison["updated_route_under_posterior"]["total_cost"]
         self.assertAlmostEqual(comparison["delta_j"], old_cost - new_cost)
-        self.assertGreater(comparison["delta_j"], 0.0)
+        self.assertEqual(comparison["delta_j"], 0.0)
+        constraints = self.primary["route_constraints"]
+        self.assertEqual(constraints["graph_id"], self.route_graph.graph_id)
+        self.assertTrue(constraints["ugv_approach_directed_conformant"])
+        self.assertTrue(constraints["prior_retreat_directed_conformant"])
+        self.assertTrue(constraints["updated_retreat_directed_conformant"])
+
+    def test_risk_map_artifacts_are_valid_svg(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            paths = write_p8_artifacts(self.suite, CONFIG, directory)
+            for key in (
+                "visualization",
+                "prior_risk_map",
+                "posterior_risk_map",
+                "risk_delta_map",
+            ):
+                root = ET.parse(paths[key]).getroot()
+                self.assertTrue(root.tag.endswith("svg"))
+            combined = paths["visualization"].read_text(encoding="utf-8")
+            self.assertIn("Prior planning risk/cost", combined)
+            self.assertIn(
+                "Posterior planning risk/cost after UGV observation",
+                combined,
+            )
+            self.assertIn("Planning risk/cost delta (posterior - prior)", combined)
+            self.assertIn("Directed green-arrow route", combined)
 
     def test_snapshot_clock_does_not_advance_during_approach_or_replanning(self) -> None:
         clocks = self.primary["simulator_timestamps"]
@@ -165,7 +209,7 @@ class P8SnapshotTests(unittest.TestCase):
 
     def test_infeasible_counterfactual_has_no_finite_delta(self) -> None:
         case = self.suite.summary["normal_cases"][
-            "normal-t180-geometry_offset_west_far"
+            "normal-t300-geometry_route_near"
         ]
         comparison = case["posterior_counterfactual"]
         self.assertFalse(comparison["updated_route_posterior_feasible"])
@@ -327,9 +371,27 @@ class P8SnapshotTests(unittest.TestCase):
             )
         self.assertEqual(exit_result.summary["invalid_reason"], "invalid_configured_exit")
 
+    def test_traversable_point_off_green_route_is_invalid(self) -> None:
+        parameters = replace(
+            self.parameters,
+            observation_points=(ObservationOffset("off_route", 1.6, 1.0),),
+            primary_observation_id="off_route",
+        )
+        with patch(
+            "indoor_fire_world.simulation.p8_snapshot.load_p8_parameters",
+            return_value=parameters,
+        ):
+            result = run_p8_snapshot_case(CONFIG, 60.0, "off_route")
+        self.assertEqual(result.summary["case_status"], "invalid_observation_case")
+        self.assertEqual(
+            result.summary["invalid_reason"],
+            "observation_point_not_on_directed_route",
+        )
+        self.assertFalse(result.summary["truth_simulator_constructed"])
+
     def test_unreachable_approach_is_an_invalid_case(self) -> None:
         with patch(
-            "indoor_fire_world.simulation.p8_snapshot.GridAStarPlanner.plan",
+            "indoor_fire_world.simulation.p8_snapshot.DirectedRoutePlanner.plan",
             return_value=RouteResult.rejected("goal_unreachable"),
         ):
             result = run_p8_snapshot_case(

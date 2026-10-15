@@ -29,6 +29,7 @@ def _row(run_id: str, group: str, output: P8CaseOutput) -> dict[str, Any]:
     observation = summary.get("observation", {})
     prior = summary.get("prior_retreat", {})
     updated = summary.get("updated_retreat", {})
+    constraints = summary.get("route_constraints", {})
     return {
         "run_id": run_id,
         "experiment_group": group,
@@ -45,6 +46,16 @@ def _row(run_id: str, group: str, output: P8CaseOutput) -> dict[str, Any]:
         "updated_exit": updated.get("selected_exit"),
         "prior_path_hash": prior.get("route", {}).get("path_hash"),
         "updated_path_hash": updated.get("route", {}).get("path_hash"),
+        "route_graph_id": constraints.get("graph_id"),
+        "ugv_approach_directed_conformant": constraints.get(
+            "ugv_approach_directed_conformant"
+        ),
+        "prior_retreat_directed_conformant": constraints.get(
+            "prior_retreat_directed_conformant"
+        ),
+        "updated_retreat_directed_conformant": constraints.get(
+            "updated_retreat_directed_conformant"
+        ),
         "old_route_posterior_feasible": counterfactual.get("old_route_posterior_feasible"),
         "delta_j": counterfactual.get("delta_j"),
         "improvement_type": counterfactual.get("improvement_type"),
@@ -103,6 +114,15 @@ def run_p8_suite(config_path: str | Path) -> P8SuiteOutput:
         [_row(run_id, "normal_matrix", output) for run_id, output in normal]
         + [_row(name, "primary_control", output) for name, output in controls]
     )
+    route_graph = primary.summary["directed_evacuation_route_graph"]
+
+    def compact(case: dict[str, Any]) -> dict[str, Any]:
+        # The graph is suite-level immutable provenance; avoid repeating its
+        # full rasterized edge paths in every one of the 20 case records.
+        result = dict(case)
+        result.pop("directed_evacuation_route_graph", None)
+        return result
+
     summary = {
         "schema_version": 1,
         "scenario_id": parameters.scenario_id,
@@ -114,10 +134,11 @@ def run_p8_suite(config_path: str | Path) -> P8SuiteOutput:
         "primary_run_id": primary_run_id,
         "research_horizon": primary.summary["research_horizon"],
         "snapshot_semantics": parameters.snapshot_semantics,
-        "normal_cases": {run_id: output.summary for run_id, output in normal},
+        "directed_evacuation_route_graph": route_graph,
+        "normal_cases": {run_id: compact(output.summary) for run_id, output in normal},
         "primary_controls": {
-            "normal_fusion": primary.summary,
-            **{name: output.summary for name, output in controls},
+            "normal_fusion": compact(primary.summary),
+            **{name: compact(output.summary) for name, output in controls},
         },
     }
     return P8SuiteOutput(summary=summary, rows=rows, primary=primary)
@@ -146,11 +167,36 @@ def write_p8_artifacts(
     svg_path = render_p8_registered_overlay_svg(
         scene,
         output.primary.summary,
+        output.primary.arrays,
         target / "registered_snapshot_closed_loop.svg",
+    )
+    prior_svg = render_p8_registered_overlay_svg(
+        scene,
+        output.primary.summary,
+        output.primary.arrays,
+        target / "prior_risk_map.svg",
+        panels=("prior",),
+    )
+    posterior_svg = render_p8_registered_overlay_svg(
+        scene,
+        output.primary.summary,
+        output.primary.arrays,
+        target / "posterior_risk_map.svg",
+        panels=("posterior",),
+    )
+    delta_svg = render_p8_registered_overlay_svg(
+        scene,
+        output.primary.summary,
+        output.primary.arrays,
+        target / "risk_delta_map.svg",
+        panels=("delta",),
     )
     return {
         "summary": summary_path.resolve(),
         "matrix": csv_path.resolve(),
         "arrays": arrays_path.resolve(),
         "visualization": svg_path,
+        "prior_risk_map": prior_svg,
+        "posterior_risk_map": posterior_svg,
+        "risk_delta_map": delta_svg,
     }

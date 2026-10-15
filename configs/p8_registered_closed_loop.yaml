@@ -2,6 +2,7 @@
   "schema_version": 1,
   "scenario_id": "p8_registered_w1_snapshot_closed_loop_v1",
   "scene_config": "scene_w1_4f_registered_v1.yaml",
+  "evacuation_route_config": "evacuation_routes_w1_4f_registered_v1.yaml",
   "truth_config": "fire_microwave_electrical_truth_v1.yaml",
   "prior_config": "fire_microwave_electrical_prior_v1.yaml",
   "hazard_config": "hazard.yaml",
@@ -38,12 +39,12 @@
   },
   "observation_points": {
     "selection_provenance": "registered_geometry_only",
-    "primary_id": "geometry_offset_west_far",
+    "primary_id": "geometry_route_high",
     "points": [
-      {"id": "geometry_offset_west_far", "offset_m": [-0.525, 0.625]},
-      {"id": "geometry_offset_west_mid", "offset_m": [-0.275, 0.625]},
-      {"id": "geometry_offset_west_near", "offset_m": [-0.025, 0.625]},
-      {"id": "geometry_offset_east_control", "offset_m": [1.600, 1.000]}
+      {"id": "geometry_route_high", "offset_m": [0.975, 0.625]},
+      {"id": "geometry_route_mid", "offset_m": [0.975, 0.125]},
+      {"id": "geometry_route_near", "offset_m": [0.975, -0.375]},
+      {"id": "geometry_route_low_control", "offset_m": [0.975, -1.375]}
     ]
   },
   "retreat_exit_ids": ["exit_west", "exit_center_stair", "exit_southeast"],
@@ -56,5 +57,5 @@
     "forbidden_representation": "infinity"
   },
   "local_comparison_radius_m": 0.75,
-  "notes": "Observation points are frozen geometric offsets before truth simulation. The 40.0 m by 12.5 m map scale, fire parameters, thresholds and dispatch offset are research assumptions, not W1 measurements or safety certification."
+  "notes": "Observation points are frozen geometric offsets on the registered directed green-arrow route graph before truth simulation. The 40.0 m by 12.5 m map scale, fire parameters, thresholds and dispatch offset are research assumptions, not W1 measurements or safety certification."
 }
