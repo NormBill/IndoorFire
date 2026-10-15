@@ -1,0 +1,60 @@
+{
+  "scene": {
+    "id": "w1_4f_makerspace_registered_v1",
+    "name": "W1 4F Makerspace Registered v1",
+    "geometry_status": "image_registered_scale_pending",
+    "notes": "Digitized from the supplied W1 4F evacuation map. Topology and semantic anchors are image registered; metric scale remains provisional until one surveyed distance is supplied."
+  },
+  "reference_map": {
+    "source_image": "../assets/maps/w1_4f_evacuation_base.png",
+    "source_size_px": [1713, 849],
+    "floor_roi_px": [40, 165, 1650, 515],
+    "metric_bounds_m": [0.0, 0.0, 40.0, 12.5],
+    "calibration_status": "provisional_aspect_registered_scale_pending",
+    "scale_reference": "The 40.0 m width preserves image aspect and gives a provisional 0.25 m grid. Replace metric_bounds_m after measuring one long horizontal reference distance."
+  },
+  "map": {
+    "width_m": 40.0,
+    "height_m": 12.5,
+    "resolution_m": 0.25,
+    "origin_m": [0.0, 0.0],
+    "default_occupancy": "UNKNOWN"
+  },
+  "free_space": [
+    {
+      "id": "digitized_floor_envelope",
+      "polygon_m": [
+        [0.25, 2.0], [0.25, 9.25], [0.5, 9.25], [0.5, 12.5],
+        [40.0, 12.5], [40.0, 2.0], [38.5, 2.0], [38.5, 0.75],
+        [31.0, 0.75], [31.0, 0.0], [28.5, 0.0], [28.5, 0.75],
+        [23.5, 0.75], [23.5, 0.0], [19.5, 0.0], [19.5, 1.5],
+        [17.0, 1.5], [17.0, 0.0], [3.25, 0.0], [3.25, 0.75],
+        [0.25, 0.75]
+      ]
+    }
+  ],
+  "obstacles": [
+    {"id": "west_structural_void", "type": "structural_void", "rect_m": [1.1, 3.35, 3.8, 8.15]},
+    {"id": "west_maker_counter", "type": "workbench", "rect_m": [7.9, 3.35, 1.8, 8.15]},
+    {"id": "center_stair_void_west", "type": "structural_void", "rect_m": [17.95, 8.15, 1.0, 3.35]},
+    {"id": "center_stair_void_east", "type": "structural_void", "rect_m": [19.65, 8.15, 0.65, 3.35]},
+    {"id": "center_maker_island", "type": "workbench", "polygon_m": [[17.35, 4.3], [23.5, 4.3], [23.5, 6.35], [21.8, 6.35], [21.8, 7.75], [20.0, 7.75], [20.0, 6.75], [18.8, 6.75], [18.8, 7.75], [17.35, 7.75]]},
+    {"id": "east_maker_island", "type": "workbench", "polygon_m": [[23.8, 3.95], [32.4, 3.95], [32.4, 6.25], [24.7, 6.25], [23.8, 5.5]]},
+    {"id": "south_center_void", "type": "structural_void", "polygon_m": [[19.5, 0.0], [23.5, 0.0], [23.5, 3.1], [22.6, 3.8], [19.5, 3.8]]},
+    {"id": "east_structural_void", "type": "structural_void", "rect_m": [35.75, 4.55, 3.2, 6.95]}
+  ],
+  "unknown_regions": [],
+  "semantic_objects": [
+    {"id": "door_center_west", "type": "door", "position_m": [18.95, 8.75]},
+    {"id": "door_center_east", "type": "door", "position_m": [20.3, 7.0]},
+    {"id": "vehicle_marker", "type": "vehicle", "position_m": [35.15, 11.0]}
+  ],
+  "exits": [
+    {"id": "exit_west", "position_m": [0.75, 5.5]},
+    {"id": "exit_center_stair", "position_m": [19.3, 8.8]},
+    {"id": "exit_southeast", "position_m": [38.9, 2.25]}
+  ],
+  "fixed_sensors": [],
+  "ugv_initial_pose": {"x_m": 35.15, "y_m": 11.0, "yaw_rad": 3.141592653589793},
+  "microwave_ignition": {"id": "microwave", "position_m": [19.4, 7.0]}
+}

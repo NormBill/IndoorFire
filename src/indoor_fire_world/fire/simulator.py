@@ -67,7 +67,11 @@ class ReducedOrderFireSimulator:
     def step(self, dt: float | None = None) -> FireField:
         step_s = self.parameters.time_step_s if dt is None else float(dt)
         self._validate_timestep(step_s)
-        source_rate = self._source_rate(self._timestamp + step_s)
+        evaluation_time = self._timestamp + step_s
+        source_rate = self._source_rate(evaluation_time)
+        temperature_gain, smoke_yield, co_yield = self.source.emission_coefficients(
+            evaluation_time
+        )
         spacing = self.scene.occupancy.geometry.resolution_m
         velocity = (self.parameters.ventilation_x_mps, self.parameters.ventilation_y_mps)
 
@@ -75,7 +79,7 @@ class ReducedOrderFireSimulator:
         self._temperature = self.parameters.ambient_temperature_c + advance_scalar(
             temperature_anomaly,
             self._fluid_mask,
-            source_rate * self.parameters.temperature_gain_c_per_kw_s,
+            source_rate * temperature_gain,
             dt=step_s,
             cell_size_m=spacing,
             diffusion_m2_per_s=self.parameters.temperature_diffusion_m2_per_s,
@@ -86,7 +90,7 @@ class ReducedOrderFireSimulator:
         self._smoke = advance_scalar(
             self._smoke,
             self._fluid_mask,
-            source_rate * self.parameters.smoke_yield_per_kw_s,
+            source_rate * smoke_yield,
             dt=step_s,
             cell_size_m=spacing,
             diffusion_m2_per_s=self.parameters.smoke_diffusion_m2_per_s,
@@ -97,7 +101,7 @@ class ReducedOrderFireSimulator:
         self._co = advance_scalar(
             self._co,
             self._fluid_mask,
-            source_rate * self.parameters.co_yield_per_kw_s,
+            source_rate * co_yield,
             dt=step_s,
             cell_size_m=spacing,
             diffusion_m2_per_s=self.parameters.co_diffusion_m2_per_s,

@@ -1,0 +1,85 @@
+{
+  "schema_version": 2,
+  "model_name": "registered_w1_microwave_electrical_prior_v1",
+  "time_step_s": 0.1,
+  "ambient_temperature_c": 22.0,
+  "ventilation_mps": [0.0, 0.0],
+  "diffusion_m2_per_s": {"temperature": 0.06, "smoke": 0.04, "co": 0.05},
+  "decay_per_s": {"smoke": 0.012, "co": 0.015},
+  "temperature_relaxation_per_s": 0.020,
+  "source": {
+    "enabled": true,
+    "source_type": "microwave_electrical_fault",
+    "semantic_id": "microwave",
+    "fire_growth_rate_kw_per_s2": 0.008,
+    "max_heat_release_rate_kw": 400.0,
+    "temperature_gain_c_per_kw_s": 0.070,
+    "smoke_yield_per_kw_s": 0.007,
+    "co_yield_per_kw_s": 0.002,
+    "phases": [
+      {
+        "phase_id": "overheating_pre_ignition",
+        "start_s": 0.0,
+        "end_s": 45.0,
+        "hrr_model": "inactive",
+        "initial_heat_release_rate_kw": 0.0,
+        "fire_growth_rate_kw_per_s2": 0.0,
+        "max_heat_release_rate_kw": 0.0,
+        "temperature_gain_c_per_kw_s": 0.0,
+        "smoke_yield_per_kw_s": 0.0,
+        "co_yield_per_kw_s": 0.0,
+        "physical_interpretation": "Prior assumes a longer non-flaming overheating period.",
+        "evidence_status": "scenario_assumption"
+      },
+      {
+        "phase_id": "concealed_smoldering",
+        "start_s": 45.0,
+        "end_s": 120.0,
+        "hrr_model": "t_squared",
+        "initial_heat_release_rate_kw": 0.0,
+        "fire_growth_rate_kw_per_s2": 0.005,
+        "max_heat_release_rate_kw": 28.125,
+        "temperature_gain_c_per_kw_s": 0.020,
+        "smoke_yield_per_kw_s": 0.008,
+        "co_yield_per_kw_s": 0.0025,
+        "physical_interpretation": "Prior underestimates concealed smoke and CO production.",
+        "evidence_status": "deliberate_model_mismatch"
+      },
+      {
+        "phase_id": "internal_flaming",
+        "start_s": 120.0,
+        "end_s": 240.0,
+        "hrr_model": "t_squared",
+        "initial_heat_release_rate_kw": 28.125,
+        "fire_growth_rate_kw_per_s2": 0.012,
+        "max_heat_release_rate_kw": 200.0,
+        "temperature_gain_c_per_kw_s": 0.055,
+        "smoke_yield_per_kw_s": 0.006,
+        "co_yield_per_kw_s": 0.0018,
+        "physical_interpretation": "Prior assumes slower internal flaming growth.",
+        "evidence_status": "deliberate_model_mismatch"
+      },
+      {
+        "phase_id": "enclosure_breakout",
+        "start_s": 240.0,
+        "end_s": null,
+        "hrr_model": "t_squared",
+        "initial_heat_release_rate_kw": 200.0,
+        "fire_growth_rate_kw_per_s2": 0.008,
+        "max_heat_release_rate_kw": 400.0,
+        "temperature_gain_c_per_kw_s": 0.070,
+        "smoke_yield_per_kw_s": 0.007,
+        "co_yield_per_kw_s": 0.002,
+        "physical_interpretation": "Prior expects delayed and weaker enclosure breakout.",
+        "evidence_status": "deliberate_model_mismatch"
+      }
+    ]
+  },
+  "visibility": {"clear_air_visibility_m": 30.0, "smoke_extinction_per_concentration": 3.0},
+  "assumption_status": "deterministic_prior_not_w1_calibrated",
+  "model_basis": [
+    "https://pages.nist.gov/fds/",
+    "https://www.nrc.gov/reading-rm/doc-collections/nuregs/contract/cr7197/index"
+  ],
+  "notes": "Gate 2 physics prior. Timing, HRR and yields are intentionally weaker than truth to expose a measurable hidden-fire mismatch for UGV correction."
+}

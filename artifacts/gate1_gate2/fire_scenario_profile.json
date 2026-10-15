@@ -1,0 +1,169 @@
+{
+  "calibration_status": "provisional_aspect_registered_scale_pending",
+  "exits": [
+    "exit_west",
+    "exit_center_stair",
+    "exit_southeast"
+  ],
+  "geometry_status": "image_registered_scale_pending",
+  "hrr_samples_kw": [
+    {
+      "prior": 0.0,
+      "time_s": 0.0,
+      "truth": 0.0
+    },
+    {
+      "prior": 0.0,
+      "time_s": 30.0,
+      "truth": 0.0
+    },
+    {
+      "prior": 1.125,
+      "time_s": 60.0,
+      "truth": 9.0
+    },
+    {
+      "prior": 10.125,
+      "time_s": 90.0,
+      "truth": 36.0
+    },
+    {
+      "prior": 15.125000000000002,
+      "time_s": 100.0,
+      "truth": 38.65
+    },
+    {
+      "prior": 71.32499999999999,
+      "time_s": 180.0,
+      "truth": 250.0
+    },
+    {
+      "prior": 200.0,
+      "time_s": 240.0,
+      "truth": 304.0
+    },
+    {
+      "prior": 228.8,
+      "time_s": 300.0,
+      "truth": 466.0
+    }
+  ],
+  "prior_phases": [
+    {
+      "co_yield_per_kw_s": 0.0,
+      "end_s": 45.0,
+      "evidence_status": "scenario_assumption",
+      "fire_growth_rate_kw_per_s2": 0.0,
+      "hrr_model": "inactive",
+      "initial_heat_release_rate_kw": 0.0,
+      "max_heat_release_rate_kw": 0.0,
+      "phase_id": "overheating_pre_ignition",
+      "physical_interpretation": "Prior assumes a longer non-flaming overheating period.",
+      "smoke_yield_per_kw_s": 0.0,
+      "start_s": 0.0,
+      "temperature_gain_c_per_kw_s": 0.0
+    },
+    {
+      "co_yield_per_kw_s": 0.0025,
+      "end_s": 120.0,
+      "evidence_status": "deliberate_model_mismatch",
+      "fire_growth_rate_kw_per_s2": 0.005,
+      "hrr_model": "t_squared",
+      "initial_heat_release_rate_kw": 0.0,
+      "max_heat_release_rate_kw": 28.125,
+      "phase_id": "concealed_smoldering",
+      "physical_interpretation": "Prior underestimates concealed smoke and CO production.",
+      "smoke_yield_per_kw_s": 0.008,
+      "start_s": 45.0,
+      "temperature_gain_c_per_kw_s": 0.02
+    },
+    {
+      "co_yield_per_kw_s": 0.0018,
+      "end_s": 240.0,
+      "evidence_status": "deliberate_model_mismatch",
+      "fire_growth_rate_kw_per_s2": 0.012,
+      "hrr_model": "t_squared",
+      "initial_heat_release_rate_kw": 28.125,
+      "max_heat_release_rate_kw": 200.0,
+      "phase_id": "internal_flaming",
+      "physical_interpretation": "Prior assumes slower internal flaming growth.",
+      "smoke_yield_per_kw_s": 0.006,
+      "start_s": 120.0,
+      "temperature_gain_c_per_kw_s": 0.055
+    },
+    {
+      "co_yield_per_kw_s": 0.002,
+      "end_s": null,
+      "evidence_status": "deliberate_model_mismatch",
+      "fire_growth_rate_kw_per_s2": 0.008,
+      "hrr_model": "t_squared",
+      "initial_heat_release_rate_kw": 200.0,
+      "max_heat_release_rate_kw": 400.0,
+      "phase_id": "enclosure_breakout",
+      "physical_interpretation": "Prior expects delayed and weaker enclosure breakout.",
+      "smoke_yield_per_kw_s": 0.007,
+      "start_s": 240.0,
+      "temperature_gain_c_per_kw_s": 0.07
+    }
+  ],
+  "scale_reference": "The 40.0 m width preserves image aspect and gives a provisional 0.25 m grid. Replace metric_bounds_m after measuring one long horizontal reference distance.",
+  "scene_id": "w1_4f_makerspace_registered_v1",
+  "truth_phases": [
+    {
+      "co_yield_per_kw_s": 0.0,
+      "end_s": 30.0,
+      "evidence_status": "scenario_assumption",
+      "fire_growth_rate_kw_per_s2": 0.0,
+      "hrr_model": "inactive",
+      "initial_heat_release_rate_kw": 0.0,
+      "max_heat_release_rate_kw": 0.0,
+      "phase_id": "overheating_pre_ignition",
+      "physical_interpretation": "Electrical overheating is present but no room-scale combustion source has emerged.",
+      "smoke_yield_per_kw_s": 0.0,
+      "start_s": 0.0,
+      "temperature_gain_c_per_kw_s": 0.0
+    },
+    {
+      "co_yield_per_kw_s": 0.004,
+      "end_s": 90.0,
+      "evidence_status": "literature_structured_uncalibrated",
+      "fire_growth_rate_kw_per_s2": 0.01,
+      "hrr_model": "t_squared",
+      "initial_heat_release_rate_kw": 0.0,
+      "max_heat_release_rate_kw": 36.0,
+      "phase_id": "concealed_smoldering",
+      "physical_interpretation": "Concealed insulation or polymer smoldering produces relatively smoke-rich emissions.",
+      "smoke_yield_per_kw_s": 0.012,
+      "start_s": 30.0,
+      "temperature_gain_c_per_kw_s": 0.025
+    },
+    {
+      "co_yield_per_kw_s": 0.0025,
+      "end_s": 180.0,
+      "evidence_status": "literature_structured_uncalibrated",
+      "fire_growth_rate_kw_per_s2": 0.0265,
+      "hrr_model": "t_squared",
+      "initial_heat_release_rate_kw": 36.0,
+      "max_heat_release_rate_kw": 250.0,
+      "phase_id": "internal_flaming",
+      "physical_interpretation": "Flaming remains primarily inside the appliance enclosure.",
+      "smoke_yield_per_kw_s": 0.008,
+      "start_s": 90.0,
+      "temperature_gain_c_per_kw_s": 0.08
+    },
+    {
+      "co_yield_per_kw_s": 0.003,
+      "end_s": null,
+      "evidence_status": "literature_structured_uncalibrated",
+      "fire_growth_rate_kw_per_s2": 0.015,
+      "hrr_model": "t_squared",
+      "initial_heat_release_rate_kw": 250.0,
+      "max_heat_release_rate_kw": 600.0,
+      "phase_id": "enclosure_breakout",
+      "physical_interpretation": "Hot gases and flames escape the appliance enclosure; secondary ignition is not yet modeled.",
+      "smoke_yield_per_kw_s": 0.011,
+      "start_s": 180.0,
+      "temperature_gain_c_per_kw_s": 0.1
+    }
+  ]
+}

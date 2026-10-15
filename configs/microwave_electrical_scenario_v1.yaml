@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "scenario_id": "w1_4f_microwave_electrical_fault_v1",
+  "task_semantics": "UGV reconnaissance and retreat; not a human crowd-egress simulation",
+  "scene_config": "scene_w1_4f_registered_v1.yaml",
+  "truth_config": "fire_microwave_electrical_truth_v1.yaml",
+  "prior_config": "fire_microwave_electrical_prior_v1.yaml",
+  "ignition_hypothesis": "Internal electrical overheating progresses through concealed smoldering, internal flaming, and enclosure breakout.",
+  "secondary_cable_spread": {
+    "enabled": false,
+    "reason": "Cable type, routing, heat flux and appliance-specific evidence are not available. Add only after a declared CHRISTIFIRE/THIEF-compatible parameterization."
+  },
+  "gate_status": {
+    "topology_registered": true,
+    "metric_scale_surveyed": false,
+    "source_phases_executable": true,
+    "w1_fire_parameters_calibrated": false
+  }
+}

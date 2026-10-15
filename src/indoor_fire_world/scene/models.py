@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import IntEnum
 import math
+from pathlib import Path
 from typing import Any, Iterator, Mapping
 
 
@@ -80,11 +81,79 @@ class Rectangle:
 
 
 @dataclass(frozen=True)
+class Polygon:
+    vertices: tuple[tuple[float, float], ...]
+
+    def __post_init__(self) -> None:
+        if len(self.vertices) < 3:
+            raise ValueError("Polygon requires at least three vertices")
+        if not all(math.isfinite(value) for point in self.vertices for value in point):
+            raise ValueError("Polygon vertices must be finite")
+
+    def contains(self, x: float, y: float) -> bool:
+        """Return whether a point is inside using deterministic ray casting."""
+        inside = False
+        previous = self.vertices[-1]
+        for current in self.vertices:
+            x1, y1 = previous
+            x2, y2 = current
+            if (y1 > y) != (y2 > y):
+                crossing_x = (x2 - x1) * (y - y1) / (y2 - y1) + x1
+                if x < crossing_x:
+                    inside = not inside
+            previous = current
+        return inside
+
+
+@dataclass(frozen=True)
+class MapRegistration:
+    source_image: Path
+    source_width_px: int
+    source_height_px: int
+    floor_roi_px: tuple[float, float, float, float]
+    metric_bounds_m: tuple[float, float, float, float]
+    calibration_status: str
+    scale_reference: str
+
+    def __post_init__(self) -> None:
+        if self.source_width_px <= 0 or self.source_height_px <= 0:
+            raise ValueError("Reference image dimensions must be positive")
+        left, top, width, height = self.floor_roi_px
+        if width <= 0 or height <= 0 or left < 0 or top < 0:
+            raise ValueError("Reference floor ROI must be a positive pixel rectangle")
+        if left + width > self.source_width_px or top + height > self.source_height_px:
+            raise ValueError("Reference floor ROI must fit inside the source image")
+        x, y, width_m, height_m = self.metric_bounds_m
+        if width_m <= 0 or height_m <= 0 or not all(
+            math.isfinite(value) for value in (x, y, width_m, height_m)
+        ):
+            raise ValueError("Reference metric bounds must be finite and positive")
+        if not self.calibration_status:
+            raise ValueError("Reference calibration status must not be empty")
+
+    def pixel_to_metric(self, pixel_x: float, pixel_y: float) -> tuple[float, float]:
+        left, top, width, height = self.floor_roi_px
+        x, y, width_m, height_m = self.metric_bounds_m
+        return (
+            x + (pixel_x - left) * width_m / width,
+            y + (top + height - pixel_y) * height_m / height,
+        )
+
+    def metric_to_pixel(self, metric_x: float, metric_y: float) -> tuple[float, float]:
+        left, top, width, height = self.floor_roi_px
+        x, y, width_m, height_m = self.metric_bounds_m
+        return (
+            left + (metric_x - x) * width / width_m,
+            top + height - (metric_y - y) * height / height_m,
+        )
+
+
+@dataclass(frozen=True)
 class SemanticObject:
     id: str
     kind: str
     position: tuple[float, float] | None = None
-    footprint: Rectangle | None = None
+    footprint: Rectangle | Polygon | None = None
 
 
 @dataclass(frozen=True)
@@ -150,4 +219,5 @@ class Scene:
     navigation: NavigationLayer
     ugv_initial_pose: Pose2D
     raw_config: Mapping[str, Any]
+    map_registration: MapRegistration | None = None
 

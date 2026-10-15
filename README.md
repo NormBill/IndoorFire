@@ -204,3 +204,54 @@ controlled deterministic model mismatch. Ventilation is a constant 2D vector
 in P2. The microwave is a lumped, cell-local source; its configured gains and
 yields convert heat-release rate into prototype field rates rather than
 calibrated physical mass or energy units.
+
+## Gate 1: registered W1 4F base map
+
+`configs/scene_w1_4f_registered_v1.yaml` is a separate migration target and
+does not replace the frozen P0-P7 schematic scene. It registers the supplied
+1713 by 849 pixel evacuation map, digitizes the irregular floor envelope and
+major fixed obstacles with polygon occupancy, and records three exits, the
+microwave anchor, and the UGV start. The original image is retained at
+`assets/maps/w1_4f_evacuation_base.png` so every metric feature can be checked
+against its source.
+
+The registration deliberately reports
+`provisional_aspect_registered_scale_pending`. Its 40.0 m by 12.5 m metric
+bounds preserve the image aspect and support a 0.25 m working grid, but are not
+surveyed dimensions. Replace `reference_map.metric_bounds_m` after obtaining
+one reliable long horizontal distance; do not report route lengths from this
+map as measured W1 distances before that calibration.
+
+Generate the self-contained overlay with:
+
+```bash
+python scripts/validate_gate1_gate2.py
+```
+
+## Gate 2: staged microwave electrical-fire scenario
+
+The registered-map scenario is declared in
+`configs/microwave_electrical_scenario_v1.yaml`. Its schema-version 2 truth and
+prior fire configurations use four deterministic phases:
+
+1. overheating before room-scale ignition;
+2. concealed, smoke-rich smoldering;
+3. internal flaming;
+4. enclosure breakout.
+
+Each phase freezes its time interval, heat-release-rate model, temperature
+gain, smoke yield, CO yield, interpretation, and evidence status. The prior is
+intentionally delayed and weaker than truth, giving the UGV correction a
+declared hidden-fire mismatch. Numerical values remain literature-structured
+research assumptions rather than W1 appliance calibration.
+
+Secondary cable ignition and flame spread are explicitly disabled. They require
+cable material, routing, incident heat flux, and a separately validated
+THIEF/CHRISTIFIRE-compatible parameterization; the current phase model must not
+be presented as a universal electrical-wire propagation model.
+
+Validate Gate 1, Gate 2, and all frozen regressions on HPC with:
+
+```bash
+bash scripts/hpc_validate_gate1_gate2.sh
+```

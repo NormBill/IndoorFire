@@ -1,0 +1,86 @@
+{
+  "schema_version": 2,
+  "model_name": "registered_w1_microwave_electrical_truth_v1",
+  "time_step_s": 0.1,
+  "ambient_temperature_c": 22.0,
+  "ventilation_mps": [-0.10, -0.05],
+  "diffusion_m2_per_s": {"temperature": 0.08, "smoke": 0.06, "co": 0.07},
+  "decay_per_s": {"smoke": 0.010, "co": 0.012},
+  "temperature_relaxation_per_s": 0.015,
+  "source": {
+    "enabled": true,
+    "source_type": "microwave_electrical_fault",
+    "semantic_id": "microwave",
+    "fire_growth_rate_kw_per_s2": 0.015,
+    "max_heat_release_rate_kw": 600.0,
+    "temperature_gain_c_per_kw_s": 0.10,
+    "smoke_yield_per_kw_s": 0.011,
+    "co_yield_per_kw_s": 0.003,
+    "phases": [
+      {
+        "phase_id": "overheating_pre_ignition",
+        "start_s": 0.0,
+        "end_s": 30.0,
+        "hrr_model": "inactive",
+        "initial_heat_release_rate_kw": 0.0,
+        "fire_growth_rate_kw_per_s2": 0.0,
+        "max_heat_release_rate_kw": 0.0,
+        "temperature_gain_c_per_kw_s": 0.0,
+        "smoke_yield_per_kw_s": 0.0,
+        "co_yield_per_kw_s": 0.0,
+        "physical_interpretation": "Electrical overheating is present but no room-scale combustion source has emerged.",
+        "evidence_status": "scenario_assumption"
+      },
+      {
+        "phase_id": "concealed_smoldering",
+        "start_s": 30.0,
+        "end_s": 90.0,
+        "hrr_model": "t_squared",
+        "initial_heat_release_rate_kw": 0.0,
+        "fire_growth_rate_kw_per_s2": 0.010,
+        "max_heat_release_rate_kw": 36.0,
+        "temperature_gain_c_per_kw_s": 0.025,
+        "smoke_yield_per_kw_s": 0.012,
+        "co_yield_per_kw_s": 0.004,
+        "physical_interpretation": "Concealed insulation or polymer smoldering produces relatively smoke-rich emissions.",
+        "evidence_status": "literature_structured_uncalibrated"
+      },
+      {
+        "phase_id": "internal_flaming",
+        "start_s": 90.0,
+        "end_s": 180.0,
+        "hrr_model": "t_squared",
+        "initial_heat_release_rate_kw": 36.0,
+        "fire_growth_rate_kw_per_s2": 0.0265,
+        "max_heat_release_rate_kw": 250.0,
+        "temperature_gain_c_per_kw_s": 0.080,
+        "smoke_yield_per_kw_s": 0.008,
+        "co_yield_per_kw_s": 0.0025,
+        "physical_interpretation": "Flaming remains primarily inside the appliance enclosure.",
+        "evidence_status": "literature_structured_uncalibrated"
+      },
+      {
+        "phase_id": "enclosure_breakout",
+        "start_s": 180.0,
+        "end_s": null,
+        "hrr_model": "t_squared",
+        "initial_heat_release_rate_kw": 250.0,
+        "fire_growth_rate_kw_per_s2": 0.015,
+        "max_heat_release_rate_kw": 600.0,
+        "temperature_gain_c_per_kw_s": 0.100,
+        "smoke_yield_per_kw_s": 0.011,
+        "co_yield_per_kw_s": 0.003,
+        "physical_interpretation": "Hot gases and flames escape the appliance enclosure; secondary ignition is not yet modeled.",
+        "evidence_status": "literature_structured_uncalibrated"
+      }
+    ]
+  },
+  "visibility": {"clear_air_visibility_m": 30.0, "smoke_extinction_per_concentration": 3.0},
+  "assumption_status": "deterministic_literature_structured_not_w1_calibrated",
+  "model_basis": [
+    "https://pages.nist.gov/fds/",
+    "https://www.nrc.gov/reading-rm/doc-collections/nuregs/contract/cr7197/index",
+    "https://www.nrc.gov/reading-rm/doc-collections/nuregs/contract/cr7010/v2/index"
+  ],
+  "notes": "Gate 2 truth scenario. Phase structure is physically interpretable, but numerical values remain explicit research assumptions until appliance-specific calorimetry or incident data are available."
+}
