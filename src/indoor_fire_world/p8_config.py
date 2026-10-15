@@ -31,6 +31,29 @@ class ObservationOffset:
 
 
 @dataclass(frozen=True)
+class RiskLevelBand:
+    id: str
+    label: str
+    upper_bound_excess_cost: float | None
+    color: str
+
+    def __post_init__(self) -> None:
+        if not self.id or not self.label:
+            raise ValueError("P8 risk-level IDs and labels must not be empty")
+        if self.upper_bound_excess_cost is not None and (
+            not math.isfinite(self.upper_bound_excess_cost)
+            or self.upper_bound_excess_cost < 0.0
+        ):
+            raise ValueError("P8 risk-level upper bounds must be finite and non-negative")
+        if len(self.color) != 7 or not self.color.startswith("#"):
+            raise ValueError("P8 risk-level colors must use #RRGGBB notation")
+        try:
+            int(self.color[1:], 16)
+        except ValueError as error:
+            raise ValueError("P8 risk-level colors must use #RRGGBB notation") from error
+
+
+@dataclass(frozen=True)
 class P8ScenarioParameters:
     config_path: Path
     scenario_id: str
@@ -56,6 +79,11 @@ class P8ScenarioParameters:
     ugv_operability_threshold: float
     retreat_hazard_threshold: float
     forbidden_representation: str
+    risk_level_metric: str
+    risk_level_definition: str
+    risk_levels: tuple[RiskLevelBand, ...]
+    risk_untenable_label: str
+    risk_untenable_color: str
     local_comparison_radius_m: float
     horizon_definition: str
     horizon_evidence_status: str
@@ -115,6 +143,30 @@ class P8ScenarioParameters:
                 raise ValueError(f"P8 {name} must be in [0, 1]")
         if self.forbidden_representation != "infinity":
             raise ValueError("P8 requires infinity forbidden representation")
+        if self.risk_level_metric != "planning_cost_excess_above_base":
+            raise ValueError("P8 risk levels require planning_cost_excess_above_base")
+        if not self.risk_level_definition or len(self.risk_levels) < 2:
+            raise ValueError("P8 risk-level scheme must be declared")
+        if self.risk_levels[-1].upper_bound_excess_cost is not None:
+            raise ValueError("The final P8 risk level must be open-ended")
+        if not self.risk_untenable_label:
+            raise ValueError("P8 untenable risk label must not be empty")
+        if len(self.risk_untenable_color) != 7 or not self.risk_untenable_color.startswith("#"):
+            raise ValueError("P8 untenable risk color must use #RRGGBB notation")
+        try:
+            int(self.risk_untenable_color[1:], 16)
+        except ValueError as error:
+            raise ValueError("P8 untenable risk color must use #RRGGBB notation") from error
+        finite_bounds = tuple(
+            level.upper_bound_excess_cost for level in self.risk_levels[:-1]
+        )
+        if any(bound is None for bound in finite_bounds) or tuple(
+            sorted(set(finite_bounds))
+        ) != finite_bounds:
+            raise ValueError("P8 risk-level bounds must be unique and increasing")
+        level_ids = tuple(level.id for level in self.risk_levels)
+        if len(level_ids) != len(set(level_ids)):
+            raise ValueError("P8 risk-level IDs must be unique")
         if not math.isfinite(self.local_comparison_radius_m) or self.local_comparison_radius_m <= 0.0:
             raise ValueError("P8 local comparison radius must be finite and positive")
         if not (
@@ -136,6 +188,39 @@ class P8ScenarioParameters:
             notes=f"P8 {purpose}; threshold semantics are independent.",
         )
 
+    def classify_excess_cost(self, excess_cost: float) -> RiskLevelBand:
+        if not math.isfinite(excess_cost) or excess_cost < 0.0:
+            raise ValueError("P8 excess planning cost must be finite and non-negative")
+        for level in self.risk_levels:
+            if level.upper_bound_excess_cost is None or (
+                excess_cost <= level.upper_bound_excess_cost + 1e-12
+            ):
+                return level
+        raise RuntimeError("P8 risk-level configuration has no terminal band")
+
+    def risk_level_scheme_dict(self) -> dict[str, Any]:
+        return {
+            "metric": self.risk_level_metric,
+            "definition": self.risk_level_definition,
+            "base_cost": self.base_cost,
+            "safety_status": "research_decision_levels_not_safety_certification",
+            "levels": [
+                {
+                    "id": level.id,
+                    "label": level.label,
+                    "upper_bound_excess_cost": level.upper_bound_excess_cost,
+                    "color": level.color,
+                }
+                for level in self.risk_levels
+            ],
+            "untenable": {
+                "id": "untenable",
+                "label": self.risk_untenable_label,
+                "color": self.risk_untenable_color,
+                "definition": "map-traversable cell forbidden by the configured retreat hazard threshold",
+            },
+        }
+
 
 def load_p8_parameters(config_path: str | Path) -> P8ScenarioParameters:
     path = Path(config_path).resolve()
@@ -150,6 +235,7 @@ def load_p8_parameters(config_path: str | Path) -> P8ScenarioParameters:
     assimilation = data["assimilation"]
     observations = data["observation_points"]
     planning = data["planning"]
+    risk_levels = data["risk_level_visualization"]
     return P8ScenarioParameters(
         config_path=path,
         scenario_id=str(data["scenario_id"]),
@@ -200,6 +286,23 @@ def load_p8_parameters(config_path: str | Path) -> P8ScenarioParameters:
         ugv_operability_threshold=float(planning["ugv_operability_threshold"]),
         retreat_hazard_threshold=float(planning["retreat_hazard_threshold"]),
         forbidden_representation=str(planning["forbidden_representation"]),
+        risk_level_metric=str(risk_levels["metric"]),
+        risk_level_definition=str(risk_levels["definition"]),
+        risk_levels=tuple(
+            RiskLevelBand(
+                id=str(item["id"]),
+                label=str(item["label"]),
+                upper_bound_excess_cost=(
+                    None
+                    if item["upper_bound_excess_cost"] is None
+                    else float(item["upper_bound_excess_cost"])
+                ),
+                color=str(item["color"]),
+            )
+            for item in risk_levels["levels"]
+        ),
+        risk_untenable_label=str(risk_levels["untenable"]["label"]),
+        risk_untenable_color=str(risk_levels["untenable"]["color"]),
         local_comparison_radius_m=float(data["local_comparison_radius_m"]),
         horizon_definition=str(clocks["horizon_definition"]),
         horizon_evidence_status=str(clocks["horizon_evidence_status"]),

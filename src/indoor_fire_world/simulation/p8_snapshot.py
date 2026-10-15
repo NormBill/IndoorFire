@@ -332,6 +332,42 @@ def _field_metrics(truth_state, prior_belief, posterior_belief, mask) -> dict[st
     return result
 
 
+def _risk_level_indices(
+    cost_field: NDArray[np.floating],
+    parameters: P8ScenarioParameters,
+) -> NDArray[np.int16]:
+    cost = np.asarray(cost_field, dtype=np.float64)
+    excess = np.maximum(cost - parameters.base_cost, 0.0)
+    indices = np.full(cost.shape, -1, dtype=np.int16)
+    finite = np.isfinite(excess)
+    unassigned = finite.copy()
+    for index, level in enumerate(parameters.risk_levels):
+        if level.upper_bound_excess_cost is None:
+            selected = unassigned
+        else:
+            selected = unassigned & (
+                excess <= level.upper_bound_excess_cost + 1e-12
+            )
+        indices[selected] = index
+        unassigned[selected] = False
+    if np.any(unassigned):
+        raise RuntimeError("P8 risk-level bands did not classify every finite cost")
+    return indices
+
+
+def _risk_level_counts(
+    indices: NDArray[np.integer],
+    parameters: P8ScenarioParameters,
+    traversable_mask: NDArray[np.bool_],
+) -> dict[str, int]:
+    counts = {
+        level.id: int(np.count_nonzero(indices == index))
+        for index, level in enumerate(parameters.risk_levels)
+    }
+    counts["untenable"] = int(np.count_nonzero((indices == -1) & traversable_mask))
+    return counts
+
+
 def _classify_route(prior: RetreatPlan, updated: RetreatPlan) -> str:
     if not prior.feasible:
         return "prior_no_feasible_retreat"
@@ -572,6 +608,21 @@ def run_p8_snapshot_case(
     uncertainty_after = {
         name: float(getattr(posterior_belief.uncertainty, name)[point.cell]) for name in MODALITIES
     }
+    prior_risk_levels = _risk_level_indices(prior_fields.cost.field, parameters)
+    posterior_risk_levels = _risk_level_indices(posterior_fields.cost.field, parameters)
+    traversable_mask = np.asarray(scene.occupancy.cells) == 0
+    prior_point_cost = float(prior_fields.cost.field[point.cell])
+    posterior_point_cost = float(posterior_fields.cost.field[point.cell])
+    prior_point_excess = (
+        max(prior_point_cost - parameters.base_cost, 0.0)
+        if math.isfinite(prior_point_cost)
+        else None
+    )
+    posterior_point_excess = (
+        max(posterior_point_cost - parameters.base_cost, 0.0)
+        if math.isfinite(posterior_point_cost)
+        else None
+    )
     summary = {
         "schema_version": 1,
         "scenario_id": parameters.scenario_id,
@@ -592,6 +643,33 @@ def run_p8_snapshot_case(
         "thresholds": {
             "ugv_operability_threshold": parameters.ugv_operability_threshold,
             "retreat_hazard_threshold": parameters.retreat_hazard_threshold,
+        },
+        "risk_level_scheme": parameters.risk_level_scheme_dict(),
+        "risk_level_counts": {
+            "prior": _risk_level_counts(
+                prior_risk_levels,
+                parameters,
+                traversable_mask,
+            ),
+            "posterior": _risk_level_counts(
+                posterior_risk_levels,
+                parameters,
+                traversable_mask,
+            ),
+        },
+        "risk_level_at_observation": {
+            "prior": (
+                parameters.classify_excess_cost(prior_point_excess).id
+                if prior_point_excess is not None
+                else "untenable"
+            ),
+            "posterior": (
+                parameters.classify_excess_cost(posterior_point_excess).id
+                if posterior_point_excess is not None
+                else "untenable"
+            ),
+            "prior_excess_cost": prior_point_excess,
+            "posterior_excess_cost": posterior_point_excess,
         },
         "run_controls": {
             "observation_enabled": observation_enabled,
@@ -672,6 +750,8 @@ def run_p8_snapshot_case(
         "posterior_planning_cost": np.asarray(posterior_fields.cost.field),
         "prior_forbidden": np.asarray(prior_fields.cost.forbidden),
         "posterior_forbidden": np.asarray(posterior_fields.cost.forbidden),
+        "prior_risk_level_index": prior_risk_levels,
+        "posterior_risk_level_index": posterior_risk_levels,
     }
     for name in MODALITIES:
         arrays[f"prior_mean_{name}"] = np.asarray(getattr(prior_belief.mean, name))

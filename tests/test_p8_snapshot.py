@@ -133,6 +133,27 @@ class P8SnapshotTests(unittest.TestCase):
         self.assertTrue(constraints["prior_retreat_directed_conformant"])
         self.assertTrue(constraints["updated_retreat_directed_conformant"])
 
+    def test_fixed_decision_risk_levels_are_auditable(self) -> None:
+        scheme = self.primary["risk_level_scheme"]
+        self.assertEqual(scheme["metric"], "planning_cost_excess_above_base")
+        self.assertEqual(
+            [level["id"] for level in scheme["levels"]],
+            ["minimal", "guarded", "elevated", "high", "critical"],
+        )
+        self.assertEqual(
+            self.primary["risk_level_at_observation"]["prior"],
+            "elevated",
+        )
+        self.assertEqual(
+            self.primary["risk_level_at_observation"]["posterior"],
+            "minimal",
+        )
+        for phase in ("prior", "posterior"):
+            self.assertEqual(
+                sum(self.primary["risk_level_counts"][phase].values()),
+                int(np.count_nonzero(~self.suite.primary.arrays[f"{phase}_forbidden"])),
+            )
+
     def test_risk_map_artifacts_are_valid_svg(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             paths = write_p8_artifacts(self.suite, CONFIG, directory)
@@ -145,13 +166,21 @@ class P8SnapshotTests(unittest.TestCase):
                 root = ET.parse(paths[key]).getroot()
                 self.assertTrue(root.tag.endswith("svg"))
             combined = paths["visualization"].read_text(encoding="utf-8")
-            self.assertIn("Prior planning risk/cost", combined)
+            self.assertIn("Prior decision-risk levels at t=100 s", combined)
             self.assertIn(
-                "Posterior planning risk/cost after UGV observation",
+                "Posterior decision-risk levels after UGV observation at t=100 s",
                 combined,
             )
-            self.assertIn("Planning risk/cost delta (posterior - prior)", combined)
+            self.assertIn(
+                "Planning-cost delta (posterior - prior) at t=100 s",
+                combined,
+            )
+            self.assertIn("Decision-risk level", combined)
+            self.assertIn("Critical (open)", combined)
             self.assertIn("Directed green-arrow route", combined)
+            self.assertIn("posterior_risk_map_t180", paths)
+            late = paths["posterior_risk_map_t180"].read_text(encoding="utf-8")
+            self.assertIn("at t=180 s", late)
 
     def test_snapshot_clock_does_not_advance_during_approach_or_replanning(self) -> None:
         clocks = self.primary["simulator_timestamps"]

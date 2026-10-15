@@ -167,34 +167,51 @@ def render_p8_registered_overlay_svg(
 
     prior_cost = np.asarray(arrays["prior_planning_cost"], dtype=np.float64)
     posterior_cost = np.asarray(arrays["posterior_planning_cost"], dtype=np.float64)
-    common_finite = np.isfinite(prior_cost) & np.isfinite(posterior_cost)
+    prior_finite = np.isfinite(prior_cost)
+    posterior_finite = np.isfinite(posterior_cost)
+    common_finite = prior_finite & posterior_finite
     if not np.any(common_finite):
         raise ValueError("P8 risk map requires finite traversable planning costs")
-    common_min = float(min(prior_cost[common_finite].min(), posterior_cost[common_finite].min()))
-    common_max = float(max(prior_cost[common_finite].max(), posterior_cost[common_finite].max()))
-    common_range = max(common_max - common_min, 1e-12)
-    prior = np.where(common_finite, (prior_cost - common_min) / common_range, 0.0)
-    posterior = np.where(
-        common_finite,
-        (posterior_cost - common_min) / common_range,
+    scheme = summary["risk_level_scheme"]
+    levels = tuple(scheme["levels"])
+    base_cost = float(scheme["base_cost"])
+    prior = np.full_like(prior_cost, np.nan)
+    posterior = np.full_like(posterior_cost, np.nan)
+    prior[prior_finite] = np.maximum(prior_cost[prior_finite] - base_cost, 0.0)
+    posterior[posterior_finite] = np.maximum(
+        posterior_cost[posterior_finite] - base_cost,
         0.0,
     )
+    delta = np.zeros_like(prior_cost)
+    np.subtract(posterior_cost, prior_cost, out=delta, where=common_finite)
     fields = {
         "prior": prior,
         "posterior": posterior,
-        "delta": posterior - prior,
+        "delta": delta,
     }
     titles = {
-        "prior": "Prior planning risk/cost",
-        "posterior": "Posterior planning risk/cost after UGV observation",
-        "delta": "Planning risk/cost delta (posterior - prior)",
+        "prior": f"Prior decision-risk levels at t={summary['fire_time_s']:g} s",
+        "posterior": (
+            "Posterior decision-risk levels after UGV observation "
+            f"at t={summary['fire_time_s']:g} s"
+        ),
+        "delta": (
+            "Planning-cost delta (posterior - prior) "
+            f"at t={summary['fire_time_s']:g} s"
+        ),
     }
     if not panels or any(name not in fields for name in panels):
         raise ValueError("P8 risk-map panels must be prior, posterior, or delta")
 
-    sequential = ("#FFF7EC", "#FEE8C8", "#FDBB84", "#FC8D59", "#D7301F", "#7F0000")
     diverging_negative = ("#2166AC", "#67A9CF", "#D1E5F0")
     diverging_positive = ("#FDDBC7", "#EF8A62", "#B2182B")
+
+    def level_for(excess_cost: float) -> dict:
+        for level in levels:
+            upper = level["upper_bound_excess_cost"]
+            if upper is None or excess_cost <= float(upper) + 1e-12:
+                return level
+        raise ValueError("P8 risk-level scheme has no terminal band")
 
     def risk_color(value: float, *, delta: bool, scale: float) -> str:
         if delta:
@@ -204,8 +221,9 @@ def render_p8_registered_overlay_svg(
             palette = diverging_positive if value >= 0.0 else diverging_negative
             index = min(len(palette) - 1, int(normalized * len(palette)))
             return palette[index]
-        index = min(len(sequential) - 1, int(max(0.0, min(1.0, value)) * len(sequential)))
-        return sequential[index]
+        if not np.isfinite(value):
+            return str(scheme["untenable"]["color"])
+        return str(level_for(max(0.0, value))["color"])
 
     source_width = registration.source_width_px
     source_height = registration.source_height_px
@@ -213,7 +231,7 @@ def render_p8_registered_overlay_svg(
     panel_width = source_width * panel_scale
     panel_height = source_height * panel_scale
     width = int(panel_width * len(panels))
-    height = int(panel_height + 142)
+    height = int(panel_height + 184)
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
         "<defs>",
@@ -241,7 +259,7 @@ def render_p8_registered_overlay_svg(
                 if not scene.navigation.is_traversable((row, col)):
                     continue
                 value = float(field[row, col])
-                if abs(value) <= 1e-9:
+                if is_delta and abs(value) <= 1e-9:
                     continue
                 x0 = geometry.origin_x + col * geometry.resolution_m
                 x1 = x0 + geometry.resolution_m
@@ -262,11 +280,22 @@ def render_p8_registered_overlay_svg(
                     for cell in edge_cells
                 )
             )
-            edge_value = float(np.mean([field[cell] for cell in edge_cells]))
-            edge_color = risk_color(edge_value, delta=is_delta, scale=delta_scale)
-            parts.append(
-                f'<polyline points="{points}" fill="none" stroke="{edge_color}" stroke-width="13" opacity="0.95" stroke-linecap="round"/>'
-            )
+            for source_cell, target_cell in zip(edge_cells, edge_cells[1:]):
+                source_px = registration.metric_to_pixel(
+                    *scene.navigation.grid_to_metric(*source_cell)
+                )
+                target_px = registration.metric_to_pixel(
+                    *scene.navigation.grid_to_metric(*target_cell)
+                )
+                segment_value = float(field[target_cell])
+                segment_color = risk_color(
+                    segment_value,
+                    delta=is_delta,
+                    scale=delta_scale,
+                )
+                parts.append(
+                    f'<line x1="{source_px[0]:.2f}" y1="{source_px[1]:.2f}" x2="{target_px[0]:.2f}" y2="{target_px[1]:.2f}" stroke="{segment_color}" stroke-width="13" opacity="0.95" stroke-linecap="round"/>'
+                )
             parts.append(
                 f'<polyline points="{points}" fill="none" stroke="#009E73" stroke-width="3" stroke-dasharray="10 8" marker-end="url(#p8-directed-arrow)"/>'
             )
@@ -336,8 +365,34 @@ def render_p8_registered_overlay_svg(
             f'<line x1="570" y1="{legend_y}" x2="626" y2="{legend_y}" stroke="#0072B2" stroke-width="7" stroke-dasharray="12 7"/><text x="636" y="{legend_y + 6}" font-size="16" font-family="sans-serif">Prior retreat</text>',
             f'<line x1="820" y1="{legend_y}" x2="876" y2="{legend_y}" stroke="#CC79A7" stroke-width="7"/><text x="886" y="{legend_y + 6}" font-size="16" font-family="sans-serif">Updated retreat</text>',
             f'<circle cx="1115" cy="{legend_y}" r="8" fill="#E69F00" stroke="#111" stroke-width="2"/><text x="1130" y="{legend_y + 6}" font-size="16" font-family="sans-serif">UGV observation</text>',
-            f'<text x="28" y="{legend_y + 34}" font-size="14" font-family="sans-serif" fill="#111">Cell color encodes planning risk/cost (physical hazard + uncertainty) on one shared scale. Delta: outlined blue = decrease, red = increase.</text>',
-            f'<text x="28" y="{legend_y + 58}" font-size="14" font-family="sans-serif" fill="#111">Snapshot model: fire is frozen during approach validation and comparison. 300 s is a configurable research horizon, not measured W1 response time.</text>',
+        ]
+    )
+    level_y = legend_y + 34
+    parts.append(
+        f'<text x="28" y="{level_y + 6}" font-size="15" font-family="sans-serif" font-weight="bold">Decision-risk level:</text>'
+    )
+    level_x = 180
+    for level in levels:
+        upper = level["upper_bound_excess_cost"]
+        bound = "open" if upper is None else f"≤{float(upper):g}"
+        parts.append(
+            f'<rect x="{level_x}" y="{level_y - 10}" width="20" height="20" fill="{escape(str(level["color"]))}" stroke="#333" stroke-width="1"/>'
+        )
+        parts.append(
+            f'<text x="{level_x + 27}" y="{level_y + 6}" font-size="14" font-family="sans-serif">{escape(str(level["label"]))} ({bound})</text>'
+        )
+        level_x += 170
+    untenable = scheme["untenable"]
+    parts.append(
+        f'<rect x="{level_x}" y="{level_y - 10}" width="20" height="20" fill="{escape(str(untenable["color"]))}" stroke="#333" stroke-width="1"/>'
+    )
+    parts.append(
+        f'<text x="{level_x + 27}" y="{level_y + 6}" font-size="14" font-family="sans-serif">{escape(str(untenable["label"]))}</text>'
+    )
+    parts.extend(
+        [
+            f'<text x="28" y="{legend_y + 70}" font-size="14" font-family="sans-serif" fill="#111">Heatmap classes use fixed planning-cost excess thresholds shared by prior/posterior cases. Delta: outlined blue = decrease, red = increase.</text>',
+            f'<text x="28" y="{legend_y + 94}" font-size="14" font-family="sans-serif" fill="#111">Research decision levels only, not safety certification. Fire is frozen during approach; 300 s is a configurable research horizon.</text>',
             "</svg>",
         ]
     )

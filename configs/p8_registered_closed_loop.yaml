@@ -56,6 +56,18 @@
     "retreat_hazard_threshold": 0.95,
     "forbidden_representation": "infinity"
   },
+  "risk_level_visualization": {
+    "metric": "planning_cost_excess_above_base",
+    "definition": "Research decision-risk bands applied to planning_cost - base_cost using fixed absolute thresholds shared by prior, posterior, times and cases; not firefighter tenability or safety-certification levels.",
+    "levels": [
+      {"id": "minimal", "label": "Minimal", "upper_bound_excess_cost": 0.15, "color": "#2C7BB6"},
+      {"id": "guarded", "label": "Guarded", "upper_bound_excess_cost": 0.20, "color": "#ABD9E9"},
+      {"id": "elevated", "label": "Elevated", "upper_bound_excess_cost": 0.25, "color": "#FFFFBF"},
+      {"id": "high", "label": "High", "upper_bound_excess_cost": 1.00, "color": "#FDAE61"},
+      {"id": "critical", "label": "Critical", "upper_bound_excess_cost": null, "color": "#D7191C"}
+    ],
+    "untenable": {"label": "Untenable / forbidden", "color": "#4D004B"}
+  },
   "local_comparison_radius_m": 0.75,
   "notes": "Observation points are frozen geometric offsets on the registered directed green-arrow route graph before truth simulation. The 40.0 m by 12.5 m map scale, fire parameters, thresholds and dispatch offset are research assumptions, not W1 measurements or safety certification."
 }

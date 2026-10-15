@@ -104,17 +104,24 @@ feasibility improvement when the updated route is feasible. Invalid geometry
 or approach cases use `invalid_observation_case` and remain distinct from a
 valid scenario with no feasible prior retreat.
 
-The visualization projects prior planning risk/cost, posterior planning
-risk/cost, and their signed difference onto the registered floor plan using a
-shared scale. This decision field combines the separately retained physical
-hazard and uncertainty components. The figure also samples the same field along
-every directed green-route edge and overlays the initial and updated retreat on
-that graph. With the current strict topology, the primary case has
+The visualization classifies `planning_cost - base_cost` into five fixed,
+configuration-defined decision-risk levels: Minimal, Guarded, Elevated, High,
+and Critical. Prior and posterior heatmaps use the same absolute thresholds and
+colors across cases; the signed cost-delta panel remains zero-centred. These are
+research decision levels, not firefighter-tenability or safety-certification
+thresholds. The underlying decision field combines the separately retained
+physical hazard and uncertainty components. Route edges are colored per short
+grid segment rather than by a whole-edge average, while the initial and updated
+retreat remain overlaid on the directed graph. With the current strict topology, the primary case has
 only the centre-exit branch available after the selected observation point, so
 the posterior route remains unchanged (`delta_j = 0`). This replaces the
 earlier free-grid reroute, which did not respect the evacuation arrows. The
 World Model and risk fields can still change without implying a route change
 when the registered topology offers no alternative downstream branch.
+The artifact writer retains the required `t=100 s` primary comparison and also
+writes posterior level heatmaps for every valid evaluation time at the primary
+observation point, making later fire-field expansion visible without rescaling
+or altering the underlying values.
 
 Run the complete P0-P8 validation and artifact generation on HPC with:
 

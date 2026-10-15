@@ -21,6 +21,7 @@ class P8SuiteOutput:
     summary: dict[str, Any]
     rows: tuple[dict[str, Any], ...]
     primary: P8CaseOutput
+    normal_cases: tuple[tuple[str, P8CaseOutput], ...]
 
 
 def _row(run_id: str, group: str, output: P8CaseOutput) -> dict[str, Any]:
@@ -30,6 +31,7 @@ def _row(run_id: str, group: str, output: P8CaseOutput) -> dict[str, Any]:
     prior = summary.get("prior_retreat", {})
     updated = summary.get("updated_retreat", {})
     constraints = summary.get("route_constraints", {})
+    observation_risk = summary.get("risk_level_at_observation", {})
     return {
         "run_id": run_id,
         "experiment_group": group,
@@ -56,6 +58,8 @@ def _row(run_id: str, group: str, output: P8CaseOutput) -> dict[str, Any]:
         "updated_retreat_directed_conformant": constraints.get(
             "updated_retreat_directed_conformant"
         ),
+        "prior_risk_level_at_observation": observation_risk.get("prior"),
+        "posterior_risk_level_at_observation": observation_risk.get("posterior"),
         "old_route_posterior_feasible": counterfactual.get("old_route_posterior_feasible"),
         "delta_j": counterfactual.get("delta_j"),
         "improvement_type": counterfactual.get("improvement_type"),
@@ -141,7 +145,12 @@ def run_p8_suite(config_path: str | Path) -> P8SuiteOutput:
             **{name: compact(output.summary) for name, output in controls},
         },
     }
-    return P8SuiteOutput(summary=summary, rows=rows, primary=primary)
+    return P8SuiteOutput(
+        summary=summary,
+        rows=rows,
+        primary=primary,
+        normal_cases=tuple(normal),
+    )
 
 
 def write_p8_artifacts(
@@ -191,7 +200,7 @@ def write_p8_artifacts(
         target / "risk_delta_map.svg",
         panels=("delta",),
     )
-    return {
+    paths = {
         "summary": summary_path.resolve(),
         "matrix": csv_path.resolve(),
         "arrays": arrays_path.resolve(),
@@ -200,3 +209,22 @@ def write_p8_artifacts(
         "posterior_risk_map": posterior_svg,
         "risk_delta_map": delta_svg,
     }
+    parameters = load_p8_parameters(config_path)
+    for _, case in output.normal_cases:
+        case_summary = case.summary
+        if (
+            case_summary["case_status"] != "valid"
+            or case_summary["observation_point"]["id"]
+            != parameters.primary_observation_id
+        ):
+            continue
+        time_label = f"{case_summary['fire_time_s']:g}"
+        key = f"posterior_risk_map_t{time_label}"
+        paths[key] = render_p8_registered_overlay_svg(
+            scene,
+            case_summary,
+            case.arrays,
+            target / f"posterior_risk_map_t{time_label}.svg",
+            panels=("posterior",),
+        )
+    return paths

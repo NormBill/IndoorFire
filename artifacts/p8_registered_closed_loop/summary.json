@@ -1788,7 +1788,7 @@
       "provenance": {
         "evacuation_route_config_sha256": "5e40ea73f98631bef39ae41b94ecae5607a96a1b7631fd182918327b6fdab4cc",
         "manual_route_penalty": false,
-        "p8_config_sha256": "9fed39162bd38d7aa19bc70eb5851f8e95a3490fa528c444a2864f12172d8d26",
+        "p8_config_sha256": "aa9d26347de5c951da02470010116fed1d446f1457289e981a5e5db45503057c",
         "planner_field_source": "posterior_belief",
         "scene_config_sha256": "8a8c7547dcb9ab8cc38353446b2a9a12fba05925c0e2290a237d0225f58cff22",
         "truth_used_for_observation_point_selection": false
@@ -1804,6 +1804,74 @@
         "fire_age_at_dispatch_s": 30.0,
         "motivation_source": "https://zrzyt.xinjiang.gov.cn/xjgtzy/tzgg/202311/f1bc95ce98e74f90bd91b78d8a354461/files/26-%E3%80%8A%E5%9F%8E%E5%B8%82%E6%B6%88%E9%98%B2%E7%AB%99%E5%BB%BA%E8%AE%BE%E6%A0%87%E5%87%86%E3%80%8B%EF%BC%88%E5%BB%BA%E6%A0%87152-2017%EF%BC%89.pdf",
         "pre_response_research_horizon_s": 300.0
+      },
+      "risk_level_at_observation": {
+        "posterior": "minimal",
+        "posterior_excess_cost": 0.10000000000000009,
+        "prior": "elevated",
+        "prior_excess_cost": 0.25
+      },
+      "risk_level_counts": {
+        "posterior": {
+          "critical": 0,
+          "elevated": 5787,
+          "guarded": 7,
+          "high": 1,
+          "minimal": 5,
+          "untenable": 0
+        },
+        "prior": {
+          "critical": 0,
+          "elevated": 5799,
+          "guarded": 0,
+          "high": 1,
+          "minimal": 0,
+          "untenable": 0
+        }
+      },
+      "risk_level_scheme": {
+        "base_cost": 1.0,
+        "definition": "Research decision-risk bands applied to planning_cost - base_cost using fixed absolute thresholds shared by prior, posterior, times and cases; not firefighter tenability or safety-certification levels.",
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "label": "Minimal",
+            "upper_bound_excess_cost": 0.15
+          },
+          {
+            "color": "#ABD9E9",
+            "id": "guarded",
+            "label": "Guarded",
+            "upper_bound_excess_cost": 0.2
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "label": "Elevated",
+            "upper_bound_excess_cost": 0.25
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "label": "High",
+            "upper_bound_excess_cost": 1.0
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "label": "Critical",
+            "upper_bound_excess_cost": null
+          }
+        ],
+        "metric": "planning_cost_excess_above_base",
+        "safety_status": "research_decision_levels_not_safety_certification",
+        "untenable": {
+          "color": "#4D004B",
+          "definition": "map-traversable cell forbidden by the configured retreat hazard threshold",
+          "id": "untenable",
+          "label": "Untenable / forbidden"
+        }
       },
       "route_constraints": {
         "graph_id": "w1_4f_green_arrow_routes_v1",
@@ -2902,7 +2970,7 @@
       "provenance": {
         "evacuation_route_config_sha256": "5e40ea73f98631bef39ae41b94ecae5607a96a1b7631fd182918327b6fdab4cc",
         "manual_route_penalty": false,
-        "p8_config_sha256": "9fed39162bd38d7aa19bc70eb5851f8e95a3490fa528c444a2864f12172d8d26",
+        "p8_config_sha256": "aa9d26347de5c951da02470010116fed1d446f1457289e981a5e5db45503057c",
         "planner_field_source": "posterior_belief",
         "scene_config_sha256": "8a8c7547dcb9ab8cc38353446b2a9a12fba05925c0e2290a237d0225f58cff22",
         "truth_used_for_observation_point_selection": false
@@ -2918,6 +2986,74 @@
         "fire_age_at_dispatch_s": 30.0,
         "motivation_source": "https://zrzyt.xinjiang.gov.cn/xjgtzy/tzgg/202311/f1bc95ce98e74f90bd91b78d8a354461/files/26-%E3%80%8A%E5%9F%8E%E5%B8%82%E6%B6%88%E9%98%B2%E7%AB%99%E5%BB%BA%E8%AE%BE%E6%A0%87%E5%87%86%E3%80%8B%EF%BC%88%E5%BB%BA%E6%A0%87152-2017%EF%BC%89.pdf",
         "pre_response_research_horizon_s": 300.0
+      },
+      "risk_level_at_observation": {
+        "posterior": "minimal",
+        "posterior_excess_cost": 0.10000000000000009,
+        "prior": "elevated",
+        "prior_excess_cost": 0.25
+      },
+      "risk_level_counts": {
+        "posterior": {
+          "critical": 0,
+          "elevated": 5788,
+          "guarded": 6,
+          "high": 1,
+          "minimal": 5,
+          "untenable": 0
+        },
+        "prior": {
+          "critical": 0,
+          "elevated": 5799,
+          "guarded": 0,
+          "high": 1,
+          "minimal": 0,
+          "untenable": 0
+        }
+      },
+      "risk_level_scheme": {
+        "base_cost": 1.0,
+        "definition": "Research decision-risk bands applied to planning_cost - base_cost using fixed absolute thresholds shared by prior, posterior, times and cases; not firefighter tenability or safety-certification levels.",
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "label": "Minimal",
+            "upper_bound_excess_cost": 0.15
+          },
+          {
+            "color": "#ABD9E9",
+            "id": "guarded",
+            "label": "Guarded",
+            "upper_bound_excess_cost": 0.2
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "label": "Elevated",
+            "upper_bound_excess_cost": 0.25
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "label": "High",
+            "upper_bound_excess_cost": 1.0
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "label": "Critical",
+            "upper_bound_excess_cost": null
+          }
+        ],
+        "metric": "planning_cost_excess_above_base",
+        "safety_status": "research_decision_levels_not_safety_certification",
+        "untenable": {
+          "color": "#4D004B",
+          "definition": "map-traversable cell forbidden by the configured retreat hazard threshold",
+          "id": "untenable",
+          "label": "Untenable / forbidden"
+        }
       },
       "route_constraints": {
         "graph_id": "w1_4f_green_arrow_routes_v1",
@@ -3952,7 +4088,7 @@
       "provenance": {
         "evacuation_route_config_sha256": "5e40ea73f98631bef39ae41b94ecae5607a96a1b7631fd182918327b6fdab4cc",
         "manual_route_penalty": false,
-        "p8_config_sha256": "9fed39162bd38d7aa19bc70eb5851f8e95a3490fa528c444a2864f12172d8d26",
+        "p8_config_sha256": "aa9d26347de5c951da02470010116fed1d446f1457289e981a5e5db45503057c",
         "planner_field_source": "posterior_belief",
         "scene_config_sha256": "8a8c7547dcb9ab8cc38353446b2a9a12fba05925c0e2290a237d0225f58cff22",
         "truth_used_for_observation_point_selection": false
@@ -3968,6 +4104,74 @@
         "fire_age_at_dispatch_s": 30.0,
         "motivation_source": "https://zrzyt.xinjiang.gov.cn/xjgtzy/tzgg/202311/f1bc95ce98e74f90bd91b78d8a354461/files/26-%E3%80%8A%E5%9F%8E%E5%B8%82%E6%B6%88%E9%98%B2%E7%AB%99%E5%BB%BA%E8%AE%BE%E6%A0%87%E5%87%86%E3%80%8B%EF%BC%88%E5%BB%BA%E6%A0%87152-2017%EF%BC%89.pdf",
         "pre_response_research_horizon_s": 300.0
+      },
+      "risk_level_at_observation": {
+        "posterior": "minimal",
+        "posterior_excess_cost": 0.10000000000000009,
+        "prior": "elevated",
+        "prior_excess_cost": 0.25
+      },
+      "risk_level_counts": {
+        "posterior": {
+          "critical": 0,
+          "elevated": 5787,
+          "guarded": 7,
+          "high": 1,
+          "minimal": 5,
+          "untenable": 0
+        },
+        "prior": {
+          "critical": 0,
+          "elevated": 5799,
+          "guarded": 0,
+          "high": 1,
+          "minimal": 0,
+          "untenable": 0
+        }
+      },
+      "risk_level_scheme": {
+        "base_cost": 1.0,
+        "definition": "Research decision-risk bands applied to planning_cost - base_cost using fixed absolute thresholds shared by prior, posterior, times and cases; not firefighter tenability or safety-certification levels.",
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "label": "Minimal",
+            "upper_bound_excess_cost": 0.15
+          },
+          {
+            "color": "#ABD9E9",
+            "id": "guarded",
+            "label": "Guarded",
+            "upper_bound_excess_cost": 0.2
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "label": "Elevated",
+            "upper_bound_excess_cost": 0.25
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "label": "High",
+            "upper_bound_excess_cost": 1.0
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "label": "Critical",
+            "upper_bound_excess_cost": null
+          }
+        ],
+        "metric": "planning_cost_excess_above_base",
+        "safety_status": "research_decision_levels_not_safety_certification",
+        "untenable": {
+          "color": "#4D004B",
+          "definition": "map-traversable cell forbidden by the configured retreat hazard threshold",
+          "id": "untenable",
+          "label": "Untenable / forbidden"
+        }
       },
       "route_constraints": {
         "graph_id": "w1_4f_green_arrow_routes_v1",
@@ -5010,7 +5214,7 @@
       "provenance": {
         "evacuation_route_config_sha256": "5e40ea73f98631bef39ae41b94ecae5607a96a1b7631fd182918327b6fdab4cc",
         "manual_route_penalty": false,
-        "p8_config_sha256": "9fed39162bd38d7aa19bc70eb5851f8e95a3490fa528c444a2864f12172d8d26",
+        "p8_config_sha256": "aa9d26347de5c951da02470010116fed1d446f1457289e981a5e5db45503057c",
         "planner_field_source": "posterior_belief",
         "scene_config_sha256": "8a8c7547dcb9ab8cc38353446b2a9a12fba05925c0e2290a237d0225f58cff22",
         "truth_used_for_observation_point_selection": false
@@ -5026,6 +5230,74 @@
         "fire_age_at_dispatch_s": 30.0,
         "motivation_source": "https://zrzyt.xinjiang.gov.cn/xjgtzy/tzgg/202311/f1bc95ce98e74f90bd91b78d8a354461/files/26-%E3%80%8A%E5%9F%8E%E5%B8%82%E6%B6%88%E9%98%B2%E7%AB%99%E5%BB%BA%E8%AE%BE%E6%A0%87%E5%87%86%E3%80%8B%EF%BC%88%E5%BB%BA%E6%A0%87152-2017%EF%BC%89.pdf",
         "pre_response_research_horizon_s": 300.0
+      },
+      "risk_level_at_observation": {
+        "posterior": "minimal",
+        "posterior_excess_cost": 0.10000000000000009,
+        "prior": "elevated",
+        "prior_excess_cost": 0.25
+      },
+      "risk_level_counts": {
+        "posterior": {
+          "critical": 0,
+          "elevated": 5788,
+          "guarded": 6,
+          "high": 1,
+          "minimal": 5,
+          "untenable": 0
+        },
+        "prior": {
+          "critical": 0,
+          "elevated": 5799,
+          "guarded": 0,
+          "high": 1,
+          "minimal": 0,
+          "untenable": 0
+        }
+      },
+      "risk_level_scheme": {
+        "base_cost": 1.0,
+        "definition": "Research decision-risk bands applied to planning_cost - base_cost using fixed absolute thresholds shared by prior, posterior, times and cases; not firefighter tenability or safety-certification levels.",
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "label": "Minimal",
+            "upper_bound_excess_cost": 0.15
+          },
+          {
+            "color": "#ABD9E9",
+            "id": "guarded",
+            "label": "Guarded",
+            "upper_bound_excess_cost": 0.2
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "label": "Elevated",
+            "upper_bound_excess_cost": 0.25
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "label": "High",
+            "upper_bound_excess_cost": 1.0
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "label": "Critical",
+            "upper_bound_excess_cost": null
+          }
+        ],
+        "metric": "planning_cost_excess_above_base",
+        "safety_status": "research_decision_levels_not_safety_certification",
+        "untenable": {
+          "color": "#4D004B",
+          "definition": "map-traversable cell forbidden by the configured retreat hazard threshold",
+          "id": "untenable",
+          "label": "Untenable / forbidden"
+        }
       },
       "route_constraints": {
         "graph_id": "w1_4f_green_arrow_routes_v1",
@@ -6012,7 +6284,7 @@
       "provenance": {
         "evacuation_route_config_sha256": "5e40ea73f98631bef39ae41b94ecae5607a96a1b7631fd182918327b6fdab4cc",
         "manual_route_penalty": false,
-        "p8_config_sha256": "9fed39162bd38d7aa19bc70eb5851f8e95a3490fa528c444a2864f12172d8d26",
+        "p8_config_sha256": "aa9d26347de5c951da02470010116fed1d446f1457289e981a5e5db45503057c",
         "planner_field_source": "posterior_belief",
         "scene_config_sha256": "8a8c7547dcb9ab8cc38353446b2a9a12fba05925c0e2290a237d0225f58cff22",
         "truth_used_for_observation_point_selection": false
@@ -6028,6 +6300,74 @@
         "fire_age_at_dispatch_s": 30.0,
         "motivation_source": "https://zrzyt.xinjiang.gov.cn/xjgtzy/tzgg/202311/f1bc95ce98e74f90bd91b78d8a354461/files/26-%E3%80%8A%E5%9F%8E%E5%B8%82%E6%B6%88%E9%98%B2%E7%AB%99%E5%BB%BA%E8%AE%BE%E6%A0%87%E5%87%86%E3%80%8B%EF%BC%88%E5%BB%BA%E6%A0%87152-2017%EF%BC%89.pdf",
         "pre_response_research_horizon_s": 300.0
+      },
+      "risk_level_at_observation": {
+        "posterior": "critical",
+        "posterior_excess_cost": 2.0656074396229926,
+        "prior": "elevated",
+        "prior_excess_cost": 0.25
+      },
+      "risk_level_counts": {
+        "posterior": {
+          "critical": 33,
+          "elevated": 5757,
+          "guarded": 2,
+          "high": 8,
+          "minimal": 0,
+          "untenable": 0
+        },
+        "prior": {
+          "critical": 29,
+          "elevated": 5764,
+          "guarded": 0,
+          "high": 7,
+          "minimal": 0,
+          "untenable": 0
+        }
+      },
+      "risk_level_scheme": {
+        "base_cost": 1.0,
+        "definition": "Research decision-risk bands applied to planning_cost - base_cost using fixed absolute thresholds shared by prior, posterior, times and cases; not firefighter tenability or safety-certification levels.",
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "label": "Minimal",
+            "upper_bound_excess_cost": 0.15
+          },
+          {
+            "color": "#ABD9E9",
+            "id": "guarded",
+            "label": "Guarded",
+            "upper_bound_excess_cost": 0.2
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "label": "Elevated",
+            "upper_bound_excess_cost": 0.25
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "label": "High",
+            "upper_bound_excess_cost": 1.0
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "label": "Critical",
+            "upper_bound_excess_cost": null
+          }
+        ],
+        "metric": "planning_cost_excess_above_base",
+        "safety_status": "research_decision_levels_not_safety_certification",
+        "untenable": {
+          "color": "#4D004B",
+          "definition": "map-traversable cell forbidden by the configured retreat hazard threshold",
+          "id": "untenable",
+          "label": "Untenable / forbidden"
+        }
       },
       "route_constraints": {
         "graph_id": "w1_4f_green_arrow_routes_v1",
@@ -7126,7 +7466,7 @@
       "provenance": {
         "evacuation_route_config_sha256": "5e40ea73f98631bef39ae41b94ecae5607a96a1b7631fd182918327b6fdab4cc",
         "manual_route_penalty": false,
-        "p8_config_sha256": "9fed39162bd38d7aa19bc70eb5851f8e95a3490fa528c444a2864f12172d8d26",
+        "p8_config_sha256": "aa9d26347de5c951da02470010116fed1d446f1457289e981a5e5db45503057c",
         "planner_field_source": "posterior_belief",
         "scene_config_sha256": "8a8c7547dcb9ab8cc38353446b2a9a12fba05925c0e2290a237d0225f58cff22",
         "truth_used_for_observation_point_selection": false
@@ -7142,6 +7482,74 @@
         "fire_age_at_dispatch_s": 30.0,
         "motivation_source": "https://zrzyt.xinjiang.gov.cn/xjgtzy/tzgg/202311/f1bc95ce98e74f90bd91b78d8a354461/files/26-%E3%80%8A%E5%9F%8E%E5%B8%82%E6%B6%88%E9%98%B2%E7%AB%99%E5%BB%BA%E8%AE%BE%E6%A0%87%E5%87%86%E3%80%8B%EF%BC%88%E5%BB%BA%E6%A0%87152-2017%EF%BC%89.pdf",
         "pre_response_research_horizon_s": 300.0
+      },
+      "risk_level_at_observation": {
+        "posterior": "critical",
+        "posterior_excess_cost": 1.52919079749342,
+        "prior": "elevated",
+        "prior_excess_cost": 0.25
+      },
+      "risk_level_counts": {
+        "posterior": {
+          "critical": 30,
+          "elevated": 5753,
+          "guarded": 6,
+          "high": 10,
+          "minimal": 1,
+          "untenable": 0
+        },
+        "prior": {
+          "critical": 29,
+          "elevated": 5764,
+          "guarded": 0,
+          "high": 7,
+          "minimal": 0,
+          "untenable": 0
+        }
+      },
+      "risk_level_scheme": {
+        "base_cost": 1.0,
+        "definition": "Research decision-risk bands applied to planning_cost - base_cost using fixed absolute thresholds shared by prior, posterior, times and cases; not firefighter tenability or safety-certification levels.",
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "label": "Minimal",
+            "upper_bound_excess_cost": 0.15
+          },
+          {
+            "color": "#ABD9E9",
+            "id": "guarded",
+            "label": "Guarded",
+            "upper_bound_excess_cost": 0.2
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "label": "Elevated",
+            "upper_bound_excess_cost": 0.25
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "label": "High",
+            "upper_bound_excess_cost": 1.0
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "label": "Critical",
+            "upper_bound_excess_cost": null
+          }
+        ],
+        "metric": "planning_cost_excess_above_base",
+        "safety_status": "research_decision_levels_not_safety_certification",
+        "untenable": {
+          "color": "#4D004B",
+          "definition": "map-traversable cell forbidden by the configured retreat hazard threshold",
+          "id": "untenable",
+          "label": "Untenable / forbidden"
+        }
       },
       "route_constraints": {
         "graph_id": "w1_4f_green_arrow_routes_v1",
@@ -8176,7 +8584,7 @@
       "provenance": {
         "evacuation_route_config_sha256": "5e40ea73f98631bef39ae41b94ecae5607a96a1b7631fd182918327b6fdab4cc",
         "manual_route_penalty": false,
-        "p8_config_sha256": "9fed39162bd38d7aa19bc70eb5851f8e95a3490fa528c444a2864f12172d8d26",
+        "p8_config_sha256": "aa9d26347de5c951da02470010116fed1d446f1457289e981a5e5db45503057c",
         "planner_field_source": "posterior_belief",
         "scene_config_sha256": "8a8c7547dcb9ab8cc38353446b2a9a12fba05925c0e2290a237d0225f58cff22",
         "truth_used_for_observation_point_selection": false
@@ -8192,6 +8600,74 @@
         "fire_age_at_dispatch_s": 30.0,
         "motivation_source": "https://zrzyt.xinjiang.gov.cn/xjgtzy/tzgg/202311/f1bc95ce98e74f90bd91b78d8a354461/files/26-%E3%80%8A%E5%9F%8E%E5%B8%82%E6%B6%88%E9%98%B2%E7%AB%99%E5%BB%BA%E8%AE%BE%E6%A0%87%E5%87%86%E3%80%8B%EF%BC%88%E5%BB%BA%E6%A0%87152-2017%EF%BC%89.pdf",
         "pre_response_research_horizon_s": 300.0
+      },
+      "risk_level_at_observation": {
+        "posterior": "critical",
+        "posterior_excess_cost": 11.521206379677345,
+        "prior": "critical",
+        "prior_excess_cost": 1.0380342408943082
+      },
+      "risk_level_counts": {
+        "posterior": {
+          "critical": 36,
+          "elevated": 5760,
+          "guarded": 0,
+          "high": 4,
+          "minimal": 0,
+          "untenable": 0
+        },
+        "prior": {
+          "critical": 29,
+          "elevated": 5764,
+          "guarded": 0,
+          "high": 7,
+          "minimal": 0,
+          "untenable": 0
+        }
+      },
+      "risk_level_scheme": {
+        "base_cost": 1.0,
+        "definition": "Research decision-risk bands applied to planning_cost - base_cost using fixed absolute thresholds shared by prior, posterior, times and cases; not firefighter tenability or safety-certification levels.",
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "label": "Minimal",
+            "upper_bound_excess_cost": 0.15
+          },
+          {
+            "color": "#ABD9E9",
+            "id": "guarded",
+            "label": "Guarded",
+            "upper_bound_excess_cost": 0.2
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "label": "Elevated",
+            "upper_bound_excess_cost": 0.25
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "label": "High",
+            "upper_bound_excess_cost": 1.0
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "label": "Critical",
+            "upper_bound_excess_cost": null
+          }
+        ],
+        "metric": "planning_cost_excess_above_base",
+        "safety_status": "research_decision_levels_not_safety_certification",
+        "untenable": {
+          "color": "#4D004B",
+          "definition": "map-traversable cell forbidden by the configured retreat hazard threshold",
+          "id": "untenable",
+          "label": "Untenable / forbidden"
+        }
       },
       "route_constraints": {
         "graph_id": "w1_4f_green_arrow_routes_v1",
@@ -9234,7 +9710,7 @@
       "provenance": {
         "evacuation_route_config_sha256": "5e40ea73f98631bef39ae41b94ecae5607a96a1b7631fd182918327b6fdab4cc",
         "manual_route_penalty": false,
-        "p8_config_sha256": "9fed39162bd38d7aa19bc70eb5851f8e95a3490fa528c444a2864f12172d8d26",
+        "p8_config_sha256": "aa9d26347de5c951da02470010116fed1d446f1457289e981a5e5db45503057c",
         "planner_field_source": "posterior_belief",
         "scene_config_sha256": "8a8c7547dcb9ab8cc38353446b2a9a12fba05925c0e2290a237d0225f58cff22",
         "truth_used_for_observation_point_selection": false
@@ -9250,6 +9726,74 @@
         "fire_age_at_dispatch_s": 30.0,
         "motivation_source": "https://zrzyt.xinjiang.gov.cn/xjgtzy/tzgg/202311/f1bc95ce98e74f90bd91b78d8a354461/files/26-%E3%80%8A%E5%9F%8E%E5%B8%82%E6%B6%88%E9%98%B2%E7%AB%99%E5%BB%BA%E8%AE%BE%E6%A0%87%E5%87%86%E3%80%8B%EF%BC%88%E5%BB%BA%E6%A0%87152-2017%EF%BC%89.pdf",
         "pre_response_research_horizon_s": 300.0
+      },
+      "risk_level_at_observation": {
+        "posterior": "critical",
+        "posterior_excess_cost": 11.173135521050948,
+        "prior": "elevated",
+        "prior_excess_cost": 0.25
+      },
+      "risk_level_counts": {
+        "posterior": {
+          "critical": 37,
+          "elevated": 5756,
+          "guarded": 1,
+          "high": 6,
+          "minimal": 0,
+          "untenable": 0
+        },
+        "prior": {
+          "critical": 29,
+          "elevated": 5764,
+          "guarded": 0,
+          "high": 7,
+          "minimal": 0,
+          "untenable": 0
+        }
+      },
+      "risk_level_scheme": {
+        "base_cost": 1.0,
+        "definition": "Research decision-risk bands applied to planning_cost - base_cost using fixed absolute thresholds shared by prior, posterior, times and cases; not firefighter tenability or safety-certification levels.",
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "label": "Minimal",
+            "upper_bound_excess_cost": 0.15
+          },
+          {
+            "color": "#ABD9E9",
+            "id": "guarded",
+            "label": "Guarded",
+            "upper_bound_excess_cost": 0.2
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "label": "Elevated",
+            "upper_bound_excess_cost": 0.25
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "label": "High",
+            "upper_bound_excess_cost": 1.0
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "label": "Critical",
+            "upper_bound_excess_cost": null
+          }
+        ],
+        "metric": "planning_cost_excess_above_base",
+        "safety_status": "research_decision_levels_not_safety_certification",
+        "untenable": {
+          "color": "#4D004B",
+          "definition": "map-traversable cell forbidden by the configured retreat hazard threshold",
+          "id": "untenable",
+          "label": "Untenable / forbidden"
+        }
       },
       "route_constraints": {
         "graph_id": "w1_4f_green_arrow_routes_v1",
@@ -10132,7 +10676,7 @@
       "provenance": {
         "evacuation_route_config_sha256": "5e40ea73f98631bef39ae41b94ecae5607a96a1b7631fd182918327b6fdab4cc",
         "manual_route_penalty": false,
-        "p8_config_sha256": "9fed39162bd38d7aa19bc70eb5851f8e95a3490fa528c444a2864f12172d8d26",
+        "p8_config_sha256": "aa9d26347de5c951da02470010116fed1d446f1457289e981a5e5db45503057c",
         "planner_field_source": "posterior_belief",
         "scene_config_sha256": "8a8c7547dcb9ab8cc38353446b2a9a12fba05925c0e2290a237d0225f58cff22",
         "truth_used_for_observation_point_selection": false
@@ -10148,6 +10692,74 @@
         "fire_age_at_dispatch_s": 30.0,
         "motivation_source": "https://zrzyt.xinjiang.gov.cn/xjgtzy/tzgg/202311/f1bc95ce98e74f90bd91b78d8a354461/files/26-%E3%80%8A%E5%9F%8E%E5%B8%82%E6%B6%88%E9%98%B2%E7%AB%99%E5%BB%BA%E8%AE%BE%E6%A0%87%E5%87%86%E3%80%8B%EF%BC%88%E5%BB%BA%E6%A0%87152-2017%EF%BC%89.pdf",
         "pre_response_research_horizon_s": 300.0
+      },
+      "risk_level_at_observation": {
+        "posterior": "critical",
+        "posterior_excess_cost": 46.79827138456365,
+        "prior": "critical",
+        "prior_excess_cost": 20.173085823756157
+      },
+      "risk_level_counts": {
+        "posterior": {
+          "critical": 96,
+          "elevated": 5654,
+          "guarded": 0,
+          "high": 8,
+          "minimal": 0,
+          "untenable": 42
+        },
+        "prior": {
+          "critical": 97,
+          "elevated": 5654,
+          "guarded": 0,
+          "high": 8,
+          "minimal": 0,
+          "untenable": 41
+        }
+      },
+      "risk_level_scheme": {
+        "base_cost": 1.0,
+        "definition": "Research decision-risk bands applied to planning_cost - base_cost using fixed absolute thresholds shared by prior, posterior, times and cases; not firefighter tenability or safety-certification levels.",
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "label": "Minimal",
+            "upper_bound_excess_cost": 0.15
+          },
+          {
+            "color": "#ABD9E9",
+            "id": "guarded",
+            "label": "Guarded",
+            "upper_bound_excess_cost": 0.2
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "label": "Elevated",
+            "upper_bound_excess_cost": 0.25
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "label": "High",
+            "upper_bound_excess_cost": 1.0
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "label": "Critical",
+            "upper_bound_excess_cost": null
+          }
+        ],
+        "metric": "planning_cost_excess_above_base",
+        "safety_status": "research_decision_levels_not_safety_certification",
+        "untenable": {
+          "color": "#4D004B",
+          "definition": "map-traversable cell forbidden by the configured retreat hazard threshold",
+          "id": "untenable",
+          "label": "Untenable / forbidden"
+        }
       },
       "route_constraints": {
         "graph_id": "w1_4f_green_arrow_routes_v1",
@@ -10907,7 +11519,7 @@
       "provenance": {
         "evacuation_route_config_sha256": "5e40ea73f98631bef39ae41b94ecae5607a96a1b7631fd182918327b6fdab4cc",
         "manual_route_penalty": false,
-        "p8_config_sha256": "9fed39162bd38d7aa19bc70eb5851f8e95a3490fa528c444a2864f12172d8d26",
+        "p8_config_sha256": "aa9d26347de5c951da02470010116fed1d446f1457289e981a5e5db45503057c",
         "planner_field_source": "posterior_belief",
         "scene_config_sha256": "8a8c7547dcb9ab8cc38353446b2a9a12fba05925c0e2290a237d0225f58cff22",
         "truth_used_for_observation_point_selection": false
@@ -10923,6 +11535,74 @@
         "fire_age_at_dispatch_s": 30.0,
         "motivation_source": "https://zrzyt.xinjiang.gov.cn/xjgtzy/tzgg/202311/f1bc95ce98e74f90bd91b78d8a354461/files/26-%E3%80%8A%E5%9F%8E%E5%B8%82%E6%B6%88%E9%98%B2%E7%AB%99%E5%BB%BA%E8%AE%BE%E6%A0%87%E5%87%86%E3%80%8B%EF%BC%88%E5%BB%BA%E6%A0%87152-2017%EF%BC%89.pdf",
         "pre_response_research_horizon_s": 300.0
+      },
+      "risk_level_at_observation": {
+        "posterior": "untenable",
+        "posterior_excess_cost": null,
+        "prior": "critical",
+        "prior_excess_cost": 46.9810480474677
+      },
+      "risk_level_counts": {
+        "posterior": {
+          "critical": 93,
+          "elevated": 5654,
+          "guarded": 0,
+          "high": 8,
+          "minimal": 0,
+          "untenable": 45
+        },
+        "prior": {
+          "critical": 97,
+          "elevated": 5654,
+          "guarded": 0,
+          "high": 8,
+          "minimal": 0,
+          "untenable": 41
+        }
+      },
+      "risk_level_scheme": {
+        "base_cost": 1.0,
+        "definition": "Research decision-risk bands applied to planning_cost - base_cost using fixed absolute thresholds shared by prior, posterior, times and cases; not firefighter tenability or safety-certification levels.",
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "label": "Minimal",
+            "upper_bound_excess_cost": 0.15
+          },
+          {
+            "color": "#ABD9E9",
+            "id": "guarded",
+            "label": "Guarded",
+            "upper_bound_excess_cost": 0.2
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "label": "Elevated",
+            "upper_bound_excess_cost": 0.25
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "label": "High",
+            "upper_bound_excess_cost": 1.0
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "label": "Critical",
+            "upper_bound_excess_cost": null
+          }
+        ],
+        "metric": "planning_cost_excess_above_base",
+        "safety_status": "research_decision_levels_not_safety_certification",
+        "untenable": {
+          "color": "#4D004B",
+          "definition": "map-traversable cell forbidden by the configured retreat hazard threshold",
+          "id": "untenable",
+          "label": "Untenable / forbidden"
+        }
       },
       "route_constraints": {
         "graph_id": "w1_4f_green_arrow_routes_v1",
@@ -11802,7 +12482,7 @@
       "provenance": {
         "evacuation_route_config_sha256": "5e40ea73f98631bef39ae41b94ecae5607a96a1b7631fd182918327b6fdab4cc",
         "manual_route_penalty": false,
-        "p8_config_sha256": "9fed39162bd38d7aa19bc70eb5851f8e95a3490fa528c444a2864f12172d8d26",
+        "p8_config_sha256": "aa9d26347de5c951da02470010116fed1d446f1457289e981a5e5db45503057c",
         "planner_field_source": "posterior_belief",
         "scene_config_sha256": "8a8c7547dcb9ab8cc38353446b2a9a12fba05925c0e2290a237d0225f58cff22",
         "truth_used_for_observation_point_selection": false
@@ -11818,6 +12498,74 @@
         "fire_age_at_dispatch_s": 30.0,
         "motivation_source": "https://zrzyt.xinjiang.gov.cn/xjgtzy/tzgg/202311/f1bc95ce98e74f90bd91b78d8a354461/files/26-%E3%80%8A%E5%9F%8E%E5%B8%82%E6%B6%88%E9%98%B2%E7%AB%99%E5%BB%BA%E8%AE%BE%E6%A0%87%E5%87%86%E3%80%8B%EF%BC%88%E5%BB%BA%E6%A0%87152-2017%EF%BC%89.pdf",
         "pre_response_research_horizon_s": 300.0
+      },
+      "risk_level_at_observation": {
+        "posterior": "minimal",
+        "posterior_excess_cost": 0.10000000000000009,
+        "prior": "elevated",
+        "prior_excess_cost": 0.25
+      },
+      "risk_level_counts": {
+        "posterior": {
+          "critical": 0,
+          "elevated": 5788,
+          "guarded": 7,
+          "high": 0,
+          "minimal": 5,
+          "untenable": 0
+        },
+        "prior": {
+          "critical": 0,
+          "elevated": 5800,
+          "guarded": 0,
+          "high": 0,
+          "minimal": 0,
+          "untenable": 0
+        }
+      },
+      "risk_level_scheme": {
+        "base_cost": 1.0,
+        "definition": "Research decision-risk bands applied to planning_cost - base_cost using fixed absolute thresholds shared by prior, posterior, times and cases; not firefighter tenability or safety-certification levels.",
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "label": "Minimal",
+            "upper_bound_excess_cost": 0.15
+          },
+          {
+            "color": "#ABD9E9",
+            "id": "guarded",
+            "label": "Guarded",
+            "upper_bound_excess_cost": 0.2
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "label": "Elevated",
+            "upper_bound_excess_cost": 0.25
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "label": "High",
+            "upper_bound_excess_cost": 1.0
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "label": "Critical",
+            "upper_bound_excess_cost": null
+          }
+        ],
+        "metric": "planning_cost_excess_above_base",
+        "safety_status": "research_decision_levels_not_safety_certification",
+        "untenable": {
+          "color": "#4D004B",
+          "definition": "map-traversable cell forbidden by the configured retreat hazard threshold",
+          "id": "untenable",
+          "label": "Untenable / forbidden"
+        }
       },
       "route_constraints": {
         "graph_id": "w1_4f_green_arrow_routes_v1",
@@ -12916,7 +13664,7 @@
       "provenance": {
         "evacuation_route_config_sha256": "5e40ea73f98631bef39ae41b94ecae5607a96a1b7631fd182918327b6fdab4cc",
         "manual_route_penalty": false,
-        "p8_config_sha256": "9fed39162bd38d7aa19bc70eb5851f8e95a3490fa528c444a2864f12172d8d26",
+        "p8_config_sha256": "aa9d26347de5c951da02470010116fed1d446f1457289e981a5e5db45503057c",
         "planner_field_source": "posterior_belief",
         "scene_config_sha256": "8a8c7547dcb9ab8cc38353446b2a9a12fba05925c0e2290a237d0225f58cff22",
         "truth_used_for_observation_point_selection": false
@@ -12932,6 +13680,74 @@
         "fire_age_at_dispatch_s": 30.0,
         "motivation_source": "https://zrzyt.xinjiang.gov.cn/xjgtzy/tzgg/202311/f1bc95ce98e74f90bd91b78d8a354461/files/26-%E3%80%8A%E5%9F%8E%E5%B8%82%E6%B6%88%E9%98%B2%E7%AB%99%E5%BB%BA%E8%AE%BE%E6%A0%87%E5%87%86%E3%80%8B%EF%BC%88%E5%BB%BA%E6%A0%87152-2017%EF%BC%89.pdf",
         "pre_response_research_horizon_s": 300.0
+      },
+      "risk_level_at_observation": {
+        "posterior": "minimal",
+        "posterior_excess_cost": 0.10000000000000009,
+        "prior": "elevated",
+        "prior_excess_cost": 0.25
+      },
+      "risk_level_counts": {
+        "posterior": {
+          "critical": 0,
+          "elevated": 5789,
+          "guarded": 6,
+          "high": 0,
+          "minimal": 5,
+          "untenable": 0
+        },
+        "prior": {
+          "critical": 0,
+          "elevated": 5800,
+          "guarded": 0,
+          "high": 0,
+          "minimal": 0,
+          "untenable": 0
+        }
+      },
+      "risk_level_scheme": {
+        "base_cost": 1.0,
+        "definition": "Research decision-risk bands applied to planning_cost - base_cost using fixed absolute thresholds shared by prior, posterior, times and cases; not firefighter tenability or safety-certification levels.",
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "label": "Minimal",
+            "upper_bound_excess_cost": 0.15
+          },
+          {
+            "color": "#ABD9E9",
+            "id": "guarded",
+            "label": "Guarded",
+            "upper_bound_excess_cost": 0.2
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "label": "Elevated",
+            "upper_bound_excess_cost": 0.25
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "label": "High",
+            "upper_bound_excess_cost": 1.0
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "label": "Critical",
+            "upper_bound_excess_cost": null
+          }
+        ],
+        "metric": "planning_cost_excess_above_base",
+        "safety_status": "research_decision_levels_not_safety_certification",
+        "untenable": {
+          "color": "#4D004B",
+          "definition": "map-traversable cell forbidden by the configured retreat hazard threshold",
+          "id": "untenable",
+          "label": "Untenable / forbidden"
+        }
       },
       "route_constraints": {
         "graph_id": "w1_4f_green_arrow_routes_v1",
@@ -13966,7 +14782,7 @@
       "provenance": {
         "evacuation_route_config_sha256": "5e40ea73f98631bef39ae41b94ecae5607a96a1b7631fd182918327b6fdab4cc",
         "manual_route_penalty": false,
-        "p8_config_sha256": "9fed39162bd38d7aa19bc70eb5851f8e95a3490fa528c444a2864f12172d8d26",
+        "p8_config_sha256": "aa9d26347de5c951da02470010116fed1d446f1457289e981a5e5db45503057c",
         "planner_field_source": "posterior_belief",
         "scene_config_sha256": "8a8c7547dcb9ab8cc38353446b2a9a12fba05925c0e2290a237d0225f58cff22",
         "truth_used_for_observation_point_selection": false
@@ -13982,6 +14798,74 @@
         "fire_age_at_dispatch_s": 30.0,
         "motivation_source": "https://zrzyt.xinjiang.gov.cn/xjgtzy/tzgg/202311/f1bc95ce98e74f90bd91b78d8a354461/files/26-%E3%80%8A%E5%9F%8E%E5%B8%82%E6%B6%88%E9%98%B2%E7%AB%99%E5%BB%BA%E8%AE%BE%E6%A0%87%E5%87%86%E3%80%8B%EF%BC%88%E5%BB%BA%E6%A0%87152-2017%EF%BC%89.pdf",
         "pre_response_research_horizon_s": 300.0
+      },
+      "risk_level_at_observation": {
+        "posterior": "minimal",
+        "posterior_excess_cost": 0.10000000000000009,
+        "prior": "elevated",
+        "prior_excess_cost": 0.25
+      },
+      "risk_level_counts": {
+        "posterior": {
+          "critical": 0,
+          "elevated": 5788,
+          "guarded": 7,
+          "high": 0,
+          "minimal": 5,
+          "untenable": 0
+        },
+        "prior": {
+          "critical": 0,
+          "elevated": 5800,
+          "guarded": 0,
+          "high": 0,
+          "minimal": 0,
+          "untenable": 0
+        }
+      },
+      "risk_level_scheme": {
+        "base_cost": 1.0,
+        "definition": "Research decision-risk bands applied to planning_cost - base_cost using fixed absolute thresholds shared by prior, posterior, times and cases; not firefighter tenability or safety-certification levels.",
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "label": "Minimal",
+            "upper_bound_excess_cost": 0.15
+          },
+          {
+            "color": "#ABD9E9",
+            "id": "guarded",
+            "label": "Guarded",
+            "upper_bound_excess_cost": 0.2
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "label": "Elevated",
+            "upper_bound_excess_cost": 0.25
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "label": "High",
+            "upper_bound_excess_cost": 1.0
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "label": "Critical",
+            "upper_bound_excess_cost": null
+          }
+        ],
+        "metric": "planning_cost_excess_above_base",
+        "safety_status": "research_decision_levels_not_safety_certification",
+        "untenable": {
+          "color": "#4D004B",
+          "definition": "map-traversable cell forbidden by the configured retreat hazard threshold",
+          "id": "untenable",
+          "label": "Untenable / forbidden"
+        }
       },
       "route_constraints": {
         "graph_id": "w1_4f_green_arrow_routes_v1",
@@ -15024,7 +15908,7 @@
       "provenance": {
         "evacuation_route_config_sha256": "5e40ea73f98631bef39ae41b94ecae5607a96a1b7631fd182918327b6fdab4cc",
         "manual_route_penalty": false,
-        "p8_config_sha256": "9fed39162bd38d7aa19bc70eb5851f8e95a3490fa528c444a2864f12172d8d26",
+        "p8_config_sha256": "aa9d26347de5c951da02470010116fed1d446f1457289e981a5e5db45503057c",
         "planner_field_source": "posterior_belief",
         "scene_config_sha256": "8a8c7547dcb9ab8cc38353446b2a9a12fba05925c0e2290a237d0225f58cff22",
         "truth_used_for_observation_point_selection": false
@@ -15040,6 +15924,74 @@
         "fire_age_at_dispatch_s": 30.0,
         "motivation_source": "https://zrzyt.xinjiang.gov.cn/xjgtzy/tzgg/202311/f1bc95ce98e74f90bd91b78d8a354461/files/26-%E3%80%8A%E5%9F%8E%E5%B8%82%E6%B6%88%E9%98%B2%E7%AB%99%E5%BB%BA%E8%AE%BE%E6%A0%87%E5%87%86%E3%80%8B%EF%BC%88%E5%BB%BA%E6%A0%87152-2017%EF%BC%89.pdf",
         "pre_response_research_horizon_s": 300.0
+      },
+      "risk_level_at_observation": {
+        "posterior": "minimal",
+        "posterior_excess_cost": 0.10000000000000009,
+        "prior": "elevated",
+        "prior_excess_cost": 0.25
+      },
+      "risk_level_counts": {
+        "posterior": {
+          "critical": 0,
+          "elevated": 5789,
+          "guarded": 6,
+          "high": 0,
+          "minimal": 5,
+          "untenable": 0
+        },
+        "prior": {
+          "critical": 0,
+          "elevated": 5800,
+          "guarded": 0,
+          "high": 0,
+          "minimal": 0,
+          "untenable": 0
+        }
+      },
+      "risk_level_scheme": {
+        "base_cost": 1.0,
+        "definition": "Research decision-risk bands applied to planning_cost - base_cost using fixed absolute thresholds shared by prior, posterior, times and cases; not firefighter tenability or safety-certification levels.",
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "label": "Minimal",
+            "upper_bound_excess_cost": 0.15
+          },
+          {
+            "color": "#ABD9E9",
+            "id": "guarded",
+            "label": "Guarded",
+            "upper_bound_excess_cost": 0.2
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "label": "Elevated",
+            "upper_bound_excess_cost": 0.25
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "label": "High",
+            "upper_bound_excess_cost": 1.0
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "label": "Critical",
+            "upper_bound_excess_cost": null
+          }
+        ],
+        "metric": "planning_cost_excess_above_base",
+        "safety_status": "research_decision_levels_not_safety_certification",
+        "untenable": {
+          "color": "#4D004B",
+          "definition": "map-traversable cell forbidden by the configured retreat hazard threshold",
+          "id": "untenable",
+          "label": "Untenable / forbidden"
+        }
       },
       "route_constraints": {
         "graph_id": "w1_4f_green_arrow_routes_v1",
@@ -16018,7 +16970,7 @@
       "provenance": {
         "evacuation_route_config_sha256": "5e40ea73f98631bef39ae41b94ecae5607a96a1b7631fd182918327b6fdab4cc",
         "manual_route_penalty": false,
-        "p8_config_sha256": "9fed39162bd38d7aa19bc70eb5851f8e95a3490fa528c444a2864f12172d8d26",
+        "p8_config_sha256": "aa9d26347de5c951da02470010116fed1d446f1457289e981a5e5db45503057c",
         "planner_field_source": "posterior_belief",
         "scene_config_sha256": "8a8c7547dcb9ab8cc38353446b2a9a12fba05925c0e2290a237d0225f58cff22",
         "truth_used_for_observation_point_selection": false
@@ -16034,6 +16986,74 @@
         "fire_age_at_dispatch_s": 30.0,
         "motivation_source": "https://zrzyt.xinjiang.gov.cn/xjgtzy/tzgg/202311/f1bc95ce98e74f90bd91b78d8a354461/files/26-%E3%80%8A%E5%9F%8E%E5%B8%82%E6%B6%88%E9%98%B2%E7%AB%99%E5%BB%BA%E8%AE%BE%E6%A0%87%E5%87%86%E3%80%8B%EF%BC%88%E5%BB%BA%E6%A0%87152-2017%EF%BC%89.pdf",
         "pre_response_research_horizon_s": 300.0
+      },
+      "risk_level_at_observation": {
+        "posterior": "elevated",
+        "posterior_excess_cost": 0.25,
+        "prior": "elevated",
+        "prior_excess_cost": 0.25
+      },
+      "risk_level_counts": {
+        "posterior": {
+          "critical": 0,
+          "elevated": 5799,
+          "guarded": 0,
+          "high": 1,
+          "minimal": 0,
+          "untenable": 0
+        },
+        "prior": {
+          "critical": 0,
+          "elevated": 5799,
+          "guarded": 0,
+          "high": 1,
+          "minimal": 0,
+          "untenable": 0
+        }
+      },
+      "risk_level_scheme": {
+        "base_cost": 1.0,
+        "definition": "Research decision-risk bands applied to planning_cost - base_cost using fixed absolute thresholds shared by prior, posterior, times and cases; not firefighter tenability or safety-certification levels.",
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "label": "Minimal",
+            "upper_bound_excess_cost": 0.15
+          },
+          {
+            "color": "#ABD9E9",
+            "id": "guarded",
+            "label": "Guarded",
+            "upper_bound_excess_cost": 0.2
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "label": "Elevated",
+            "upper_bound_excess_cost": 0.25
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "label": "High",
+            "upper_bound_excess_cost": 1.0
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "label": "Critical",
+            "upper_bound_excess_cost": null
+          }
+        ],
+        "metric": "planning_cost_excess_above_base",
+        "safety_status": "research_decision_levels_not_safety_certification",
+        "untenable": {
+          "color": "#4D004B",
+          "definition": "map-traversable cell forbidden by the configured retreat hazard threshold",
+          "id": "untenable",
+          "label": "Untenable / forbidden"
+        }
       },
       "route_constraints": {
         "graph_id": "w1_4f_green_arrow_routes_v1",
@@ -17004,7 +18024,7 @@
       "provenance": {
         "evacuation_route_config_sha256": "5e40ea73f98631bef39ae41b94ecae5607a96a1b7631fd182918327b6fdab4cc",
         "manual_route_penalty": false,
-        "p8_config_sha256": "9fed39162bd38d7aa19bc70eb5851f8e95a3490fa528c444a2864f12172d8d26",
+        "p8_config_sha256": "aa9d26347de5c951da02470010116fed1d446f1457289e981a5e5db45503057c",
         "planner_field_source": "posterior_belief",
         "scene_config_sha256": "8a8c7547dcb9ab8cc38353446b2a9a12fba05925c0e2290a237d0225f58cff22",
         "truth_used_for_observation_point_selection": false
@@ -17020,6 +18040,74 @@
         "fire_age_at_dispatch_s": 30.0,
         "motivation_source": "https://zrzyt.xinjiang.gov.cn/xjgtzy/tzgg/202311/f1bc95ce98e74f90bd91b78d8a354461/files/26-%E3%80%8A%E5%9F%8E%E5%B8%82%E6%B6%88%E9%98%B2%E7%AB%99%E5%BB%BA%E8%AE%BE%E6%A0%87%E5%87%86%E3%80%8B%EF%BC%88%E5%BB%BA%E6%A0%87152-2017%EF%BC%89.pdf",
         "pre_response_research_horizon_s": 300.0
+      },
+      "risk_level_at_observation": {
+        "posterior": "minimal",
+        "posterior_excess_cost": 0.10000000000000009,
+        "prior": "elevated",
+        "prior_excess_cost": 0.25
+      },
+      "risk_level_counts": {
+        "posterior": {
+          "critical": 0,
+          "elevated": 5787,
+          "guarded": 7,
+          "high": 1,
+          "minimal": 5,
+          "untenable": 0
+        },
+        "prior": {
+          "critical": 0,
+          "elevated": 5799,
+          "guarded": 0,
+          "high": 1,
+          "minimal": 0,
+          "untenable": 0
+        }
+      },
+      "risk_level_scheme": {
+        "base_cost": 1.0,
+        "definition": "Research decision-risk bands applied to planning_cost - base_cost using fixed absolute thresholds shared by prior, posterior, times and cases; not firefighter tenability or safety-certification levels.",
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "label": "Minimal",
+            "upper_bound_excess_cost": 0.15
+          },
+          {
+            "color": "#ABD9E9",
+            "id": "guarded",
+            "label": "Guarded",
+            "upper_bound_excess_cost": 0.2
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "label": "Elevated",
+            "upper_bound_excess_cost": 0.25
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "label": "High",
+            "upper_bound_excess_cost": 1.0
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "label": "Critical",
+            "upper_bound_excess_cost": null
+          }
+        ],
+        "metric": "planning_cost_excess_above_base",
+        "safety_status": "research_decision_levels_not_safety_certification",
+        "untenable": {
+          "color": "#4D004B",
+          "definition": "map-traversable cell forbidden by the configured retreat hazard threshold",
+          "id": "untenable",
+          "label": "Untenable / forbidden"
+        }
       },
       "route_constraints": {
         "graph_id": "w1_4f_green_arrow_routes_v1",
@@ -17990,7 +19078,7 @@
       "provenance": {
         "evacuation_route_config_sha256": "5e40ea73f98631bef39ae41b94ecae5607a96a1b7631fd182918327b6fdab4cc",
         "manual_route_penalty": false,
-        "p8_config_sha256": "9fed39162bd38d7aa19bc70eb5851f8e95a3490fa528c444a2864f12172d8d26",
+        "p8_config_sha256": "aa9d26347de5c951da02470010116fed1d446f1457289e981a5e5db45503057c",
         "planner_field_source": "posterior_belief",
         "scene_config_sha256": "8a8c7547dcb9ab8cc38353446b2a9a12fba05925c0e2290a237d0225f58cff22",
         "truth_used_for_observation_point_selection": false
@@ -18006,6 +19094,74 @@
         "fire_age_at_dispatch_s": 30.0,
         "motivation_source": "https://zrzyt.xinjiang.gov.cn/xjgtzy/tzgg/202311/f1bc95ce98e74f90bd91b78d8a354461/files/26-%E3%80%8A%E5%9F%8E%E5%B8%82%E6%B6%88%E9%98%B2%E7%AB%99%E5%BB%BA%E8%AE%BE%E6%A0%87%E5%87%86%E3%80%8B%EF%BC%88%E5%BB%BA%E6%A0%87152-2017%EF%BC%89.pdf",
         "pre_response_research_horizon_s": 300.0
+      },
+      "risk_level_at_observation": {
+        "posterior": "elevated",
+        "posterior_excess_cost": 0.25,
+        "prior": "elevated",
+        "prior_excess_cost": 0.25
+      },
+      "risk_level_counts": {
+        "posterior": {
+          "critical": 0,
+          "elevated": 5799,
+          "guarded": 0,
+          "high": 1,
+          "minimal": 0,
+          "untenable": 0
+        },
+        "prior": {
+          "critical": 0,
+          "elevated": 5799,
+          "guarded": 0,
+          "high": 1,
+          "minimal": 0,
+          "untenable": 0
+        }
+      },
+      "risk_level_scheme": {
+        "base_cost": 1.0,
+        "definition": "Research decision-risk bands applied to planning_cost - base_cost using fixed absolute thresholds shared by prior, posterior, times and cases; not firefighter tenability or safety-certification levels.",
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "label": "Minimal",
+            "upper_bound_excess_cost": 0.15
+          },
+          {
+            "color": "#ABD9E9",
+            "id": "guarded",
+            "label": "Guarded",
+            "upper_bound_excess_cost": 0.2
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "label": "Elevated",
+            "upper_bound_excess_cost": 0.25
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "label": "High",
+            "upper_bound_excess_cost": 1.0
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "label": "Critical",
+            "upper_bound_excess_cost": null
+          }
+        ],
+        "metric": "planning_cost_excess_above_base",
+        "safety_status": "research_decision_levels_not_safety_certification",
+        "untenable": {
+          "color": "#4D004B",
+          "definition": "map-traversable cell forbidden by the configured retreat hazard threshold",
+          "id": "untenable",
+          "label": "Untenable / forbidden"
+        }
       },
       "route_constraints": {
         "graph_id": "w1_4f_green_arrow_routes_v1",
@@ -18976,7 +20132,7 @@
       "provenance": {
         "evacuation_route_config_sha256": "5e40ea73f98631bef39ae41b94ecae5607a96a1b7631fd182918327b6fdab4cc",
         "manual_route_penalty": false,
-        "p8_config_sha256": "9fed39162bd38d7aa19bc70eb5851f8e95a3490fa528c444a2864f12172d8d26",
+        "p8_config_sha256": "aa9d26347de5c951da02470010116fed1d446f1457289e981a5e5db45503057c",
         "planner_field_source": "ground_truth_oracle",
         "scene_config_sha256": "8a8c7547dcb9ab8cc38353446b2a9a12fba05925c0e2290a237d0225f58cff22",
         "truth_used_for_observation_point_selection": false
@@ -18992,6 +20148,74 @@
         "fire_age_at_dispatch_s": 30.0,
         "motivation_source": "https://zrzyt.xinjiang.gov.cn/xjgtzy/tzgg/202311/f1bc95ce98e74f90bd91b78d8a354461/files/26-%E3%80%8A%E5%9F%8E%E5%B8%82%E6%B6%88%E9%98%B2%E7%AB%99%E5%BB%BA%E8%AE%BE%E6%A0%87%E5%87%86%E3%80%8B%EF%BC%88%E5%BB%BA%E6%A0%87152-2017%EF%BC%89.pdf",
         "pre_response_research_horizon_s": 300.0
+      },
+      "risk_level_at_observation": {
+        "posterior": "minimal",
+        "posterior_excess_cost": 0.0,
+        "prior": "elevated",
+        "prior_excess_cost": 0.25
+      },
+      "risk_level_counts": {
+        "posterior": {
+          "critical": 16,
+          "elevated": 0,
+          "guarded": 0,
+          "high": 3,
+          "minimal": 5780,
+          "untenable": 1
+        },
+        "prior": {
+          "critical": 0,
+          "elevated": 5799,
+          "guarded": 0,
+          "high": 1,
+          "minimal": 0,
+          "untenable": 0
+        }
+      },
+      "risk_level_scheme": {
+        "base_cost": 1.0,
+        "definition": "Research decision-risk bands applied to planning_cost - base_cost using fixed absolute thresholds shared by prior, posterior, times and cases; not firefighter tenability or safety-certification levels.",
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "label": "Minimal",
+            "upper_bound_excess_cost": 0.15
+          },
+          {
+            "color": "#ABD9E9",
+            "id": "guarded",
+            "label": "Guarded",
+            "upper_bound_excess_cost": 0.2
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "label": "Elevated",
+            "upper_bound_excess_cost": 0.25
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "label": "High",
+            "upper_bound_excess_cost": 1.0
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "label": "Critical",
+            "upper_bound_excess_cost": null
+          }
+        ],
+        "metric": "planning_cost_excess_above_base",
+        "safety_status": "research_decision_levels_not_safety_certification",
+        "untenable": {
+          "color": "#4D004B",
+          "definition": "map-traversable cell forbidden by the configured retreat hazard threshold",
+          "id": "untenable",
+          "label": "Untenable / forbidden"
+        }
       },
       "route_constraints": {
         "graph_id": "w1_4f_green_arrow_routes_v1",
