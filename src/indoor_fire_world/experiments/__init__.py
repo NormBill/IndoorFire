@@ -8,6 +8,7 @@ from .runner import (
     run_experiment,
     run_experiment_suite,
 )
+from .p8_runner import P8SuiteOutput, run_p8_suite, write_p8_artifacts
 
 __all__ = [
     "ExperimentResult",
@@ -18,4 +19,7 @@ __all__ = [
     "load_experiment_suite",
     "run_experiment",
     "run_experiment_suite",
+    "P8SuiteOutput",
+    "run_p8_suite",
+    "write_p8_artifacts",
 ]

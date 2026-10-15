@@ -10,7 +10,7 @@ from numpy.typing import NDArray
 from indoor_fire_world.scene.models import NavigationLayer
 
 from .astar import GridAStarPlanner
-from .result import ExitRouteEvaluation, GridCell, MissionPlan, RouteResult
+from .result import ExitRouteEvaluation, GridCell, MissionPlan, RetreatPlan, RouteResult
 
 
 class MissionPlanner:
@@ -37,13 +37,50 @@ class MissionPlanner:
             hazard_field,
             uncertainty_field,
         )
+        retreat_plan = self.plan_retreat(
+            planning_cost_field,
+            forbidden_mask,
+            hazard_field,
+            uncertainty_field,
+            navigation,
+            inspection_target,
+            exits,
+        )
+
+        reasons: list[str] = []
+        if not entry.feasible:
+            reasons.append("entry_infeasible")
+            reasons.extend(f"entry:{reason}" for reason in entry.rejection_reasons)
+        if not retreat_plan.feasible:
+            reasons.extend(retreat_plan.rejection_reasons)
+        feasible = entry.feasible and retreat_plan.feasible
+        return MissionPlan(
+            entry_route=entry,
+            retreat_route=retreat_plan.route,
+            selected_exit=retreat_plan.selected_exit,
+            retreat_candidates=retreat_plan.candidates,
+            feasible=feasible,
+            rejection_reasons=tuple(reasons),
+        )
+
+    def plan_retreat(
+        self,
+        planning_cost_field: NDArray[np.floating],
+        forbidden_mask: NDArray[np.bool_],
+        hazard_field: NDArray[np.floating],
+        uncertainty_field: NDArray[np.floating],
+        navigation: NavigationLayer,
+        start: GridCell,
+        exits: Mapping[str, GridCell],
+    ) -> RetreatPlan:
+        """Select the lowest-cost feasible exit from the robot's current cell."""
         candidates = tuple(
             ExitRouteEvaluation(
                 exit_id=exit_id,
                 route=self.route_planner.plan(
                     planning_cost_field,
                     forbidden_mask,
-                    inspection_target,
+                    start,
                     exit_cell,
                     navigation,
                     hazard_field,
@@ -63,20 +100,15 @@ class MissionPlanner:
         else:
             retreat = RouteResult.rejected("no_feasible_exit")
             selected_exit = None
-
-        reasons: list[str] = []
-        if not entry.feasible:
-            reasons.append("entry_infeasible")
-            reasons.extend(f"entry:{reason}" for reason in entry.rejection_reasons)
-        if not retreat.feasible:
-            reasons.append("retreat_infeasible")
-            reasons.extend(f"retreat:{reason}" for reason in retreat.rejection_reasons)
-        feasible = entry.feasible and retreat.feasible
-        return MissionPlan(
-            entry_route=entry,
-            retreat_route=retreat,
+        feasible = retreat.feasible
+        reasons = () if feasible else (
+            "retreat_infeasible",
+            *(f"retreat:{reason}" for reason in retreat.rejection_reasons),
+        )
+        return RetreatPlan(
+            route=retreat,
             selected_exit=selected_exit,
-            retreat_candidates=candidates,
+            candidates=candidates,
             feasible=feasible,
-            rejection_reasons=tuple(reasons),
+            rejection_reasons=reasons,
         )

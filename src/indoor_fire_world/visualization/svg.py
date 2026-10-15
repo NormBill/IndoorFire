@@ -135,3 +135,79 @@ def render_registration_overlay_svg(scene: Scene, output_path: str | Path) -> Pa
     output.write_text("\n".join(parts), encoding="utf-8")
     return output.resolve()
 
+
+def render_p8_registered_overlay_svg(
+    scene: Scene,
+    summary: dict,
+    output_path: str | Path,
+) -> Path:
+    """Render the primary P8 approach and retreat comparison on the source map."""
+    registration = scene.map_registration
+    if registration is None:
+        raise ValueError("P8 visualization requires a registered source map")
+    if summary.get("case_status") != "valid":
+        raise ValueError("P8 visualization requires a valid case")
+    output = Path(output_path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    encoded = base64.b64encode(registration.source_image.read_bytes()).decode("ascii")
+
+    def path_points(route: dict) -> str:
+        metric = (
+            scene.navigation.grid_to_metric(item["row"], item["col"])
+            for item in route["path"]
+        )
+        return " ".join(
+            f"{x:.2f},{y:.2f}"
+            for x, y in (registration.metric_to_pixel(*point) for point in metric)
+        )
+
+    width = registration.source_width_px
+    height = registration.source_height_px
+    parts = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height + 94}" viewBox="0 0 {width} {height + 94}">',
+        f'<image href="data:image/png;base64,{encoded}" x="0" y="0" width="{width}" height="{height}"/>',
+    ]
+    routes = (
+        (summary["ugv_approach"], "#7c3aed", "8 7", 5, "UGV reachability path"),
+        (summary["prior_retreat"]["route"], "#2563eb", "", 6, "Prior retreat"),
+        (summary["updated_retreat"]["route"], "#dc2626", "", 6, "Updated retreat"),
+    )
+    for route, color, dash, stroke_width, _ in routes:
+        if route["feasible"]:
+            dash_attribute = f' stroke-dasharray="{dash}"' if dash else ""
+            parts.append(
+                f'<polyline points="{path_points(route)}" fill="none" stroke="{color}" '
+                f'stroke-width="{stroke_width}" stroke-linejoin="round" stroke-linecap="round"{dash_attribute}/>'
+            )
+    point = summary["observation_point"]["resolved_position_m"]
+    px, py = registration.metric_to_pixel(point["x"], point["y"])
+    parts.extend(
+        [
+            f'<circle cx="{px:.2f}" cy="{py:.2f}" r="11" fill="#f59e0b" stroke="white" stroke-width="3"/>',
+            f'<text x="{px + 15:.2f}" y="{py - 12:.2f}" font-size="18" font-family="sans-serif" font-weight="bold" fill="#92400e">geometry-offset observation</text>',
+        ]
+    )
+    for exit_id in summary["prior_retreat"]["candidates"]:
+        semantic = scene.semantic.by_id(exit_id)
+        if semantic.position is None:
+            continue
+        ex, ey = registration.metric_to_pixel(*semantic.position)
+        parts.append(f'<circle cx="{ex:.2f}" cy="{ey:.2f}" r="9" fill="#16a34a" stroke="white" stroke-width="3"/>')
+        parts.append(
+            f'<text x="{ex + 12:.2f}" y="{ey - 10:.2f}" font-size="15" font-family="sans-serif" font-weight="bold" fill="#166534">{escape(exit_id)}</text>'
+        )
+    caption_y = height + 24
+    parts.extend(
+        [
+            f'<rect x="0" y="{height}" width="{width}" height="94" fill="#ffffff"/>',
+            f'<line x1="28" y1="{caption_y}" x2="88" y2="{caption_y}" stroke="#7c3aed" stroke-width="5" stroke-dasharray="8 7"/><text x="100" y="{caption_y + 6}" font-size="17" font-family="sans-serif">UGV reachability</text>',
+            f'<line x1="310" y1="{caption_y}" x2="370" y2="{caption_y}" stroke="#2563eb" stroke-width="6"/><text x="382" y="{caption_y + 6}" font-size="17" font-family="sans-serif">Prior retreat</text>',
+            f'<line x1="560" y1="{caption_y}" x2="620" y2="{caption_y}" stroke="#dc2626" stroke-width="6"/><text x="632" y="{caption_y + 6}" font-size="17" font-family="sans-serif">Updated retreat</text>',
+            f'<text x="28" y="{height + 55}" font-size="15" font-family="sans-serif" fill="#111">Snapshot closed loop: fire evolution is frozen during UGV reachability validation and prior/posterior comparison.</text>',
+            f'<text x="28" y="{height + 78}" font-size="15" font-family="sans-serif" fill="#111">300 s is a configurable research horizon, not W1 measured arrival or firefighter interior-deployment time.</text>',
+            "</svg>",
+        ]
+    )
+    output.write_text("\n".join(parts), encoding="utf-8")
+    return output.resolve()
+

@@ -79,6 +79,25 @@ class ExitRouteEvaluation:
 
 
 @dataclass(frozen=True)
+class RetreatPlan:
+    route: RouteResult
+    selected_exit: str | None
+    candidates: tuple[ExitRouteEvaluation, ...]
+    feasible: bool
+    rejection_reasons: tuple[str, ...] = ()
+
+    def __post_init__(self) -> None:
+        if self.feasible != self.route.feasible:
+            raise ValueError("Retreat feasibility must match the selected route")
+        if self.route.feasible != (self.selected_exit is not None):
+            raise ValueError("A selected exit is required exactly when retreat is feasible")
+        if self.feasible and self.rejection_reasons:
+            raise ValueError("A feasible retreat cannot contain rejection reasons")
+        if not self.feasible and not self.rejection_reasons:
+            raise ValueError("An infeasible retreat requires explicit reasons")
+
+
+@dataclass(frozen=True)
 class MissionPlan:
     entry_route: RouteResult
     retreat_route: RouteResult

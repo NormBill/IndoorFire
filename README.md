@@ -1,14 +1,16 @@
 # IndoorFireWorld
 
-Phases P0-P7 establish a deterministic digital scene, reduced-order fire
+Phases P0-P8 establish a deterministic digital scene, reduced-order fire
 simulation, UGV point sensing, local belief correction, and separate hazard,
 uncertainty, and planning-cost fields for the approximate W1 4F Makerspace,
 followed by risk-aware entry/retreat planning and a controlled closed-loop
 replanning experiment and a reproducible evaluation suite.
-The authoritative geometry is
-[`configs/scene_w1_4f.yaml`](configs/scene_w1_4f.yaml); the file uses the JSON
-subset of YAML so it can be loaded with the Python standard library and without
-an environment-specific YAML dependency.
+P0-P7 retain the frozen schematic geometry in
+[`configs/scene_w1_4f.yaml`](configs/scene_w1_4f.yaml), while P8 uses the
+image-registered migration target
+[`configs/scene_w1_4f_registered_v1.yaml`](configs/scene_w1_4f_registered_v1.yaml).
+Configuration files use the JSON subset of YAML so they load without an
+environment-specific YAML dependency.
 
 The primary representation is a continuous world frame (`x`, `y` in metres)
 rasterized into a `[row, col]` grid. Semantic, occupancy, and navigation layers
@@ -30,6 +32,7 @@ python scripts/run_p5_planning_demo.py
 python scripts/run_p6_closed_loop_demo.py
 python scripts/run_experiment.py --config configs/experiments/p7_baseline.yaml
 python scripts/run_experiment_suite.py
+python scripts/run_p8_registered_closed_loop.py
 ```
 
 The visualization is written to `artifacts/w1_4f_scene.svg`. Use `--show` to
@@ -44,6 +47,8 @@ the mission result plus JSON/CSV weight-sensitivity summaries under
 `artifacts/p5_planning/`. P6 writes its causal before/after report to
 `artifacts/p6/summary.json`. P7 writes per-run artifacts plus aggregate JSON and
 CSV results under `artifacts/p7/`.
+P8 writes its 4-by-4 registered-map snapshot matrix, primary-case arrays, and
+route overlay under `artifacts/p8_registered_closed_loop/`.
 
 ## Current scope
 
@@ -60,6 +65,45 @@ static deterministic route search over those precomputed fields. P6 adds one
 controlled, single-observation replan using the same P2-P5 components; it does
 not add a new planning algorithm, continuous/time-dependent route switching, or
 active sensing.
+
+## P8 registered-map snapshot closed loop
+
+`configs/p8_registered_closed_loop.yaml` integrates the Gate 1 registered map,
+Gate 2 staged microwave electrical-fire truth/prior pair, a geometry-defined
+UGV observation, local World Model correction, and retreat-only replanning.
+Each case is a snapshot closed loop: UGV travel validates reachability, but the
+fire fields remain frozen during the approach check and prior/posterior route
+comparison. P8 is not a fully time-coupled robot-fire simulation.
+
+All four observation points are frozen before the truth simulator is created.
+They are specified only as fixed offsets from the registered microwave anchor
+and checked against map traversability; plume, truth-hazard, posterior, and
+route-result fields cannot select or move them. The normal matrix evaluates
+four fire ages against all four points. The primary case also includes no
+observation, observation-without-fusion, normal-fusion, and truth-oracle
+controls.
+
+The configured 300 s value is a **configurable pre-response research horizon
+motivated by the 5-min fire-station layout principle**. It is not a measured W1
+response time, an actual fire-engine arrival time, or the time at which
+firefighters complete interior deployment. The public five-minute principle is
+used only as motivation for a replaceable research horizon. The registered
+40.0 m by 12.5 m scale also remains provisional.
+
+P8 separates `ugv_operability_threshold` from `retreat_hazard_threshold`, even
+when both have the same numerical value. Decision improvement is evaluated as
+`J_post(prior_route) - J_post(updated_route)`, with both fixed paths evaluated
+on the identical posterior planning field. If the old route is posterior-
+infeasible, no finite delta is invented; the result is reported as a
+feasibility improvement when the updated route is feasible. Invalid geometry
+or approach cases use `invalid_observation_case` and remain distinct from a
+valid scenario with no feasible prior retreat.
+
+Run the complete P0-P8 validation and artifact generation on HPC with:
+
+```bash
+bash scripts/hpc_validate_p8.sh
+```
 
 ## P6 controlled closed-loop replanning
 

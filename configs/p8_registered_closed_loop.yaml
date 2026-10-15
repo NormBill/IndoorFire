@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "scenario_id": "p8_registered_w1_snapshot_closed_loop_v1",
+  "scene_config": "scene_w1_4f_registered_v1.yaml",
+  "truth_config": "fire_microwave_electrical_truth_v1.yaml",
+  "prior_config": "fire_microwave_electrical_prior_v1.yaml",
+  "hazard_config": "hazard.yaml",
+  "clocks": {
+    "fire_age_at_dispatch_s": 30.0,
+    "pre_response_research_horizon_s": 300.0,
+    "evaluation_fire_times_s": [60.0, 100.0, 180.0, 300.0],
+    "primary_fire_time_s": 100.0,
+    "horizon_definition": "configurable pre-response research horizon motivated by the 5-min fire-station layout principle",
+    "horizon_evidence_status": "research_horizon_not_w1_measured_arrival_or_interior_deployment_time",
+    "horizon_motivation_source": "https://zrzyt.xinjiang.gov.cn/xjgtzy/tzgg/202311/f1bc95ce98e74f90bd91b78d8a354461/files/26-%E3%80%8A%E5%9F%8E%E5%B8%82%E6%B6%88%E9%98%B2%E7%AB%99%E5%BB%BA%E8%AE%BE%E6%A0%87%E5%87%86%E3%80%8B%EF%BC%88%E5%BB%BA%E6%A0%87152-2017%EF%BC%89.pdf"
+  },
+  "snapshot_semantics": "UGV travel is used for reachability validation, but fire evolution is frozen during approach and prior/posterior comparison at each evaluation time; this is not a fully time-coupled robot-fire simulation.",
+  "random_seed": 20261015,
+  "sensor": {
+    "temperature_std": 0.0,
+    "co_std": 0.0,
+    "smoke_std": 0.0,
+    "visibility_std": 0.0
+  },
+  "uncertainty": {
+    "meaning": "Per-cell diagonal epistemic variance proxy in squared native units; not a calibrated probability distribution.",
+    "temperature_initial": 25.0,
+    "co_initial": 0.01,
+    "smoke_initial": 0.04,
+    "visibility_initial": 25.0
+  },
+  "assimilation": {
+    "gain": 0.90,
+    "kernel_sigma_m": 0.35,
+    "max_radius_m": 0.50,
+    "uncertainty_reduction_fraction": 0.60,
+    "minimum_temperature_c": -273.15
+  },
+  "observation_points": {
+    "selection_provenance": "registered_geometry_only",
+    "primary_id": "geometry_offset_west_far",
+    "points": [
+      {"id": "geometry_offset_west_far", "offset_m": [-0.525, 0.625]},
+      {"id": "geometry_offset_west_mid", "offset_m": [-0.275, 0.625]},
+      {"id": "geometry_offset_west_near", "offset_m": [-0.025, 0.625]},
+      {"id": "geometry_offset_east_control", "offset_m": [1.600, 1.000]}
+    ]
+  },
+  "retreat_exit_ids": ["exit_west", "exit_center_stair", "exit_southeast"],
+  "planning": {
+    "base_cost": 1.0,
+    "hazard_weight": 50.0,
+    "uncertainty_weight": 0.25,
+    "ugv_operability_threshold": 0.95,
+    "retreat_hazard_threshold": 0.95,
+    "forbidden_representation": "infinity"
+  },
+  "local_comparison_radius_m": 0.75,
+  "notes": "Observation points are frozen geometric offsets before truth simulation. The 40.0 m by 12.5 m map scale, fire parameters, thresholds and dispatch offset are research assumptions, not W1 measurements or safety certification."
+}

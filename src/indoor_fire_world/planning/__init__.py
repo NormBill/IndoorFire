@@ -14,7 +14,7 @@ from .mission_config import (
     load_mission_parameters,
     resolve_mission_cells,
 )
-from .result import ExitRouteEvaluation, MissionPlan, RouteResult
+from .result import ExitRouteEvaluation, MissionPlan, RetreatPlan, RouteResult
 
 __all__ = [
     "ExitRouteEvaluation",
@@ -26,6 +26,7 @@ __all__ = [
     "PlanningCostModel",
     "PlanningCostParameters",
     "PlanningCostResult",
+    "RetreatPlan",
     "RouteResult",
     "load_mission_parameters",
     "load_planning_cost_parameters",
