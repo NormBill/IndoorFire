@@ -1,0 +1,60 @@
+{
+  "schema_version": 2,
+  "experiment_id": "p8_v2_preentry_observation_to_ingress",
+  "assumption_status": "simulation_assumed",
+  "reference_provider": "reduced_order_fixture",
+  "scene_config": "scene_w1_4f_registered_v1.yaml",
+  "corridor_config": "evacuation_routes_w1_4f_registered_v1.yaml",
+  "prior_config": "fire_prior_p8_v2.yaml",
+  "hazard_config": "hazard.yaml",
+  "primary_scenario_id": "enclosure_breakout",
+  "synthetic_scenarios": [
+    {"id": "appliance_contained", "reference_config": "fire_synthetic_appliance_contained_v2.yaml", "fds_input": "../fds/p8_v2/appliance_contained.fds", "fds_manifest": "../artifacts/p8_v2_fds/appliance_contained/manifest.json"},
+    {"id": "enclosure_breakout", "reference_config": "fire_synthetic_enclosure_breakout_v2.yaml", "fds_input": "../fds/p8_v2/enclosure_breakout.fds", "fds_manifest": "../artifacts/p8_v2_fds/enclosure_breakout/manifest.json"},
+    {"id": "cabinet_or_cable_ignition", "reference_config": "fire_synthetic_cabinet_cable_v2.yaml", "fds_input": "../fds/p8_v2/cabinet_or_cable_ignition.fds", "fds_manifest": "../artifacts/p8_v2_fds/cabinet_or_cable_ignition/manifest.json"}
+  ],
+  "clocks": {
+    "observation_times_s": [60.0, 100.0, 180.0, 300.0],
+    "handoff_time_s": 300.0,
+    "forecast_times_s": [300.0, 360.0, 420.0, 480.0],
+    "meaning": "Configurable simulation handoff and no-intervention forecast times; not measured response or deployment times."
+  },
+  "observation_points": {
+    "selection_provenance": "registered_geometry_only_frozen_before_reference",
+    "primary_id": "geometry_route_high",
+    "points": [
+      {"id": "geometry_route_high", "offset_m": [0.975, 0.625]},
+      {"id": "geometry_route_mid", "offset_m": [0.975, 0.125]},
+      {"id": "geometry_route_near", "offset_m": [0.975, -0.375]},
+      {"id": "geometry_route_low_control", "offset_m": [0.975, -1.375]}
+    ]
+  },
+  "sensor": {"temperature_std": 0.5, "co_std": 0.005, "smoke_std": 0.01, "visibility_std": 0.5},
+  "likelihood_modalities": ["temperature", "co", "smoke"],
+  "candidate_ensemble": {
+    "hrr_factors": [0.5, 1.0, 1.6],
+    "yield_factors": [0.75, 1.25],
+    "ventilation_factors": [0.5, 1.5],
+    "prior_weights": "uniform",
+    "candidate_count": 12
+  },
+  "planning": {
+    "entrance_ids": ["exit_west", "exit_center_stair", "exit_southeast"],
+    "target_node": "center_lower_left",
+    "target_semantics": "simulation_assumed_suppression_staging_anchor",
+    "corridor_direction_policy": "bidirectional_physical_corridor_with_evacuation_arrow_metadata",
+    "base_cost": 1.0,
+    "exposure_weight": 50.0,
+    "uncertainty_weight": 0.25,
+    "ugv_operability_threshold": 0.95,
+    "ingress_exposure_threshold": 0.95
+  },
+  "forecast_exposure_levels": [
+    {"id": "minimal", "upper_bound": 0.05, "color": "#2C7BB6"},
+    {"id": "elevated", "upper_bound": 0.20, "color": "#FFFFBF"},
+    {"id": "high", "upper_bound": 0.40, "color": "#FDAE61"},
+    {"id": "critical", "upper_bound": 0.70, "color": "#D7191C"},
+    {"id": "extreme", "upper_bound": null, "color": "#6A00A8"}
+  ],
+  "random_seed": 20261016
+}

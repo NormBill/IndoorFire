@@ -9,3 +9,6 @@ python -m unittest discover -s tests -v
 python scripts/run_p8_registered_closed_loop.py \
   --config configs/p8_registered_closed_loop.yaml \
   --output artifacts/p8_registered_closed_loop
+python scripts/run_p8_v2_preentry_ingress.py \
+  --config configs/p8_v2_preentry_ingress.yaml \
+  --output artifacts/p8_v2_preentry_ingress

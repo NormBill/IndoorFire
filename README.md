@@ -33,6 +33,7 @@ python scripts/run_p6_closed_loop_demo.py
 python scripts/run_experiment.py --config configs/experiments/p7_baseline.yaml
 python scripts/run_experiment_suite.py
 python scripts/run_p8_registered_closed_loop.py
+python scripts/run_p8_v2_preentry_ingress.py
 ```
 
 The visualization is written to `artifacts/w1_4f_scene.svg`. Use `--show` to
@@ -50,6 +51,9 @@ CSV results under `artifacts/p7/`.
 P8 writes its 4-by-4 registered-map snapshot matrix, primary-case arrays, a
 three-panel registered overlay, and separate prior, posterior, and delta risk
 maps under `artifacts/p8_registered_closed_loop/`.
+P8 v2 writes its 3-by-4-by-4 synthetic-reference matrix, forecast arrays,
+fixed-scale exposure maps, and firefighter ingress comparison under
+`artifacts/p8_v2_preentry_ingress/`.
 
 ## Current scope
 
@@ -67,7 +71,39 @@ controlled, single-observation replan using the same P2-P5 components; it does
 not add a new planning algorithm, continuous/time-dependent route switching, or
 active sensing.
 
-## P8 registered-map snapshot closed loop
+## P8 v2 simulation-only pre-entry sensing and firefighter ingress
+
+`configs/p8_v2_preentry_ingress.yaml` defines the canonical P8 v2 experiment:
+three configurable synthetic fire branches, four geometry-frozen observation
+points, four observation times, and forecasts at 300/360/420/480 s. The 300 s
+handoff is a simulation boundary, not a W1 response-time claim.
+
+The UGV route verifies only geometric reachability. A twelve-member
+reduced-order candidate ensemble is updated by the temperature/CO/smoke point
+observation, and its posterior weights generate forecast means and variances.
+Firefighter ingress then selects among the three registered exits, treated as
+entrances, while remaining on the green-map physical corridors. Arrow
+orientation remains evacuation metadata; ingress may traverse the same
+corridor in reverse.
+
+The reference provider used by the committed demo is explicitly
+`reduced_order_fixture`. It is deterministic synthetic evidence and is never
+labelled as FDS. `fds/p8_v2/` and `scripts/run_p8_v2_fds.sh` provide the offline
+FDS input and execution boundary; a result may be labelled
+`high_fidelity_synthetic_reference` only after conversion through a hashed FDS
+snapshot manifest. Neither reference type is real-world ground truth.
+
+Primary evidence is paired forecast error before/after fusion and the
+counterfactual route objective
+`J_post(prior_route) - J_post(updated_route)`. Unchanged routes and no-feasible-
+ingress cases are retained as valid outcomes. The exposure index and its fixed
+color bands are simulation planning quantities, not physiological or certified
+firefighter-safety thresholds. Local Gaussian correction and HRR-only fusion
+are reported as lightweight baselines/ablations; suppression feedback, crowd
+evacuation, detailed robot dynamics, and operational deployment are out of
+scope.
+
+## Legacy P8 registered-map snapshot closed loop
 
 `configs/p8_registered_closed_loop.yaml` integrates the Gate 1 registered map,
 Gate 2 staged microwave electrical-fire truth/prior pair, a geometry-defined

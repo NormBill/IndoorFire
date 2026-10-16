@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "model_name": "p8v2_enclosure_breakout_fixture",
+  "time_step_s": 0.1,
+  "ambient_temperature_c": 22.0,
+  "ventilation_mps": [-0.10, -0.05],
+  "diffusion_m2_per_s": {"temperature": 0.09, "smoke": 0.07, "co": 0.08},
+  "decay_per_s": {"smoke": 0.010, "co": 0.012},
+  "temperature_relaxation_per_s": 0.015,
+  "source": {
+    "enabled": true, "source_type": "microwave_electrical_fault", "semantic_id": "microwave",
+    "fire_growth_rate_kw_per_s2": 0.009, "max_heat_release_rate_kw": 450.0,
+    "temperature_gain_c_per_kw_s": 0.080, "smoke_yield_per_kw_s": 0.011, "co_yield_per_kw_s": 0.0030
+  },
+  "visibility": {"clear_air_visibility_m": 30.0, "smoke_extinction_per_concentration": 3.0},
+  "assumption_status": "simulation_assumed_synthetic_reference",
+  "notes": "Reduced-order test fixture for the enclosure-breakout synthetic branch; not FDS or real W1 truth."
+}

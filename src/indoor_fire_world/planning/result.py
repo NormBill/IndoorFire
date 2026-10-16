@@ -79,6 +79,34 @@ class ExitRouteEvaluation:
 
 
 @dataclass(frozen=True)
+class EntranceRouteEvaluation:
+    entrance_id: str
+    route: RouteResult
+
+
+@dataclass(frozen=True)
+class FirefighterIngressPlan:
+    route: RouteResult
+    selected_entrance: str | None
+    target_id: str
+    candidates: tuple[EntranceRouteEvaluation, ...]
+    feasible: bool
+    rejection_reasons: tuple[str, ...] = ()
+
+    def __post_init__(self) -> None:
+        if not self.target_id:
+            raise ValueError("Ingress target ID must not be empty")
+        if self.feasible != self.route.feasible:
+            raise ValueError("Ingress feasibility must match the selected route")
+        if self.route.feasible != (self.selected_entrance is not None):
+            raise ValueError("A selected entrance is required exactly when ingress is feasible")
+        if self.feasible and self.rejection_reasons:
+            raise ValueError("A feasible ingress plan cannot contain rejection reasons")
+        if not self.feasible and not self.rejection_reasons:
+            raise ValueError("An infeasible ingress plan requires explicit reasons")
+
+
+@dataclass(frozen=True)
 class RetreatPlan:
     route: RouteResult
     selected_exit: str | None

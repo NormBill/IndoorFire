@@ -11,6 +11,94 @@ import numpy as np
 from indoor_fire_world.scene.models import Polygon, Scene
 
 
+def render_p8_v2_forecast_svg(
+    config_path: str | Path,
+    summary: dict,
+    arrays: dict,
+    output_path: str | Path,
+) -> Path:
+    """Render the four fixed-scale P8 v2 forecast-exposure snapshots."""
+    from indoor_fire_world.p8_v2_config import load_p8_v2_parameters
+    from indoor_fire_world.scene import load_scene
+
+    parameters = load_p8_v2_parameters(config_path)
+    scene = load_scene(parameters.scene_config)
+    registration = scene.map_registration
+    if registration is None:
+        raise ValueError("P8 v2 visualization requires registered map geometry")
+    output = Path(output_path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    encoded = base64.b64encode(registration.source_image.read_bytes()).decode("ascii")
+    panel_scale = 0.42
+    panel_width = registration.source_width_px * panel_scale
+    panel_height = registration.source_height_px * panel_scale
+    width = int(panel_width * 2)
+    height = int(panel_height * 2 + 150)
+    levels = parameters.exposure_levels
+
+    def color(value: float) -> str:
+        for level in levels:
+            if level.upper_bound is None or value <= level.upper_bound:
+                return level.color
+        raise RuntimeError("Exposure-level configuration has no terminal band")
+
+    def route_points(route: dict) -> str:
+        return " ".join(
+            f"{x:.2f},{y:.2f}"
+            for x, y in (
+                registration.metric_to_pixel(*scene.navigation.grid_to_metric(item["row"], item["col"]))
+                for item in route["path"]
+            )
+        )
+
+    parts = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
+        "<defs>",
+        f'<image id="p8v2-map" href="data:image/png;base64,{encoded}" width="{registration.source_width_px}" height="{registration.source_height_px}"/>',
+        "</defs>",
+        '<rect width="100%" height="100%" fill="white"/>',
+    ]
+    geometry = scene.occupancy.geometry
+    for index, time_s in enumerate(parameters.forecast_times_s):
+        offset_x = (index % 2) * panel_width
+        offset_y = (index // 2) * panel_height + 34
+        field = np.asarray(arrays[f"posterior_exposure_t{time_s:g}"], dtype=np.float64)
+        parts.append(f'<text x="{offset_x + panel_width / 2:.1f}" y="{offset_y - 8:.1f}" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="bold">Posterior forecast exposure index — t={time_s:g} s</text>')
+        parts.append(f'<g transform="translate({offset_x:.2f},{offset_y:.2f}) scale({panel_scale})">')
+        parts.append('<use href="#p8v2-map"/>')
+        for row in range(geometry.rows):
+            for col in range(geometry.cols):
+                if not scene.navigation.is_traversable((row, col)):
+                    continue
+                value = float(field[row, col])
+                if value <= 1e-9:
+                    continue
+                x0 = geometry.origin_x + col * geometry.resolution_m
+                x1 = x0 + geometry.resolution_m
+                y0 = geometry.origin_y + row * geometry.resolution_m
+                y1 = y0 + geometry.resolution_m
+                px0, py0 = registration.metric_to_pixel(x0, y1)
+                px1, py1 = registration.metric_to_pixel(x1, y0)
+                parts.append(f'<rect x="{px0:.2f}" y="{py0:.2f}" width="{px1-px0:.2f}" height="{py1-py0:.2f}" fill="{color(value)}" opacity="0.66"/>')
+        updated = summary["updated_ingress"]["route"]
+        prior = summary["prior_ingress"]["route"]
+        if prior["feasible"]:
+            parts.append(f'<polyline points="{route_points(prior)}" fill="none" stroke="#0072B2" stroke-width="7" stroke-dasharray="12 7"/>')
+        if updated["feasible"]:
+            parts.append(f'<polyline points="{route_points(updated)}" fill="none" stroke="#CC79A7" stroke-width="7"/>')
+        parts.append("</g>")
+    legend_y = panel_height * 2 + 78
+    parts.append(f'<text x="24" y="{legend_y}" font-family="sans-serif" font-size="16" font-weight="bold">Forecast exposure index (simulation planning scale):</text>')
+    x = 390
+    for level in levels:
+        parts.append(f'<rect x="{x}" y="{legend_y-16}" width="22" height="22" fill="{level.color}" stroke="#333"/><text x="{x+28}" y="{legend_y+1}" font-family="sans-serif" font-size="14">{escape(level.id)}</text>')
+        x += 125
+    parts.append(f'<text x="24" y="{legend_y+38}" font-family="sans-serif" font-size="14">Blue dashed: prior ingress · magenta: posterior ingress · synthetic reference and thresholds; not certified firefighter safety.</text>')
+    parts.append("</svg>")
+    output.write_text("\n".join(parts), encoding="utf-8")
+    return output.resolve()
+
+
 def render_scene_svg(scene: Scene, output_path: str | Path, scale: int = 45) -> Path:
     output = Path(output_path)
     output.parent.mkdir(parents=True, exist_ok=True)

@@ -17,7 +17,14 @@ from indoor_fire_world.scene.models import NavigationLayer, Scene
 
 from .astar import GridAStarPlanner
 from .cost_field import PlanningCostParameters
-from .result import ExitRouteEvaluation, GridCell, RetreatPlan, RouteResult
+from .result import (
+    EntranceRouteEvaluation,
+    ExitRouteEvaluation,
+    FirefighterIngressPlan,
+    GridCell,
+    RetreatPlan,
+    RouteResult,
+)
 
 
 @dataclass(frozen=True)
@@ -64,6 +71,23 @@ class DirectedEvacuationGraph:
     def outgoing(self, node_id: str) -> tuple[DirectedRouteEdge, ...]:
         return tuple(sorted((edge for edge in self.edges if edge.source == node_id), key=lambda edge: edge.id))
 
+    def corridor_edges(self, node_id: str) -> tuple[DirectedRouteEdge, ...]:
+        """Return both orientations of every physical green-map corridor."""
+        result: list[DirectedRouteEdge] = []
+        for edge in self.edges:
+            if edge.source == node_id:
+                result.append(edge)
+            elif edge.target == node_id:
+                result.append(
+                    DirectedRouteEdge(
+                        id=f"{edge.id}:reverse",
+                        source=edge.target,
+                        target=edge.source,
+                        path=tuple(reversed(edge.path)),
+                    )
+                )
+        return tuple(sorted(result, key=lambda item: item.id))
+
     @property
     def allowed_transitions(self) -> frozenset[tuple[GridCell, GridCell]]:
         return frozenset(
@@ -76,6 +100,13 @@ class DirectedEvacuationGraph:
         return bool(path) and all(
             transition in self.allowed_transitions
             for transition in zip(path, path[1:])
+        )
+
+    def path_is_corridor_conformant(self, path: tuple[GridCell, ...]) -> bool:
+        transitions = self.allowed_transitions
+        bidirectional = transitions | frozenset((target, source) for source, target in transitions)
+        return bool(path) and all(
+            transition in bidirectional for transition in zip(path, path[1:])
         )
 
 
@@ -166,6 +197,8 @@ class DirectedRoutePlanner:
         navigation: NavigationLayer,
         hazard_field: NDArray[np.floating],
         uncertainty_field: NDArray[np.floating],
+        *,
+        allow_reverse: bool = False,
     ) -> RouteResult:
         if start_node not in self.graph.nodes:
             return RouteResult.rejected("start_node_not_in_directed_route_graph")
@@ -188,7 +221,12 @@ class DirectedRoutePlanner:
                 continue
             if node_id == goal_node:
                 break
-            for edge in self.graph.outgoing(node_id):
+            available = (
+                self.graph.corridor_edges(node_id)
+                if allow_reverse
+                else self.graph.outgoing(node_id)
+            )
+            for edge in available:
                 entered = edge.path[1:]
                 if any(forbidden[cell] or not math.isfinite(float(cost[cell])) for cell in entered):
                     continue
@@ -218,9 +256,67 @@ class DirectedRoutePlanner:
             hazard_field,
             uncertainty_field,
         )
-        if route.feasible and not self.graph.path_is_directed(route.path):
-            raise RuntimeError("Directed route planner emitted a non-conforming path")
+        if route.feasible:
+            conformant = (
+                self.graph.path_is_corridor_conformant(route.path)
+                if allow_reverse
+                else self.graph.path_is_directed(route.path)
+            )
+            if not conformant:
+                raise RuntimeError("Route planner emitted a non-conforming corridor path")
         return route
+
+    def plan_ingress(
+        self,
+        planning_cost_field: NDArray[np.floating],
+        forbidden_mask: NDArray[np.bool_],
+        hazard_field: NDArray[np.floating],
+        uncertainty_field: NDArray[np.floating],
+        navigation: NavigationLayer,
+        entrances: tuple[str, ...],
+        target_node: str,
+    ) -> FirefighterIngressPlan:
+        candidates = tuple(
+            EntranceRouteEvaluation(
+                entrance_id=entrance_id,
+                route=self.plan(
+                    planning_cost_field,
+                    forbidden_mask,
+                    entrance_id,
+                    target_node,
+                    navigation,
+                    hazard_field,
+                    uncertainty_field,
+                    allow_reverse=True,
+                ),
+            )
+            for entrance_id in sorted(entrances)
+        )
+        feasible = [candidate for candidate in candidates if candidate.route.feasible]
+        if feasible:
+            selected = min(
+                feasible,
+                key=lambda candidate: (
+                    candidate.route.total_cost,
+                    candidate.entrance_id,
+                    candidate.route.path_hash or "",
+                ),
+            )
+            return FirefighterIngressPlan(
+                selected.route,
+                selected.entrance_id,
+                target_node,
+                candidates,
+                True,
+            )
+        return FirefighterIngressPlan(
+            RouteResult.rejected("no_feasible_firefighter_ingress"),
+            None,
+            target_node,
+            candidates,
+            False,
+            ("no_feasible_firefighter_ingress",),
+        )
 
     def plan_retreat(
         self,

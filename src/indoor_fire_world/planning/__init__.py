@@ -21,7 +21,14 @@ from .route_graph import (
     DirectedRoutePlanner,
     load_directed_evacuation_graph,
 )
-from .result import ExitRouteEvaluation, MissionPlan, RetreatPlan, RouteResult
+from .result import (
+    EntranceRouteEvaluation,
+    ExitRouteEvaluation,
+    FirefighterIngressPlan,
+    MissionPlan,
+    RetreatPlan,
+    RouteResult,
+)
 
 __all__ = [
     "ExitRouteEvaluation",
@@ -38,6 +45,8 @@ __all__ = [
     "PlanningCostParameters",
     "PlanningCostResult",
     "RetreatPlan",
+    "EntranceRouteEvaluation",
+    "FirefighterIngressPlan",
     "RouteResult",
     "load_mission_parameters",
     "load_planning_cost_parameters",

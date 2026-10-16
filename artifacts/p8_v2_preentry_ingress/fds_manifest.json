@@ -1,0 +1,11 @@
+{
+  "reference_provider_used": "reduced_order_fixture",
+  "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+  "required_before_fds_claim": [
+    "official_fds_version",
+    "fds_input_sha256",
+    "converted_arrays_sha256"
+  ],
+  "schema_version": 1,
+  "status": "not_generated_in_current_environment"
+}
