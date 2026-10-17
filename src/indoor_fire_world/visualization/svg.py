@@ -55,6 +55,7 @@ def render_p8_v2_forecast_svg(
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
         "<defs>",
         f'<image id="p8v2-map" href="data:image/png;base64,{encoded}" width="{registration.source_width_px}" height="{registration.source_height_px}"/>',
+        '<pattern id="p8v2-blocked" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="#6B7280"/><line x1="0" y1="0" x2="0" y2="8" stroke="#374151" stroke-width="3"/></pattern>',
         "</defs>",
         '<rect width="100%" height="100%" fill="white"/>',
     ]
@@ -63,23 +64,24 @@ def render_p8_v2_forecast_svg(
         offset_x = (index % 2) * panel_width
         offset_y = (index // 2) * panel_height + 34
         field = np.asarray(arrays[f"posterior_exposure_t{time_s:g}"], dtype=np.float64)
+        risk_grid = np.asarray(arrays[f"posterior_risk_level_t{time_s:g}"], dtype=np.int8)
         parts.append(f'<text x="{offset_x + panel_width / 2:.1f}" y="{offset_y - 8:.1f}" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="bold">Posterior forecast exposure index — t={time_s:g} s</text>')
         parts.append(f'<g transform="translate({offset_x:.2f},{offset_y:.2f}) scale({panel_scale})">')
         parts.append('<use href="#p8v2-map"/>')
+        parts.append('<g shape-rendering="crispEdges">')
         for row in range(geometry.rows):
             for col in range(geometry.cols):
-                if not scene.navigation.is_traversable((row, col)):
-                    continue
-                value = float(field[row, col])
-                if value <= 1e-9:
-                    continue
                 x0 = geometry.origin_x + col * geometry.resolution_m
                 x1 = x0 + geometry.resolution_m
                 y0 = geometry.origin_y + row * geometry.resolution_m
                 y1 = y0 + geometry.resolution_m
                 px0, py0 = registration.metric_to_pixel(x0, y1)
                 px1, py1 = registration.metric_to_pixel(x1, y0)
-                parts.append(f'<rect x="{px0:.2f}" y="{py0:.2f}" width="{px1-px0:.2f}" height="{py1-py0:.2f}" fill="{color(value)}" opacity="0.66"/>')
+                level_index = int(risk_grid[row, col])
+                fill = "url(#p8v2-blocked)" if level_index < 0 else levels[level_index].color
+                opacity = "0.58" if level_index < 0 else "0.68"
+                parts.append(f'<rect x="{px0:.2f}" y="{py0:.2f}" width="{px1-px0:.2f}" height="{py1-py0:.2f}" fill="{fill}" fill-opacity="{opacity}" stroke="#FFFFFF" stroke-opacity="0.22" stroke-width="0.35"><title>row={row}, col={col}, exposure={float(field[row,col]):.6f}, level={"blocked" if level_index < 0 else levels[level_index].id}</title></rect>')
+        parts.append('</g>')
         updated = summary["updated_ingress"]["route"]
         prior = summary["prior_ingress"]["route"]
         if prior["feasible"]:
@@ -93,6 +95,7 @@ def render_p8_v2_forecast_svg(
     for level in levels:
         parts.append(f'<rect x="{x}" y="{legend_y-16}" width="22" height="22" fill="{level.color}" stroke="#333"/><text x="{x+28}" y="{legend_y+1}" font-family="sans-serif" font-size="14">{escape(level.id)}</text>')
         x += 125
+    parts.append(f'<rect x="{x}" y="{legend_y-16}" width="22" height="22" fill="url(#p8v2-blocked)" stroke="#333"/><text x="{x+28}" y="{legend_y+1}" font-family="sans-serif" font-size="14">blocked</text>')
     parts.append(f'<text x="24" y="{legend_y+38}" font-family="sans-serif" font-size="14">Blue dashed: prior ingress · magenta: posterior ingress · synthetic reference and thresholds; not certified firefighter safety.</text>')
     parts.append("</svg>")
     output.write_text("\n".join(parts), encoding="utf-8")

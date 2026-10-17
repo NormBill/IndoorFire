@@ -6707,6 +6707,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 70,
+            "elevated": 114,
+            "extreme": 79,
+            "high": 74,
+            "minimal": 5463
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 83,
+            "elevated": 162,
+            "extreme": 93,
+            "high": 94,
+            "minimal": 5368
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 96,
+            "elevated": 184,
+            "extreme": 104,
+            "high": 99,
+            "minimal": 5317
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 98,
+            "elevated": 187,
+            "extreme": 110,
+            "high": 109,
+            "minimal": 5296
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
       "schema_version": 2,
@@ -15576,6 +15652,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 48,
+            "elevated": 100,
+            "extreme": 79,
+            "high": 64,
+            "minimal": 5509
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 68,
+            "elevated": 121,
+            "extreme": 86,
+            "high": 76,
+            "minimal": 5449
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 84,
+            "elevated": 142,
+            "extreme": 92,
+            "high": 81,
+            "minimal": 5401
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 86,
+            "elevated": 154,
+            "extreme": 96,
+            "high": 84,
+            "minimal": 5380
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
       "schema_version": 2,
@@ -24413,6 +24565,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 37,
+            "elevated": 107,
+            "extreme": 71,
+            "high": 52,
+            "minimal": 5533
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 54,
+            "elevated": 130,
+            "extreme": 77,
+            "high": 68,
+            "minimal": 5471
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 60,
+            "elevated": 141,
+            "extreme": 83,
+            "high": 79,
+            "minimal": 5437
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 62,
+            "elevated": 143,
+            "extreme": 87,
+            "high": 85,
+            "minimal": 5423
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
       "schema_version": 2,
@@ -33365,6 +33593,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 36,
+            "elevated": 69,
+            "extreme": 56,
+            "high": 51,
+            "minimal": 5588
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 56,
+            "elevated": 88,
+            "extreme": 60,
+            "high": 58,
+            "minimal": 5538
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 70,
+            "elevated": 90,
+            "extreme": 64,
+            "high": 63,
+            "minimal": 5513
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 76,
+            "elevated": 97,
+            "extreme": 67,
+            "high": 62,
+            "minimal": 5498
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
       "schema_version": 2,
@@ -42309,6 +42613,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 54,
+            "elevated": 129,
+            "extreme": 83,
+            "high": 74,
+            "minimal": 5460
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 79,
+            "elevated": 169,
+            "extreme": 94,
+            "high": 86,
+            "minimal": 5372
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 83,
+            "elevated": 196,
+            "extreme": 105,
+            "high": 98,
+            "minimal": 5318
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 84,
+            "elevated": 207,
+            "extreme": 111,
+            "high": 106,
+            "minimal": 5292
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
       "schema_version": 2,
@@ -51269,6 +51649,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 30,
+            "elevated": 62,
+            "extreme": 60,
+            "high": 38,
+            "minimal": 5610
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 38,
+            "elevated": 81,
+            "extreme": 62,
+            "high": 53,
+            "minimal": 5566
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 47,
+            "elevated": 87,
+            "extreme": 64,
+            "high": 59,
+            "minimal": 5543
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 48,
+            "elevated": 86,
+            "extreme": 67,
+            "high": 65,
+            "minimal": 5534
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
       "schema_version": 2,
@@ -60197,6 +60653,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 31,
+            "elevated": 23,
+            "extreme": 70,
+            "high": 21,
+            "minimal": 5655
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 34,
+            "elevated": 29,
+            "extreme": 76,
+            "high": 17,
+            "minimal": 5644
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 32,
+            "elevated": 31,
+            "extreme": 78,
+            "high": 19,
+            "minimal": 5640
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 32,
+            "elevated": 31,
+            "extreme": 79,
+            "high": 19,
+            "minimal": 5639
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
       "schema_version": 2,
@@ -69058,6 +69590,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 31,
+            "elevated": 23,
+            "extreme": 70,
+            "high": 21,
+            "minimal": 5655
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 34,
+            "elevated": 28,
+            "extreme": 76,
+            "high": 17,
+            "minimal": 5645
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 32,
+            "elevated": 31,
+            "extreme": 78,
+            "high": 19,
+            "minimal": 5640
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 32,
+            "elevated": 31,
+            "extreme": 79,
+            "high": 19,
+            "minimal": 5639
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
       "schema_version": 2,
@@ -77911,6 +78519,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 112,
+            "elevated": 192,
+            "extreme": 151,
+            "high": 121,
+            "minimal": 5224
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 143,
+            "elevated": 253,
+            "extreme": 192,
+            "high": 170,
+            "minimal": 5042
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 167,
+            "elevated": 281,
+            "extreme": 213,
+            "high": 177,
+            "minimal": 4962
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 164,
+            "elevated": 287,
+            "extreme": 226,
+            "high": 183,
+            "minimal": 4940
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
       "schema_version": 2,
@@ -86871,6 +87555,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 49,
+            "elevated": 64,
+            "extreme": 69,
+            "high": 47,
+            "minimal": 5571
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 58,
+            "elevated": 81,
+            "extreme": 89,
+            "high": 58,
+            "minimal": 5514
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 64,
+            "elevated": 92,
+            "extreme": 102,
+            "high": 65,
+            "minimal": 5477
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 69,
+            "elevated": 91,
+            "extreme": 109,
+            "high": 69,
+            "minimal": 5462
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
       "schema_version": 2,
@@ -95890,6 +96650,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 58,
+            "elevated": 87,
+            "extreme": 83,
+            "high": 70,
+            "minimal": 5502
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 69,
+            "elevated": 121,
+            "extreme": 112,
+            "high": 78,
+            "minimal": 5420
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 73,
+            "elevated": 130,
+            "extreme": 127,
+            "high": 94,
+            "minimal": 5376
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 75,
+            "elevated": 131,
+            "extreme": 135,
+            "high": 97,
+            "minimal": 5362
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
       "schema_version": 2,
@@ -104933,6 +105769,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 58,
+            "elevated": 87,
+            "extreme": 83,
+            "high": 70,
+            "minimal": 5502
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 69,
+            "elevated": 121,
+            "extreme": 112,
+            "high": 78,
+            "minimal": 5420
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 73,
+            "elevated": 130,
+            "extreme": 127,
+            "high": 94,
+            "minimal": 5376
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 75,
+            "elevated": 131,
+            "extreme": 135,
+            "high": 97,
+            "minimal": 5362
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
       "schema_version": 2,
@@ -113877,6 +114789,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 59,
+            "elevated": 153,
+            "extreme": 102,
+            "high": 82,
+            "minimal": 5404
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 84,
+            "elevated": 208,
+            "extreme": 110,
+            "high": 100,
+            "minimal": 5298
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 96,
+            "elevated": 241,
+            "extreme": 124,
+            "high": 109,
+            "minimal": 5230
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 102,
+            "elevated": 259,
+            "extreme": 129,
+            "high": 115,
+            "minimal": 5195
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
       "schema_version": 2,
@@ -122837,6 +123825,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 43,
+            "elevated": 109,
+            "extreme": 76,
+            "high": 57,
+            "minimal": 5515
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 61,
+            "elevated": 132,
+            "extreme": 79,
+            "high": 79,
+            "minimal": 5449
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 78,
+            "elevated": 148,
+            "extreme": 83,
+            "high": 86,
+            "minimal": 5405
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 85,
+            "elevated": 160,
+            "extreme": 88,
+            "high": 84,
+            "minimal": 5383
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
       "schema_version": 2,
@@ -131765,6 +132829,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 58,
+            "elevated": 144,
+            "extreme": 93,
+            "high": 79,
+            "minimal": 5426
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 84,
+            "elevated": 194,
+            "extreme": 104,
+            "high": 94,
+            "minimal": 5324
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 90,
+            "elevated": 221,
+            "extreme": 116,
+            "high": 108,
+            "minimal": 5265
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 101,
+            "elevated": 233,
+            "extreme": 121,
+            "high": 106,
+            "minimal": 5239
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
       "schema_version": 2,
@@ -140717,6 +141857,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 42,
+            "elevated": 85,
+            "extreme": 57,
+            "high": 55,
+            "minimal": 5561
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 64,
+            "elevated": 104,
+            "extreme": 61,
+            "high": 61,
+            "minimal": 5510
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 75,
+            "elevated": 119,
+            "extreme": 68,
+            "high": 64,
+            "minimal": 5474
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 75,
+            "elevated": 122,
+            "extreme": 75,
+            "high": 69,
+            "minimal": 5459
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
       "schema_version": 2,
@@ -145078,6 +146294,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 63,
+            "elevated": 83,
+            "extreme": 167,
+            "high": 65,
+            "minimal": 5422
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 76,
+            "elevated": 130,
+            "extreme": 183,
+            "high": 85,
+            "minimal": 5326
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 84,
+            "elevated": 180,
+            "extreme": 186,
+            "high": 111,
+            "minimal": 5239
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 92,
+            "elevated": 206,
+            "extreme": 188,
+            "high": 127,
+            "minimal": 5187
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "cabinet_or_cable_ignition",
       "schema_version": 2,
@@ -147665,6 +148957,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 106,
+            "elevated": 165,
+            "extreme": 244,
+            "high": 120,
+            "minimal": 5165
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 154,
+            "elevated": 330,
+            "extreme": 279,
+            "high": 210,
+            "minimal": 4827
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 214,
+            "elevated": 357,
+            "extreme": 291,
+            "high": 286,
+            "minimal": 4652
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 236,
+            "elevated": 341,
+            "extreme": 306,
+            "high": 345,
+            "minimal": 4572
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "cabinet_or_cable_ignition",
       "schema_version": 2,
@@ -150220,6 +151588,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 63,
+            "elevated": 87,
+            "extreme": 171,
+            "high": 65,
+            "minimal": 5414
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 75,
+            "elevated": 134,
+            "extreme": 184,
+            "high": 89,
+            "minimal": 5318
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 85,
+            "elevated": 184,
+            "extreme": 188,
+            "high": 118,
+            "minimal": 5225
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 94,
+            "elevated": 211,
+            "extreme": 190,
+            "high": 132,
+            "minimal": 5173
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "cabinet_or_cable_ignition",
       "schema_version": 2,
@@ -152799,6 +154243,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 74,
+            "elevated": 111,
+            "extreme": 189,
+            "high": 83,
+            "minimal": 5343
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 94,
+            "elevated": 196,
+            "extreme": 207,
+            "high": 125,
+            "minimal": 5178
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 109,
+            "elevated": 263,
+            "extreme": 215,
+            "high": 171,
+            "minimal": 5042
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 127,
+            "elevated": 315,
+            "extreme": 218,
+            "high": 188,
+            "minimal": 4952
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "cabinet_or_cable_ignition",
       "schema_version": 2,
@@ -155370,6 +156890,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 63,
+            "elevated": 87,
+            "extreme": 171,
+            "high": 65,
+            "minimal": 5414
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 75,
+            "elevated": 134,
+            "extreme": 184,
+            "high": 89,
+            "minimal": 5318
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 85,
+            "elevated": 184,
+            "extreme": 188,
+            "high": 117,
+            "minimal": 5226
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 94,
+            "elevated": 211,
+            "extreme": 190,
+            "high": 132,
+            "minimal": 5173
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "cabinet_or_cable_ignition",
       "schema_version": 2,
@@ -157957,6 +159553,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 106,
+            "elevated": 165,
+            "extreme": 244,
+            "high": 120,
+            "minimal": 5165
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 154,
+            "elevated": 330,
+            "extreme": 279,
+            "high": 210,
+            "minimal": 4827
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 214,
+            "elevated": 357,
+            "extreme": 291,
+            "high": 286,
+            "minimal": 4652
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 236,
+            "elevated": 341,
+            "extreme": 306,
+            "high": 345,
+            "minimal": 4572
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "cabinet_or_cable_ignition",
       "schema_version": 2,
@@ -160512,6 +162184,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 63,
+            "elevated": 87,
+            "extreme": 172,
+            "high": 64,
+            "minimal": 5414
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 75,
+            "elevated": 134,
+            "extreme": 184,
+            "high": 90,
+            "minimal": 5317
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 85,
+            "elevated": 186,
+            "extreme": 189,
+            "high": 119,
+            "minimal": 5221
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 93,
+            "elevated": 212,
+            "extreme": 192,
+            "high": 135,
+            "minimal": 5168
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "cabinet_or_cable_ignition",
       "schema_version": 2,
@@ -163091,6 +164839,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 63,
+            "elevated": 87,
+            "extreme": 172,
+            "high": 64,
+            "minimal": 5414
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 75,
+            "elevated": 134,
+            "extreme": 184,
+            "high": 90,
+            "minimal": 5317
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 85,
+            "elevated": 186,
+            "extreme": 189,
+            "high": 119,
+            "minimal": 5221
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 93,
+            "elevated": 212,
+            "extreme": 192,
+            "high": 135,
+            "minimal": 5168
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "cabinet_or_cable_ignition",
       "schema_version": 2,
@@ -165662,6 +167486,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 61,
+            "elevated": 80,
+            "extreme": 164,
+            "high": 64,
+            "minimal": 5431
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 72,
+            "elevated": 129,
+            "extreme": 182,
+            "high": 80,
+            "minimal": 5337
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 77,
+            "elevated": 169,
+            "extreme": 184,
+            "high": 108,
+            "minimal": 5262
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 79,
+            "elevated": 191,
+            "extreme": 185,
+            "high": 129,
+            "minimal": 5216
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "cabinet_or_cable_ignition",
       "schema_version": 2,
@@ -168249,6 +170149,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 63,
+            "elevated": 87,
+            "extreme": 172,
+            "high": 64,
+            "minimal": 5414
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 75,
+            "elevated": 134,
+            "extreme": 184,
+            "high": 90,
+            "minimal": 5317
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 85,
+            "elevated": 186,
+            "extreme": 189,
+            "high": 119,
+            "minimal": 5221
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 93,
+            "elevated": 212,
+            "extreme": 192,
+            "high": 135,
+            "minimal": 5168
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "cabinet_or_cable_ignition",
       "schema_version": 2,
@@ -170804,6 +172780,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 61,
+            "elevated": 80,
+            "extreme": 164,
+            "high": 64,
+            "minimal": 5431
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 72,
+            "elevated": 129,
+            "extreme": 182,
+            "high": 80,
+            "minimal": 5337
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 77,
+            "elevated": 169,
+            "extreme": 184,
+            "high": 108,
+            "minimal": 5262
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 79,
+            "elevated": 191,
+            "extreme": 185,
+            "high": 129,
+            "minimal": 5216
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "cabinet_or_cable_ignition",
       "schema_version": 2,
@@ -173383,6 +175435,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 63,
+            "elevated": 87,
+            "extreme": 172,
+            "high": 64,
+            "minimal": 5414
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 75,
+            "elevated": 134,
+            "extreme": 184,
+            "high": 90,
+            "minimal": 5317
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 85,
+            "elevated": 186,
+            "extreme": 189,
+            "high": 119,
+            "minimal": 5221
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 93,
+            "elevated": 212,
+            "extreme": 192,
+            "high": 135,
+            "minimal": 5168
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "cabinet_or_cable_ignition",
       "schema_version": 2,
@@ -175954,6 +178082,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 67,
+            "elevated": 107,
+            "extreme": 168,
+            "high": 68,
+            "minimal": 5390
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 79,
+            "elevated": 187,
+            "extreme": 182,
+            "high": 94,
+            "minimal": 5258
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 87,
+            "elevated": 228,
+            "extreme": 187,
+            "high": 136,
+            "minimal": 5162
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 103,
+            "elevated": 248,
+            "extreme": 189,
+            "high": 148,
+            "minimal": 5112
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "cabinet_or_cable_ignition",
       "schema_version": 2,
@@ -178541,6 +180745,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 80,
+            "elevated": 187,
+            "extreme": 171,
+            "high": 101,
+            "minimal": 5261
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 120,
+            "elevated": 284,
+            "extreme": 182,
+            "high": 156,
+            "minimal": 5058
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 160,
+            "elevated": 333,
+            "extreme": 188,
+            "high": 179,
+            "minimal": 4940
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 167,
+            "elevated": 358,
+            "extreme": 201,
+            "high": 195,
+            "minimal": 4879
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "cabinet_or_cable_ignition",
       "schema_version": 2,
@@ -181096,6 +183376,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 66,
+            "elevated": 95,
+            "extreme": 170,
+            "high": 63,
+            "minimal": 5406
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 77,
+            "elevated": 157,
+            "extreme": 183,
+            "high": 93,
+            "minimal": 5290
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 89,
+            "elevated": 207,
+            "extreme": 188,
+            "high": 125,
+            "minimal": 5191
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 99,
+            "elevated": 229,
+            "extreme": 191,
+            "high": 144,
+            "minimal": 5137
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "cabinet_or_cable_ignition",
       "schema_version": 2,
@@ -183675,6 +186031,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 81,
+            "elevated": 153,
+            "extreme": 192,
+            "high": 86,
+            "minimal": 5288
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 104,
+            "elevated": 250,
+            "extreme": 210,
+            "high": 146,
+            "minimal": 5090
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 134,
+            "elevated": 331,
+            "extreme": 216,
+            "high": 189,
+            "minimal": 4930
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 152,
+            "elevated": 347,
+            "extreme": 219,
+            "high": 216,
+            "minimal": 4866
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "cabinet_or_cable_ignition",
       "schema_version": 2,
@@ -190738,6 +193170,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 47,
+            "elevated": 133,
+            "extreme": 119,
+            "high": 66,
+            "minimal": 5435
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 67,
+            "elevated": 176,
+            "extreme": 127,
+            "high": 88,
+            "minimal": 5342
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 76,
+            "elevated": 205,
+            "extreme": 130,
+            "high": 99,
+            "minimal": 5290
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 77,
+            "elevated": 217,
+            "extreme": 138,
+            "high": 112,
+            "minimal": 5256
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
       "schema_version": 2,
@@ -199516,6 +202024,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 66,
+            "elevated": 135,
+            "extreme": 105,
+            "high": 89,
+            "minimal": 5405
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 95,
+            "elevated": 189,
+            "extreme": 119,
+            "high": 101,
+            "minimal": 5296
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 105,
+            "elevated": 225,
+            "extreme": 133,
+            "high": 106,
+            "minimal": 5231
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 111,
+            "elevated": 237,
+            "extreme": 139,
+            "high": 112,
+            "minimal": 5201
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
       "schema_version": 2,
@@ -208262,6 +210846,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 138,
+            "elevated": 283,
+            "extreme": 161,
+            "high": 144,
+            "minimal": 5074
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 168,
+            "elevated": 354,
+            "extreme": 201,
+            "high": 227,
+            "minimal": 4850
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 191,
+            "elevated": 347,
+            "extreme": 229,
+            "high": 262,
+            "minimal": 4771
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 204,
+            "elevated": 337,
+            "extreme": 238,
+            "high": 280,
+            "minimal": 4741
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
       "schema_version": 2,
@@ -217032,6 +219692,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 44,
+            "elevated": 117,
+            "extreme": 119,
+            "high": 61,
+            "minimal": 5459
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 54,
+            "elevated": 156,
+            "extreme": 126,
+            "high": 86,
+            "minimal": 5378
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 65,
+            "elevated": 180,
+            "extreme": 132,
+            "high": 93,
+            "minimal": 5330
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 72,
+            "elevated": 192,
+            "extreme": 136,
+            "high": 94,
+            "minimal": 5306
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
       "schema_version": 2,
@@ -225794,6 +228530,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 36,
+            "elevated": 43,
+            "extreme": 119,
+            "high": 39,
+            "minimal": 5563
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 42,
+            "elevated": 53,
+            "extreme": 124,
+            "high": 46,
+            "minimal": 5535
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 49,
+            "elevated": 62,
+            "extreme": 126,
+            "high": 44,
+            "minimal": 5519
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 49,
+            "elevated": 72,
+            "extreme": 127,
+            "high": 45,
+            "minimal": 5507
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
       "schema_version": 2,
@@ -234572,6 +237384,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 226,
+            "elevated": 220,
+            "extreme": 299,
+            "high": 228,
+            "minimal": 4827
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 322,
+            "elevated": 184,
+            "extreme": 384,
+            "high": 264,
+            "minimal": 4646
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 351,
+            "elevated": 176,
+            "extreme": 430,
+            "high": 246,
+            "minimal": 4597
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 365,
+            "elevated": 176,
+            "extreme": 441,
+            "high": 239,
+            "minimal": 4579
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
       "schema_version": 2,
@@ -243318,6 +246206,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 39,
+            "elevated": 45,
+            "extreme": 121,
+            "high": 38,
+            "minimal": 5557
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 45,
+            "elevated": 59,
+            "extreme": 127,
+            "high": 44,
+            "minimal": 5525
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 52,
+            "elevated": 66,
+            "extreme": 128,
+            "high": 43,
+            "minimal": 5511
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 52,
+            "elevated": 77,
+            "extreme": 129,
+            "high": 45,
+            "minimal": 5497
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
       "schema_version": 2,
@@ -252088,6 +255052,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 40,
+            "elevated": 50,
+            "extreme": 120,
+            "high": 38,
+            "minimal": 5552
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 47,
+            "elevated": 71,
+            "extreme": 126,
+            "high": 43,
+            "minimal": 5513
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 52,
+            "elevated": 90,
+            "extreme": 128,
+            "high": 45,
+            "minimal": 5485
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 51,
+            "elevated": 105,
+            "extreme": 129,
+            "high": 49,
+            "minimal": 5466
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
       "schema_version": 2,
@@ -260850,6 +263890,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 38,
+            "extreme": 110,
+            "high": 34,
+            "minimal": 5590
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 37,
+            "elevated": 46,
+            "extreme": 112,
+            "high": 36,
+            "minimal": 5569
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 38,
+            "elevated": 48,
+            "extreme": 115,
+            "high": 39,
+            "minimal": 5560
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 38,
+            "elevated": 48,
+            "extreme": 115,
+            "high": 42,
+            "minimal": 5557
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
       "schema_version": 2,
@@ -269628,6 +272744,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 226,
+            "elevated": 220,
+            "extreme": 299,
+            "high": 228,
+            "minimal": 4827
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 322,
+            "elevated": 184,
+            "extreme": 384,
+            "high": 264,
+            "minimal": 4646
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 351,
+            "elevated": 176,
+            "extreme": 430,
+            "high": 246,
+            "minimal": 4597
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 365,
+            "elevated": 176,
+            "extreme": 441,
+            "high": 239,
+            "minimal": 4579
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
       "schema_version": 2,
@@ -278374,6 +281566,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 226,
+            "elevated": 220,
+            "extreme": 299,
+            "high": 228,
+            "minimal": 4827
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 322,
+            "elevated": 184,
+            "extreme": 384,
+            "high": 264,
+            "minimal": 4646
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 351,
+            "elevated": 176,
+            "extreme": 430,
+            "high": 246,
+            "minimal": 4597
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 365,
+            "elevated": 176,
+            "extreme": 441,
+            "high": 239,
+            "minimal": 4579
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
       "schema_version": 2,
@@ -287144,6 +290412,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 39,
+            "elevated": 45,
+            "extreme": 121,
+            "high": 38,
+            "minimal": 5557
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 45,
+            "elevated": 59,
+            "extreme": 127,
+            "high": 44,
+            "minimal": 5525
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 52,
+            "elevated": 66,
+            "extreme": 128,
+            "high": 43,
+            "minimal": 5511
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 52,
+            "elevated": 77,
+            "extreme": 129,
+            "high": 45,
+            "minimal": 5497
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
       "schema_version": 2,
@@ -295997,6 +299341,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 60,
+            "elevated": 116,
+            "extreme": 71,
+            "high": 64,
+            "minimal": 5489
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 76,
+            "elevated": 153,
+            "extreme": 84,
+            "high": 80,
+            "minimal": 5407
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 85,
+            "elevated": 173,
+            "extreme": 96,
+            "high": 91,
+            "minimal": 5355
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 92,
+            "elevated": 174,
+            "extreme": 100,
+            "high": 94,
+            "minimal": 5340
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
       "schema_version": 2,
@@ -304866,6 +308286,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 62,
+            "elevated": 170,
+            "extreme": 133,
+            "high": 95,
+            "minimal": 5340
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 99,
+            "elevated": 224,
+            "extreme": 140,
+            "high": 130,
+            "minimal": 5207
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 121,
+            "elevated": 276,
+            "extreme": 146,
+            "high": 150,
+            "minimal": 5107
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 134,
+            "elevated": 312,
+            "extreme": 155,
+            "high": 152,
+            "minimal": 5047
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
       "schema_version": 2,
@@ -313612,6 +317108,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 67,
+            "elevated": 164,
+            "extreme": 136,
+            "high": 89,
+            "minimal": 5344
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 91,
+            "elevated": 234,
+            "extreme": 146,
+            "high": 126,
+            "minimal": 5203
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 109,
+            "elevated": 296,
+            "extreme": 160,
+            "high": 140,
+            "minimal": 5095
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 120,
+            "elevated": 324,
+            "extreme": 170,
+            "high": 145,
+            "minimal": 5041
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
       "schema_version": 2,
@@ -322382,6 +325954,82 @@
         "maximum_weight": 0.08333333333333333
       },
       "reference_semantics": "reduced_order_synthetic_fixture_not_fds",
+      "risk_grid": {
+        "blocked_index": -1,
+        "cell_area_m2": 0.0625,
+        "classification": "every registered cell is one configured exposure level or blocked",
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 60,
+            "elevated": 150,
+            "extreme": 145,
+            "high": 80,
+            "minimal": 5365
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 87,
+            "elevated": 202,
+            "extreme": 151,
+            "high": 116,
+            "minimal": 5244
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 105,
+            "elevated": 245,
+            "extreme": 158,
+            "high": 135,
+            "minimal": 5157
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 121,
+            "elevated": 269,
+            "extreme": 160,
+            "high": 144,
+            "minimal": 5106
+          }
+        },
+        "levels": [
+          {
+            "color": "#2C7BB6",
+            "id": "minimal",
+            "index": 0,
+            "upper_bound": 0.05
+          },
+          {
+            "color": "#FFFFBF",
+            "id": "elevated",
+            "index": 1,
+            "upper_bound": 0.2
+          },
+          {
+            "color": "#FDAE61",
+            "id": "high",
+            "index": 2,
+            "upper_bound": 0.4
+          },
+          {
+            "color": "#D7191C",
+            "id": "critical",
+            "index": 3,
+            "upper_bound": 0.7
+          },
+          {
+            "color": "#6A00A8",
+            "id": "extreme",
+            "index": 4,
+            "upper_bound": null
+          }
+        ],
+        "resolution_m": 0.25,
+        "shape": [
+          50,
+          160
+        ]
+      },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
       "schema_version": 2,

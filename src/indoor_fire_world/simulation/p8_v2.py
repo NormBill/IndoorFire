@@ -220,6 +220,31 @@ def _forecast_errors(reference: dict[float, FireField], prior: dict[float, Any],
     return metrics, aggregate_prior, aggregate_posterior
 
 
+def _risk_level_grid(
+    context: P8V2Context,
+    exposure: NDArray[np.floating],
+) -> tuple[NDArray[np.int8], dict[str, int]]:
+    """Classify every registered cell as blocked (-1) or one configured level."""
+    values = np.asarray(exposure, dtype=np.float64)
+    traversable = np.asarray(context.scene.occupancy.cells) == 0
+    result = np.full(values.shape, -1, dtype=np.int8)
+    unassigned = traversable.copy()
+    counts: dict[str, int] = {}
+    for index, level in enumerate(context.parameters.exposure_levels):
+        selected = unassigned if level.upper_bound is None else (
+            unassigned & (values <= level.upper_bound + 1e-12)
+        )
+        result[selected] = index
+        counts[level.id] = int(np.count_nonzero(selected))
+        unassigned[selected] = False
+    if np.any(unassigned):
+        raise RuntimeError("Forecast exposure levels did not classify every traversable cell")
+    counts["blocked"] = int(np.count_nonzero(~traversable))
+    if sum(counts.values()) != values.size:
+        raise RuntimeError("P8 v2 risk grid must classify every registered cell exactly once")
+    return result, counts
+
+
 def _local_gaussian_baseline(context: P8V2Context, prior_forecasts: dict[float, Any], observation: Any, point: FrozenV2ObservationPoint) -> dict[float, WeightedForecast]:
     geometry = context.scene.occupancy.geometry
     rows, cols = np.indices((geometry.rows, geometry.cols))
@@ -394,6 +419,18 @@ def run_p8_v2_case(context: P8V2Context, scenario_id: str, observation_time_s: f
             "posterior_better": posterior_error < prior_error,
         },
         "forecast_exposure_semantics": "simulation planning index; not certified firefighter safety or physiological exposure",
+        "risk_grid": {
+            "shape": [context.scene.occupancy.geometry.rows, context.scene.occupancy.geometry.cols],
+            "resolution_m": context.scene.occupancy.geometry.resolution_m,
+            "cell_area_m2": context.scene.occupancy.geometry.resolution_m**2,
+            "classification": "every registered cell is one configured exposure level or blocked",
+            "blocked_index": -1,
+            "levels": [
+                {"index": index, "id": level.id, "upper_bound": level.upper_bound, "color": level.color}
+                for index, level in enumerate(parameters.exposure_levels)
+            ],
+            "counts_by_forecast_time": {},
+        },
         "corridor_semantics": "bidirectional physical corridor; arrow orientation retained only as evacuation metadata",
         "ugv_approach": _route_dict(approach),
         "prior_ingress": _ingress_dict(prior_plan),
@@ -425,5 +462,9 @@ def run_p8_v2_case(context: P8V2Context, scenario_id: str, observation_time_s: f
         arrays[f"truth_smoke_{key}"] = reference[time_s].smoke
         arrays[f"posterior_temperature_{key}"] = posterior_forecasts[time_s].mean.temperature
         arrays[f"posterior_smoke_{key}"] = posterior_forecasts[time_s].mean.smoke
-        arrays[f"posterior_exposure_{key}"] = hazard_model.compute(posterior_forecasts[time_s].mean).field
+        exposure = hazard_model.compute(posterior_forecasts[time_s].mean).field
+        risk_levels, level_counts = _risk_level_grid(context, exposure)
+        arrays[f"posterior_exposure_{key}"] = exposure
+        arrays[f"posterior_risk_level_{key}"] = risk_levels
+        summary["risk_grid"]["counts_by_forecast_time"][key] = level_counts
     return P8V2CaseOutput(summary, arrays)

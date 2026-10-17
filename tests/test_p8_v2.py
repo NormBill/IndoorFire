@@ -65,6 +65,16 @@ class P8V2Tests(unittest.TestCase):
         self.assertIn("hrr_only_ablation", metrics)
         self.assertIn("planning_ablation_without_uncertainty_penalty", self.case.summary)
 
+    def test_risk_map_classifies_every_registered_grid_cell(self) -> None:
+        expected_shape = (50, 160)
+        for time_s in self.parameters.forecast_times_s:
+            key = f"t{time_s:g}"
+            grid = self.case.arrays[f"posterior_risk_level_{key}"]
+            self.assertEqual(grid.shape, expected_shape)
+            self.assertTrue(np.all((grid >= -1) & (grid < len(self.parameters.exposure_levels))))
+            counts = self.case.summary["risk_grid"]["counts_by_forecast_time"][key]
+            self.assertEqual(sum(counts.values()), expected_shape[0] * expected_shape[1])
+
     def test_counterfactual_uses_one_posterior_forecast_sequence(self) -> None:
         counterfactual = self.case.summary["posterior_counterfactual"]
         self.assertEqual(counterfactual["definition"], "delta_j = J_post(prior_route) - J_post(updated_route)")

@@ -103,6 +103,13 @@ are reported as lightweight baselines/ablations; suppression feedback, crowd
 evacuation, detailed robot dynamics, and operational deployment are out of
 scope.
 
+The P8 v2 risk figure is a complete registered grid map rather than a sparse
+overlay. At each forecast time all 8,000 cells in the 50-by-160 grid are
+rendered: every traversable cell receives exactly one configured exposure
+level, while non-traversable cells receive the explicit `blocked` value `-1`.
+The same categorical matrices are stored as `posterior_risk_level_t*` arrays
+and their counts are serialized under `risk_grid` in `summary.json`.
+
 ## Legacy P8 registered-map snapshot closed loop
 
 `configs/p8_registered_closed_loop.yaml` integrates the Gate 1 registered map,
