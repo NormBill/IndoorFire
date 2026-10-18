@@ -40,6 +40,14 @@ class ExposureLevel:
 
 
 @dataclass(frozen=True)
+class FireSourceSemantics:
+    ignition_model: str
+    primary_source: str
+    secondary_ignition_mode: str
+    fuel_chemistry_semantics: str
+
+
+@dataclass(frozen=True)
 class P8V2Parameters:
     config_path: Path
     experiment_id: str
@@ -68,6 +76,7 @@ class P8V2Parameters:
     reference_provider: str
     assumption_status: str
     exposure_levels: tuple[ExposureLevel, ...]
+    fire_source_semantics: FireSourceSemantics
 
     def __post_init__(self) -> None:
         if not self.experiment_id or self.assumption_status != "simulation_assumed":
@@ -110,6 +119,14 @@ class P8V2Parameters:
         finite_bounds = tuple(item.upper_bound for item in self.exposure_levels[:-1])
         if any(value is None for value in finite_bounds) or tuple(sorted(set(finite_bounds))) != finite_bounds:
             raise ValueError("P8 v2 exposure bounds must be unique and increasing")
+        semantics = self.fire_source_semantics
+        if (
+            semantics.ignition_model != "single_primary_source"
+            or semantics.primary_source != "microwave"
+            or semantics.secondary_ignition_mode != "disabled"
+            or semantics.fuel_chemistry_semantics != "synthetic_surrogate"
+        ):
+            raise ValueError("P8 v2 requires explicit single-source synthetic fire semantics")
 
 
 def load_p8_v2_parameters(config_path: str | Path) -> P8V2Parameters:
@@ -123,6 +140,7 @@ def load_p8_v2_parameters(config_path: str | Path) -> P8V2Parameters:
     axes = data["candidate_ensemble"]
     planning = data["planning"]
     observations = data["observation_points"]
+    source_semantics = data["fire_source_semantics"]
     return P8V2Parameters(
         config_path=path,
         experiment_id=str(data["experiment_id"]),
@@ -177,5 +195,11 @@ def load_p8_v2_parameters(config_path: str | Path) -> P8V2Parameters:
                 color=str(item["color"]),
             )
             for item in data["forecast_exposure_levels"]
+        ),
+        fire_source_semantics=FireSourceSemantics(
+            ignition_model=str(source_semantics["ignition_model"]),
+            primary_source=str(source_semantics["primary_source"]),
+            secondary_ignition_mode=str(source_semantics["secondary_ignition_mode"]),
+            fuel_chemistry_semantics=str(source_semantics["fuel_chemistry_semantics"]),
         ),
     )

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "model_name": "p8v2_cabinet_cable_fixture",
+  "model_name": "p8v2_high_intensity_appliance_fixture",
   "time_step_s": 0.1,
   "ambient_temperature_c": 22.0,
   "ventilation_mps": [-0.14, -0.06],
@@ -14,5 +14,5 @@
   },
   "visibility": {"clear_air_visibility_m": 30.0, "smoke_extinction_per_concentration": 3.0},
   "assumption_status": "simulation_assumed_synthetic_reference",
-  "notes": "Reduced-order test fixture for the cabinet/cable synthetic branch; not FDS or real W1 truth."
+  "notes": "Reduced-order test fixture for a high-intensity single-source microwave-origin fire; no cable propagation or secondary ignition; not FDS or real W1 truth."
 }

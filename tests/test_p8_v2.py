@@ -1,13 +1,20 @@
 from __future__ import annotations
 
 from pathlib import Path
+import tempfile
 import unittest
 
 import numpy as np
 
+from indoor_fire_world.fire import load_fire_parameters
 from indoor_fire_world.p8_v2_config import load_p8_v2_parameters
 from indoor_fire_world.planning import DirectedRoutePlanner, PlanningCostParameters
 from indoor_fire_world.simulation.p8_v2 import build_p8_v2_context, run_p8_v2_case
+from indoor_fire_world.visualization.svg import (
+    render_p8_v2_exposure_evolution_svg,
+    render_p8_v2_grid_diagnostic_svg,
+    render_p8_v2_planning_envelope_svg,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -32,6 +39,10 @@ class P8V2Tests(unittest.TestCase):
         self.assertEqual(len(self.parameters.observation_points), 4)
         self.assertEqual(self.parameters.forecast_times_s, (300.0, 360.0, 420.0, 480.0))
         self.assertEqual([item.id for item in self.parameters.exposure_levels], ["minimal", "elevated", "high", "critical", "extreme"])
+        self.assertEqual(
+            [item.id for item in self.parameters.scenarios],
+            ["appliance_contained", "enclosure_breakout", "high_intensity_appliance_fire"],
+        )
 
     def test_candidate_ensemble_is_frozen_and_small(self) -> None:
         self.assertEqual(len(self.context.candidates), 12)
@@ -51,6 +62,22 @@ class P8V2Tests(unittest.TestCase):
 
     def test_reference_is_not_mislabeled_as_fds(self) -> None:
         self.assertEqual(self.case.summary["reference_semantics"], "reduced_order_synthetic_fixture_not_fds")
+
+    def test_fire_semantics_are_single_source_without_secondary_ignition(self) -> None:
+        semantics = self.case.summary["fire_source_semantics"]
+        self.assertEqual(semantics["ignition_model"], "single_primary_source")
+        self.assertEqual(semantics["primary_source"], "microwave")
+        self.assertEqual(semantics["primary_source_count"], 1)
+        self.assertEqual(semantics["secondary_ignition_mode"], "disabled")
+        self.assertEqual(semantics["secondary_ignition_count"], 0)
+        self.assertEqual(int(np.sum(self.case.arrays["primary_source_mask"])), 1)
+        self.assertFalse(np.any(self.case.arrays["secondary_ignition_mask"]))
+        for scenario in self.parameters.scenarios:
+            reference = load_fire_parameters(scenario.reference_config)
+            self.assertEqual(reference.source_semantic_id, "microwave")
+            fds_text = scenario.fds_input.read_text(encoding="utf-8")
+            self.assertEqual(fds_text.count("SURF_ID='SYNTHETIC_FIRE'"), 1)
+            self.assertNotIn("cable", scenario.id.lower())
 
     def test_posterior_weights_are_normalized(self) -> None:
         weights = self.case.summary["posterior_weights"]
@@ -74,6 +101,59 @@ class P8V2Tests(unittest.TestCase):
             self.assertTrue(np.all((grid >= -1) & (grid < len(self.parameters.exposure_levels))))
             counts = self.case.summary["risk_grid"]["counts_by_forecast_time"][key]
             self.assertEqual(sum(counts.values()), expected_shape[0] * expected_shape[1])
+
+    def test_continuous_fields_and_component_provenance_are_auditable(self) -> None:
+        allowed = {"source_connected_exposure", "threshold_disconnected_transport_region"}
+        self.assertEqual(self.case.summary["model_validation_status"], "passed")
+        self.assertEqual(self.case.summary["unexpected_disconnected_component_count"], 0)
+        for time_s in self.parameters.forecast_times_s:
+            key = f"t{time_s:g}"
+            for modality in ("temperature", "co", "smoke", "visibility"):
+                self.assertEqual(self.case.arrays[f"posterior_{modality}_severity_{key}"].shape, (50, 160))
+            self.assertEqual(self.case.arrays[f"posterior_dominant_modality_{key}"].shape, (50, 160))
+            self.assertEqual(self.case.arrays[f"posterior_exposure_component_{key}"].shape, (50, 160))
+            diagnostics = self.case.summary["risk_component_diagnostics"][key]
+            self.assertGreater(diagnostics["continuous_support_epsilon"], 0.0)
+            for threshold in diagnostics["thresholds"].values():
+                for component in threshold["components"]:
+                    self.assertIn(component["classification"], allowed)
+
+    def test_planning_field_is_cellwise_worst_case_envelope(self) -> None:
+        snapshots = np.stack([
+            self.case.arrays[f"posterior_exposure_t{time_s:g}"]
+            for time_s in self.parameters.forecast_times_s
+        ])
+        np.testing.assert_array_equal(
+            self.case.arrays["planning_exposure_envelope"],
+            np.max(snapshots, axis=0),
+        )
+        self.assertEqual(
+            self.case.summary["planning_field_semantics"]["aggregation"],
+            "cellwise_maximum_across_forecast_times",
+        )
+
+    def test_exposure_change_is_measured_without_panel_normalization(self) -> None:
+        changes = self.case.summary["exposure_change_from_previous_time"]
+        self.assertIsNone(changes["t300"])
+        for key in ("t360", "t420", "t480"):
+            self.assertGreater(changes[key]["changed_cell_count"], 0)
+            self.assertGreater(changes[key]["max_absolute_change"], 0.0)
+
+    def test_visualizations_use_fixed_scale_and_render_every_cell(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            evolution = render_p8_v2_exposure_evolution_svg(CONFIG, self.case.summary, self.case.arrays, root / "evolution.svg")
+            planning = render_p8_v2_planning_envelope_svg(CONFIG, self.case.summary, self.case.arrays, root / "planning.svg")
+            diagnostic = render_p8_v2_grid_diagnostic_svg(CONFIG, self.case.summary, self.case.arrays, root / "diagnostic.svg")
+            evolution_text = evolution.read_text(encoding="utf-8")
+            planning_text = planning.read_text(encoding="utf-8")
+            diagnostic_text = diagnostic.read_text(encoding="utf-8")
+            self.assertIn('data-fixed-color-scale="0:1"', evolution_text)
+            self.assertEqual(evolution_text.count('class="registered-cell"'), 4 * 50 * 160)
+            self.assertEqual(planning_text.count('class="registered-cell"'), 50 * 160)
+            self.assertEqual(diagnostic_text.count('class="registered-cell"'), 50 * 160)
+            self.assertIn("Colored cells indicate forecast exposure, not burning or secondary ignition", evolution_text)
+            self.assertIn('data-ignition-source="microwave"', planning_text)
 
     def test_counterfactual_uses_one_posterior_forecast_sequence(self) -> None:
         counterfactual = self.case.summary["posterior_counterfactual"]

@@ -3,6 +3,12 @@
   "experiment_id": "p8_v2_preentry_observation_to_ingress",
   "assumption_status": "simulation_assumed",
   "reference_provider": "reduced_order_fixture",
+  "fire_source_semantics": {
+    "ignition_model": "single_primary_source",
+    "primary_source": "microwave",
+    "secondary_ignition_mode": "disabled",
+    "fuel_chemistry_semantics": "synthetic_surrogate"
+  },
   "scene_config": "scene_w1_4f_registered_v1.yaml",
   "corridor_config": "evacuation_routes_w1_4f_registered_v1.yaml",
   "prior_config": "fire_prior_p8_v2.yaml",
@@ -11,7 +17,7 @@
   "synthetic_scenarios": [
     {"id": "appliance_contained", "reference_config": "fire_synthetic_appliance_contained_v2.yaml", "fds_input": "../fds/p8_v2/appliance_contained.fds", "fds_manifest": "../artifacts/p8_v2_fds/appliance_contained/manifest.json"},
     {"id": "enclosure_breakout", "reference_config": "fire_synthetic_enclosure_breakout_v2.yaml", "fds_input": "../fds/p8_v2/enclosure_breakout.fds", "fds_manifest": "../artifacts/p8_v2_fds/enclosure_breakout/manifest.json"},
-    {"id": "cabinet_or_cable_ignition", "reference_config": "fire_synthetic_cabinet_cable_v2.yaml", "fds_input": "../fds/p8_v2/cabinet_or_cable_ignition.fds", "fds_manifest": "../artifacts/p8_v2_fds/cabinet_or_cable_ignition/manifest.json"}
+    {"id": "high_intensity_appliance_fire", "reference_config": "fire_synthetic_high_intensity_appliance_v2.yaml", "fds_input": "../fds/p8_v2/high_intensity_appliance_fire.fds", "fds_manifest": "../artifacts/p8_v2_fds/high_intensity_appliance_fire/manifest.json"}
   ],
   "clocks": {
     "observation_times_s": [60.0, 100.0, 180.0, 300.0],

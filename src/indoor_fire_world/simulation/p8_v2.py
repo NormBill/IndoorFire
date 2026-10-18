@@ -46,6 +46,7 @@ from indoor_fire_world.world_model import (
 
 
 MODALITIES = ("temperature", "co", "smoke", "visibility")
+MODALITY_CODES = {"none": 0, "temperature": 1, "co": 2, "smoke": 3, "visibility": 4}
 
 
 @dataclass(frozen=True)
@@ -72,6 +73,8 @@ class P8V2Context:
     candidates: tuple[Any, ...]
     candidate_bank: dict[str, dict[float, FireField]]
     reference_banks: dict[str, dict[float, FireField]]
+    source_cell: tuple[int, int]
+    ambient_temperature_c: float
 
 
 def _advance(simulator: GroundTruthSimulator, target: float) -> None:
@@ -133,7 +136,24 @@ def build_p8_v2_context(config_path: str | Path) -> P8V2Context:
             if any(time_s not in snapshots for time_s in all_times):
                 raise ValueError("FDS manifest is missing a required observation or forecast time")
             reference_banks[scenario.id] = snapshots
-    return P8V2Context(parameters, scene, graph, points, point_hash, candidates, candidate_bank, reference_banks)
+    microwave = scene.semantic.by_id(parameters.fire_source_semantics.primary_source)
+    if microwave.position is None:
+        raise ValueError("Configured primary fire source requires a registered position")
+    source_cell = scene.navigation.metric_to_grid(*microwave.position)
+    if not scene.navigation.is_traversable(source_cell):
+        raise ValueError("Configured primary fire source must occupy a traversable simulation cell")
+    return P8V2Context(
+        parameters,
+        scene,
+        graph,
+        points,
+        point_hash,
+        candidates,
+        candidate_bank,
+        reference_banks,
+        source_cell,
+        base.ambient_temperature_c,
+    )
 
 
 def _route_dict(route: RouteResult) -> dict[str, Any]:
@@ -243,6 +263,180 @@ def _risk_level_grid(
     if sum(counts.values()) != values.size:
         raise RuntimeError("P8 v2 risk grid must classify every registered cell exactly once")
     return result, counts
+
+
+def _label_components(mask: NDArray[np.bool_]) -> tuple[NDArray[np.int32], list[list[tuple[int, int]]]]:
+    """Return deterministic row-major four-neighbour components."""
+    active = np.asarray(mask, dtype=np.bool_)
+    labels = np.full(active.shape, -1, dtype=np.int32)
+    components: list[list[tuple[int, int]]] = []
+    rows, cols = active.shape
+    for row in range(rows):
+        for col in range(cols):
+            if not active[row, col] or labels[row, col] >= 0:
+                continue
+            component_id = len(components)
+            labels[row, col] = component_id
+            queue = [(row, col)]
+            cells: list[tuple[int, int]] = []
+            cursor = 0
+            while cursor < len(queue):
+                current_row, current_col = queue[cursor]
+                cursor += 1
+                cells.append((current_row, current_col))
+                for next_row, next_col in (
+                    (current_row - 1, current_col),
+                    (current_row, current_col - 1),
+                    (current_row, current_col + 1),
+                    (current_row + 1, current_col),
+                ):
+                    if (
+                        0 <= next_row < rows
+                        and 0 <= next_col < cols
+                        and active[next_row, next_col]
+                        and labels[next_row, next_col] < 0
+                    ):
+                        labels[next_row, next_col] = component_id
+                        queue.append((next_row, next_col))
+            components.append(cells)
+    return labels, components
+
+
+def _dominant_component_modality(
+    dominant: NDArray[np.str_],
+    cells: list[tuple[int, int]],
+) -> str:
+    counts = {
+        name: sum(str(dominant[row, col]) == name for row, col in cells)
+        for name in MODALITIES
+    }
+    return min(MODALITIES, key=lambda name: (-counts[name], MODALITIES.index(name)))
+
+
+def _component_record(
+    context: P8V2Context,
+    field: NDArray[np.float64],
+    dominant: NDArray[np.str_],
+    cells: list[tuple[int, int]],
+    component_id: int,
+    *,
+    source_connected_at_threshold: bool,
+    source_connected_in_continuous_support: bool,
+    source_connected_in_transport_domain: bool,
+) -> dict[str, Any]:
+    if source_connected_at_threshold:
+        classification = "source_connected_exposure"
+    elif source_connected_in_transport_domain:
+        classification = "threshold_disconnected_transport_region"
+    else:
+        classification = "unexpected_disconnected_transport"
+    rows = np.asarray([cell[0] for cell in cells], dtype=np.float64)
+    cols = np.asarray([cell[1] for cell in cells], dtype=np.float64)
+    centroid_row = float(np.mean(rows))
+    centroid_col = float(np.mean(cols))
+    geometry = context.scene.occupancy.geometry
+    centroid_x = geometry.origin_x + (centroid_col + 0.5) * geometry.resolution_m
+    centroid_y = geometry.origin_y + (centroid_row + 0.5) * geometry.resolution_m
+    return {
+        "component_id": component_id,
+        "cell_count": len(cells),
+        "area_m2": len(cells) * geometry.resolution_m**2,
+        "centroid_cell": [centroid_row, centroid_col],
+        "centroid_m": [centroid_x, centroid_y],
+        "peak_exposure": max(float(field[row, col]) for row, col in cells),
+        "dominant_modality": _dominant_component_modality(dominant, cells),
+        "source_connected_at_threshold": source_connected_at_threshold,
+        "source_connected_in_continuous_support": source_connected_in_continuous_support,
+        "source_connected_in_transport_domain": source_connected_in_transport_domain,
+        "classification": classification,
+    }
+
+
+def _exposure_component_diagnostics(
+    context: P8V2Context,
+    field: NDArray[np.floating],
+    dominant: NDArray[np.str_],
+    transport_support: NDArray[np.floating],
+) -> tuple[NDArray[np.int32], dict[str, Any]]:
+    """Audit categorical islands against unthresholded transported fire signals."""
+    values = np.asarray(field, dtype=np.float64)
+    support_values = np.asarray(transport_support, dtype=np.float64)
+    traversable = np.asarray(context.scene.occupancy.cells) == 0
+    maximum = float(np.max(values[traversable]))
+    support_epsilon = max(1e-12, 1e-6 * maximum)
+    support_labels, support_components = _label_components(
+        traversable & (support_values > support_epsilon)
+    )
+    source_support_id = int(support_labels[context.source_cell])
+    transport_domain_labels, _ = _label_components(traversable)
+    source_transport_domain_id = int(transport_domain_labels[context.source_cell])
+    support_records = [
+        _component_record(
+            context,
+            values,
+            dominant,
+            cells,
+            component_id,
+            source_connected_at_threshold=component_id == source_support_id,
+            source_connected_in_continuous_support=component_id == source_support_id,
+            source_connected_in_transport_domain=all(
+                int(transport_domain_labels[row, col]) == source_transport_domain_id
+                for row, col in cells
+            ),
+        )
+        for component_id, cells in enumerate(support_components)
+    ]
+
+    threshold_records: dict[str, Any] = {}
+    primary_component_grid = np.full(values.shape, -1, dtype=np.int32)
+    primary_component_grid[~traversable] = -2
+    transport_only_count = 0
+    unexpected_count = sum(
+        record["classification"] == "unexpected_disconnected_transport"
+        for record in support_records
+    )
+    finite_levels = [level for level in context.parameters.exposure_levels if level.upper_bound is not None]
+    for threshold_index, level in enumerate(finite_levels):
+        threshold = float(level.upper_bound)
+        labels, components = _label_components(traversable & (values > threshold + 1e-12))
+        if threshold_index == 0:
+            primary_component_grid[labels >= 0] = labels[labels >= 0]
+        source_component_id = int(labels[context.source_cell])
+        records: list[dict[str, Any]] = []
+        for component_id, cells in enumerate(components):
+            support_ids = {int(support_labels[row, col]) for row, col in cells}
+            connected_in_support = source_support_id >= 0 and support_ids == {source_support_id}
+            connected_in_domain = all(
+                int(transport_domain_labels[row, col]) == source_transport_domain_id
+                for row, col in cells
+            )
+            record = _component_record(
+                context,
+                values,
+                dominant,
+                cells,
+                component_id,
+                source_connected_at_threshold=component_id == source_component_id,
+                source_connected_in_continuous_support=connected_in_support,
+                source_connected_in_transport_domain=connected_in_domain,
+            )
+            transport_only_count += record["classification"] == "threshold_disconnected_transport_region"
+            records.append(record)
+        threshold_records[level.id] = {
+            "superlevel_definition": f"exposure > {threshold:g}",
+            "component_count": len(records),
+            "components": records,
+        }
+    return primary_component_grid, {
+        "continuous_support_epsilon": support_epsilon,
+        "continuous_support_basis": "max(normalized_temperature_anomaly, normalized_raw_smoke, normalized_raw_co); no hazard safe-threshold clipping",
+        "causal_connectivity_basis": "four-neighbour traversable transport domain used by the no-flux solver",
+        "continuous_support_component_count": len(support_records),
+        "continuous_support_components": support_records,
+        "thresholds": threshold_records,
+        "transport_only_component_count_across_thresholds": int(transport_only_count),
+        "unexpected_disconnected_component_count": int(unexpected_count),
+    }
 
 
 def _local_gaussian_baseline(context: P8V2Context, prior_forecasts: dict[float, Any], observation: Any, point: FrozenV2ObservationPoint) -> dict[float, WeightedForecast]:
@@ -393,6 +587,16 @@ def run_p8_v2_case(context: P8V2Context, scenario_id: str, observation_time_s: f
         "scenario_id": scenario_id,
         "reference_semantics": "high_fidelity_synthetic_reference" if parameters.reference_provider == "fds_snapshot" else "reduced_order_synthetic_fixture_not_fds",
         "assumption_status": parameters.assumption_status,
+        "fire_source_semantics": {
+            "ignition_model": parameters.fire_source_semantics.ignition_model,
+            "primary_source": parameters.fire_source_semantics.primary_source,
+            "primary_source_cell": list(context.source_cell),
+            "primary_source_count": 1,
+            "secondary_ignition_mode": parameters.fire_source_semantics.secondary_ignition_mode,
+            "secondary_ignition_count": 0,
+            "fuel_chemistry_semantics": parameters.fire_source_semantics.fuel_chemistry_semantics,
+            "interpretation": "Only the microwave cell is an ignition source; colored remote cells are forecast exposure, not burning cells.",
+        },
         "observation_time_s": observation_time_s,
         "handoff_time_s": parameters.handoff_time_s,
         "forecast_times_s": list(parameters.forecast_times_s),
@@ -419,6 +623,11 @@ def run_p8_v2_case(context: P8V2Context, scenario_id: str, observation_time_s: f
             "posterior_better": posterior_error < prior_error,
         },
         "forecast_exposure_semantics": "simulation planning index; not certified firefighter safety or physiological exposure",
+        "planning_field_semantics": {
+            "aggregation": "cellwise_maximum_across_forecast_times",
+            "definition": "planning_exposure_envelope = max(exposure_t300, exposure_t360, exposure_t420, exposure_t480)",
+            "time_coupling": "none; route planning uses a worst-case forecast envelope",
+        },
         "risk_grid": {
             "shape": [context.scene.occupancy.geometry.rows, context.scene.occupancy.geometry.cols],
             "resolution_m": context.scene.occupancy.geometry.resolution_m,
@@ -430,7 +639,17 @@ def run_p8_v2_case(context: P8V2Context, scenario_id: str, observation_time_s: f
                 for index, level in enumerate(parameters.exposure_levels)
             ],
             "counts_by_forecast_time": {},
+            "dominant_modality_codes": MODALITY_CODES,
+            "component_grid_semantics": {
+                "blocked": -2,
+                "below_first_threshold": -1,
+                "nonnegative": "deterministic row-major component ID for exposure above the first configured boundary",
+            },
         },
+        "risk_component_diagnostics": {},
+        "transport_only_component_count": 0,
+        "unexpected_disconnected_component_count": 0,
+        "exposure_change_from_previous_time": {},
         "corridor_semantics": "bidirectional physical corridor; arrow orientation retained only as evacuation metadata",
         "ugv_approach": _route_dict(approach),
         "prior_ingress": _ingress_dict(prior_plan),
@@ -452,19 +671,68 @@ def run_p8_v2_case(context: P8V2Context, scenario_id: str, observation_time_s: f
     arrays: dict[str, NDArray[Any]] = {
         "prior_forecast_exposure": prior_exposure,
         "posterior_forecast_exposure": posterior_exposure,
+        "planning_exposure_envelope": posterior_exposure,
         "posterior_forecast_uncertainty": posterior_uncertainty,
         "posterior_weights": updated_weights,
         "oracle_forecast_exposure": oracle_exposure,
     }
+    source_mask = np.zeros(shape, dtype=np.uint8)
+    source_mask[context.source_cell] = 1
+    arrays["primary_source_mask"] = source_mask
+    arrays["secondary_ignition_mask"] = np.zeros(shape, dtype=np.uint8)
+    previous_exposure: NDArray[np.float64] | None = None
     for time_s in parameters.forecast_times_s:
         key = f"t{time_s:g}"
         arrays[f"truth_temperature_{key}"] = reference[time_s].temperature
         arrays[f"truth_smoke_{key}"] = reference[time_s].smoke
         arrays[f"posterior_temperature_{key}"] = posterior_forecasts[time_s].mean.temperature
         arrays[f"posterior_smoke_{key}"] = posterior_forecasts[time_s].mean.smoke
-        exposure = hazard_model.compute(posterior_forecasts[time_s].mean).field
+        hazard = hazard_model.compute(posterior_forecasts[time_s].mean)
+        exposure = hazard.field
+        forecast_mean = posterior_forecasts[time_s].mean
+        transport_support = np.maximum.reduce([
+            np.maximum(np.asarray(forecast_mean.temperature) - context.ambient_temperature_c, 0.0) / 50.0,
+            np.asarray(forecast_mean.smoke) / 1.0,
+            np.asarray(forecast_mean.co) / 0.30,
+        ])
         risk_levels, level_counts = _risk_level_grid(context, exposure)
+        component_grid, component_diagnostics = _exposure_component_diagnostics(
+            context,
+            exposure,
+            hazard.dominant_modality,
+            transport_support,
+        )
+        dominant_codes = np.zeros(shape, dtype=np.int8)
+        for modality, code in MODALITY_CODES.items():
+            dominant_codes[np.asarray(hazard.dominant_modality) == modality] = code
         arrays[f"posterior_exposure_{key}"] = exposure
+        arrays[f"posterior_transport_support_{key}"] = transport_support
         arrays[f"posterior_risk_level_{key}"] = risk_levels
+        arrays[f"posterior_dominant_modality_{key}"] = dominant_codes
+        arrays[f"posterior_exposure_component_{key}"] = component_grid
+        for modality in MODALITIES:
+            arrays[f"posterior_{modality}_severity_{key}"] = np.asarray(getattr(hazard, modality))
         summary["risk_grid"]["counts_by_forecast_time"][key] = level_counts
+        summary["risk_component_diagnostics"][key] = component_diagnostics
+        summary["transport_only_component_count"] += component_diagnostics[
+            "transport_only_component_count_across_thresholds"
+        ]
+        summary["unexpected_disconnected_component_count"] += component_diagnostics[
+            "unexpected_disconnected_component_count"
+        ]
+        if previous_exposure is None:
+            summary["exposure_change_from_previous_time"][key] = None
+        else:
+            difference = np.abs(exposure - previous_exposure)
+            summary["exposure_change_from_previous_time"][key] = {
+                "mean_absolute_change": float(np.mean(difference)),
+                "max_absolute_change": float(np.max(difference)),
+                "changed_cell_count": int(np.count_nonzero(difference > 1e-12)),
+            }
+        previous_exposure = np.array(exposure, copy=True)
+    summary["model_validation_status"] = (
+        "passed"
+        if summary["unexpected_disconnected_component_count"] == 0
+        else "failed_unexpected_disconnected_transport"
+    )
     return P8V2CaseOutput(summary, arrays)

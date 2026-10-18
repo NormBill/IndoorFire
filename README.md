@@ -78,6 +78,12 @@ three configurable synthetic fire branches, four geometry-frozen observation
 points, four observation times, and forecasts at 300/360/420/480 s. The 300 s
 handoff is a simulation boundary, not a W1 response-time claim.
 
+All three branches retain one microwave-origin primary source. They vary only
+synthetic HRR, yield, and ventilation assumptions; cable propagation and
+secondary ignition are disabled. The high-intensity branch is therefore named
+`high_intensity_appliance_fire` without implying a separate propagation mode. The FDS fuel is a
+synthetic surrogate and does not claim appliance-specific combustion chemistry.
+
 The UGV route verifies only geometric reachability. A twelve-member
 reduced-order candidate ensemble is updated by the temperature/CO/smoke point
 observation, and its posterior weights generate forecast means and variances.
@@ -103,12 +109,16 @@ are reported as lightweight baselines/ablations; suppression feedback, crowd
 evacuation, detailed robot dynamics, and operational deployment are out of
 scope.
 
-The P8 v2 risk figure is a complete registered grid map rather than a sparse
-overlay. At each forecast time all 8,000 cells in the 50-by-160 grid are
-rendered: every traversable cell receives exactly one configured exposure
-level, while non-traversable cells receive the explicit `blocked` value `-1`.
-The same categorical matrices are stored as `posterior_risk_level_t*` arrays
-and their counts are serialized under `risk_grid` in `summary.json`.
+The P8 v2 figures separate the only ignition source from transported exposure.
+At each forecast time all 8,000 cells in the 50-by-160 grid are rendered on a
+shared continuous `[0,1]` scale, with configured risk boundaries as contours.
+`forecast_exposure_evolution.svg` shows temporal evolution,
+`planning_envelope_and_ingress.svg` shows the cellwise worst-case forecast and
+routes, and `forecast_exposure_grid_diagnostic.svg` retains cell tooltips and
+component provenance. Colored cells indicate forecast exposure, never burning
+or secondary ignition. Threshold-disconnected islands are retained only when
+the unthresholded transport signals remain inside the microwave-connected
+no-flux transport domain; signal components outside that domain fail validation.
 
 ## Legacy P8 registered-map snapshot closed loop
 

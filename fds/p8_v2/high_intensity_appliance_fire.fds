@@ -1,4 +1,4 @@
-&HEAD CHID='p8v2_cabinet_cable', TITLE='Synthetic cabinet-or-cable reference; not W1 calibrated' /
+&HEAD CHID='p8v2_high_intensity_appliance', TITLE='Synthetic high-intensity single-source appliance reference; no cable propagation; not W1 calibrated' /
 &TIME T_END=480.0 /
 &MESH IJK=160,50,12, XB=0.0,40.0,0.0,12.5,0.0,3.0 /
 &REAC FUEL='PROPANE', SOOT_YIELD=0.14, CO_YIELD=0.04 /

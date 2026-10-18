@@ -11,7 +11,7 @@ import numpy as np
 from indoor_fire_world.scene.models import Polygon, Scene
 
 
-def render_p8_v2_forecast_svg(
+def _render_p8_v2_forecast_svg_legacy(
     config_path: str | Path,
     summary: dict,
     arrays: dict,
@@ -97,6 +97,278 @@ def render_p8_v2_forecast_svg(
         x += 125
     parts.append(f'<rect x="{x}" y="{legend_y-16}" width="22" height="22" fill="url(#p8v2-blocked)" stroke="#333"/><text x="{x+28}" y="{legend_y+1}" font-family="sans-serif" font-size="14">blocked</text>')
     parts.append(f'<text x="24" y="{legend_y+38}" font-family="sans-serif" font-size="14">Blue dashed: prior ingress · magenta: posterior ingress · synthetic reference and thresholds; not certified firefighter safety.</text>')
+    parts.append("</svg>")
+    output.write_text("\n".join(parts), encoding="utf-8")
+    return output.resolve()
+
+
+_CIVIDIS_STOPS = (
+    (0.00, (0, 32, 76)),
+    (0.25, (65, 77, 107)),
+    (0.50, (125, 124, 120)),
+    (0.75, (188, 174, 108)),
+    (1.00, (254, 232, 56)),
+)
+
+
+def _continuous_exposure_color(value: float) -> str:
+    clipped = min(1.0, max(0.0, float(value)))
+    for (left_value, left_rgb), (right_value, right_rgb) in zip(_CIVIDIS_STOPS, _CIVIDIS_STOPS[1:]):
+        if clipped <= right_value:
+            fraction = (clipped - left_value) / (right_value - left_value)
+            rgb = tuple(round(left + fraction * (right - left)) for left, right in zip(left_rgb, right_rgb))
+            return "#" + "".join(f"{channel:02X}" for channel in rgb)
+    return "#FEE838"
+
+
+def _p8_v2_visual_context(config_path: str | Path):
+    from indoor_fire_world.p8_v2_config import load_p8_v2_parameters
+    from indoor_fire_world.planning import load_directed_evacuation_graph
+    from indoor_fire_world.scene import load_scene
+
+    parameters = load_p8_v2_parameters(config_path)
+    scene = load_scene(parameters.scene_config)
+    registration = scene.map_registration
+    if registration is None:
+        raise ValueError("P8 v2 visualization requires registered map geometry")
+    graph = load_directed_evacuation_graph(parameters.corridor_config, scene)
+    encoded = base64.b64encode(registration.source_image.read_bytes()).decode("ascii")
+    return parameters, scene, registration, graph, encoded
+
+
+def _p8_v2_svg_defs(registration, encoded: str) -> list[str]:
+    return [
+        "<defs>",
+        f'<image id="p8v2-map" href="data:image/png;base64,{encoded}" width="{registration.source_width_px}" height="{registration.source_height_px}"/>',
+        '<pattern id="p8v2-blocked" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="#B8BDC6"/><line x1="0" y1="0" x2="0" y2="8" stroke="#737984" stroke-width="2"/></pattern>',
+        "</defs>",
+    ]
+
+
+def _p8_v2_cell_geometry(scene, registration, row: int, col: int) -> tuple[float, float, float, float]:
+    geometry = scene.occupancy.geometry
+    x0 = geometry.origin_x + col * geometry.resolution_m
+    y0 = geometry.origin_y + row * geometry.resolution_m
+    px0, py0 = registration.metric_to_pixel(x0, y0 + geometry.resolution_m)
+    px1, py1 = registration.metric_to_pixel(x0 + geometry.resolution_m, y0)
+    return px0, py0, px1 - px0, py1 - py0
+
+
+def _p8_v2_route_points(scene, registration, route: dict) -> str:
+    return " ".join(
+        f"{x:.2f},{y:.2f}"
+        for x, y in (
+            registration.metric_to_pixel(*scene.navigation.grid_to_metric(item["row"], item["col"]))
+            for item in route["path"]
+        )
+    )
+
+
+def _p8_v2_source_marker(scene, registration) -> str:
+    microwave = scene.semantic.by_id("microwave")
+    if microwave.position is None:
+        raise ValueError("Microwave source requires a registered position")
+    x, y = registration.metric_to_pixel(*microwave.position)
+    return (
+        f'<g class="primary-fire-source" data-ignition-source="microwave">'
+        f'<circle cx="{x:.2f}" cy="{y:.2f}" r="15" fill="white" stroke="#D55E00" stroke-width="7"/>'
+        f'<path d="M {x:.2f} {y+8:.2f} C {x-11:.2f} {y-2:.2f}, {x-2:.2f} {y-16:.2f}, {x+1:.2f} {y-23:.2f} C {x+4:.2f} {y-10:.2f}, {x+15:.2f} {y-6:.2f}, {x+8:.2f} {y+8:.2f} Z" fill="#D55E00"/>'
+        '<title>Microwave primary source; the only ignition source</title></g>'
+    )
+
+
+def _p8_v2_contours(risk_grid: np.ndarray, scene, registration) -> list[str]:
+    rows, cols = risk_grid.shape
+    parts = ['<g class="risk-level-contours" fill="none" stroke="#111827" stroke-opacity="0.78">']
+    for row in range(rows):
+        for col in range(cols):
+            current = int(risk_grid[row, col])
+            if current < 0:
+                continue
+            px, py, cell_width, cell_height = _p8_v2_cell_geometry(scene, registration, row, col)
+            if col + 1 < cols and int(risk_grid[row, col + 1]) >= 0 and int(risk_grid[row, col + 1]) != current:
+                level = max(current, int(risk_grid[row, col + 1]))
+                parts.append(f'<line data-boundary-level="{level}" x1="{px+cell_width:.2f}" y1="{py:.2f}" x2="{px+cell_width:.2f}" y2="{py+cell_height:.2f}" stroke-width="{0.9+0.25*level:.2f}"/>')
+            if row + 1 < rows and int(risk_grid[row + 1, col]) >= 0 and int(risk_grid[row + 1, col]) != current:
+                level = max(current, int(risk_grid[row + 1, col]))
+                parts.append(f'<line data-boundary-level="{level}" x1="{px:.2f}" y1="{py:.2f}" x2="{px+cell_width:.2f}" y2="{py:.2f}" stroke-width="{0.9+0.25*level:.2f}"/>')
+    parts.append("</g>")
+    return parts
+
+
+def _p8_v2_panel_cells(
+    field: np.ndarray,
+    risk_grid: np.ndarray,
+    scene,
+    registration,
+    *,
+    diagnostic: bool = False,
+    component_grid: np.ndarray | None = None,
+    component_classes: dict[int, str] | None = None,
+) -> list[str]:
+    rows, cols = field.shape
+    parts = [f'<g class="registered-risk-grid" data-grid-cell-count="{rows*cols}" data-color-scale-min="0" data-color-scale-max="1" shape-rendering="crispEdges">']
+    for row in range(rows):
+        for col in range(cols):
+            px, py, cell_width, cell_height = _p8_v2_cell_geometry(scene, registration, row, col)
+            level_index = int(risk_grid[row, col])
+            blocked = level_index < 0
+            fill = "url(#p8v2-blocked)" if blocked else _continuous_exposure_color(float(field[row, col]))
+            opacity = "0.42" if blocked else "0.74"
+            component_id = -1 if component_grid is None else int(component_grid[row, col])
+            classification = "" if component_id < 0 else (component_classes or {}).get(component_id, "")
+            stroke = "none"
+            stroke_width = "0"
+            if diagnostic and component_id >= 0:
+                stroke = {
+                    "source_connected_exposure": "#009E73",
+                    "threshold_disconnected_transport_region": "#E69F00",
+                    "unexpected_disconnected_transport": "#D73027",
+                }.get(classification, "#FFFFFF")
+                stroke_width = "0.9"
+            tooltip = f"row={row}, col={col}, exposure={float(field[row,col]):.6f}, level={'blocked' if blocked else level_index}, component={component_id}, classification={classification or 'none'}"
+            parts.append(
+                f'<rect class="registered-cell" data-row="{row}" data-col="{col}" x="{px:.2f}" y="{py:.2f}" '
+                f'width="{cell_width:.2f}" height="{cell_height:.2f}" fill="{fill}" fill-opacity="{opacity}" '
+                f'stroke="{stroke}" stroke-width="{stroke_width}"><title>{tooltip}</title></rect>'
+            )
+    parts.append("</g>")
+    return parts
+
+
+def _p8_v2_routes(summary: dict, scene, registration) -> list[str]:
+    parts: list[str] = []
+    for name, color, dash in (("prior_ingress", "#56B4E9", "18 10"), ("updated_ingress", "#CC79A7", "")):
+        route = summary[name]["route"]
+        if not route["feasible"]:
+            continue
+        points = _p8_v2_route_points(scene, registration, route)
+        parts.append(f'<polyline points="{points}" fill="none" stroke="white" stroke-opacity="0.92" stroke-width="13" stroke-linejoin="round" stroke-linecap="round"/>')
+        dash_attribute = f' stroke-dasharray="{dash}"' if dash else ""
+        parts.append(f'<polyline class="{name}" points="{points}" fill="none" stroke="{color}" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"{dash_attribute}/>')
+    return parts
+
+
+def _render_p8_v2_evolution(config_path: str | Path, summary: dict, arrays: dict, output_path: str | Path, *, include_routes: bool) -> Path:
+    parameters, scene, registration, _, encoded = _p8_v2_visual_context(config_path)
+    output = Path(output_path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    panel_scale = 0.42
+    panel_width = registration.source_width_px * panel_scale
+    panel_height = registration.source_height_px * panel_scale
+    width = int(panel_width * 2)
+    height = int(panel_height * 2 + 190)
+    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" data-fixed-color-scale="0:1">']
+    parts.extend(_p8_v2_svg_defs(registration, encoded))
+    parts.append('<rect width="100%" height="100%" fill="white"/>')
+    for index, time_s in enumerate(parameters.forecast_times_s):
+        offset_x = (index % 2) * panel_width
+        offset_y = (index // 2) * panel_height + 38
+        field = np.asarray(arrays[f"posterior_exposure_t{time_s:g}"], dtype=np.float64)
+        risk_grid = np.asarray(arrays[f"posterior_risk_level_t{time_s:g}"], dtype=np.int8)
+        parts.append(f'<text x="{offset_x+panel_width/2:.1f}" y="{offset_y-10:.1f}" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="bold">Forecast exposure at t={time_s:g} s</text>')
+        parts.append(f'<g transform="translate({offset_x:.2f},{offset_y:.2f}) scale({panel_scale})"><use href="#p8v2-map" opacity="0.72"/>')
+        parts.extend(_p8_v2_panel_cells(field, risk_grid, scene, registration))
+        parts.extend(_p8_v2_contours(risk_grid, scene, registration))
+        parts.append(_p8_v2_source_marker(scene, registration))
+        if include_routes:
+            parts.extend(_p8_v2_routes(summary, scene, registration))
+        parts.append("</g>")
+    legend_y = panel_height * 2 + 88
+    parts.append(f'<text x="24" y="{legend_y}" font-family="sans-serif" font-size="18" font-weight="bold">Continuous forecast exposure: 0</text>')
+    for index in range(101):
+        parts.append(f'<rect x="{258+index*3}" y="{legend_y-17}" width="3" height="22" fill="{_continuous_exposure_color(index/100)}"/>')
+    parts.append(f'<text x="568" y="{legend_y}" font-family="sans-serif" font-size="18" font-weight="bold">1</text>')
+    thresholds = ", ".join(f"{level.id} ≤ {level.upper_bound:g}" for level in parameters.exposure_levels if level.upper_bound is not None)
+    parts.append(f'<text x="620" y="{legend_y}" font-family="sans-serif" font-size="16">Contour boundaries: {escape(thresholds)}; extreme &gt; 0.70</text>')
+    parts.append(f'<text x="24" y="{legend_y+42}" font-family="sans-serif" font-size="16" font-weight="bold" fill="#D55E00">Circle/flame: microwave primary source (only ignition).</text>')
+    parts.append(f'<text x="500" y="{legend_y+42}" font-family="sans-serif" font-size="16">Colored cells indicate forecast exposure, not burning or secondary ignition. Shared fixed scale [0,1].</text>')
+    if include_routes:
+        parts.append(f'<text x="24" y="{legend_y+78}" font-family="sans-serif" font-size="15">Blue dashed: prior ingress; purple solid: posterior ingress. Routes are planned on the worst-case envelope.</text>')
+    parts.append("</svg>")
+    output.write_text("\n".join(parts), encoding="utf-8")
+    return output.resolve()
+
+
+def render_p8_v2_forecast_svg(config_path: str | Path, summary: dict, arrays: dict, output_path: str | Path) -> Path:
+    """Backward-compatible combined exposure and route artifact."""
+    return _render_p8_v2_evolution(config_path, summary, arrays, output_path, include_routes=True)
+
+
+def render_p8_v2_exposure_evolution_svg(config_path: str | Path, summary: dict, arrays: dict, output_path: str | Path) -> Path:
+    """Render four fixed-scale exposure snapshots without route clutter."""
+    return _render_p8_v2_evolution(config_path, summary, arrays, output_path, include_routes=False)
+
+
+def _risk_grid_for_visual(field: np.ndarray, levels, scene) -> np.ndarray:
+    traversable = np.asarray(scene.occupancy.cells) == 0
+    grid = np.full(field.shape, -1, dtype=np.int8)
+    remaining = traversable.copy()
+    for index, level in enumerate(levels):
+        selected = remaining if level.upper_bound is None else remaining & (field <= level.upper_bound + 1e-12)
+        grid[selected] = index
+        remaining[selected] = False
+    return grid
+
+
+def render_p8_v2_planning_envelope_svg(config_path: str | Path, summary: dict, arrays: dict, output_path: str | Path) -> Path:
+    """Render the worst-case planning envelope, green corridor and compared routes."""
+    parameters, scene, registration, graph, encoded = _p8_v2_visual_context(config_path)
+    output = Path(output_path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    scale = 0.72
+    width = int(registration.source_width_px * scale)
+    height = int(registration.source_height_px * scale + 150)
+    field = np.asarray(arrays["planning_exposure_envelope"], dtype=np.float64)
+    risk_grid = _risk_grid_for_visual(field, parameters.exposure_levels, scene)
+    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" data-fixed-color-scale="0:1">']
+    parts.extend(_p8_v2_svg_defs(registration, encoded))
+    parts.extend(['<rect width="100%" height="100%" fill="white"/>', '<text x="24" y="28" font-family="sans-serif" font-size="21" font-weight="bold">Worst-case forecast exposure envelope and firefighter ingress</text>', f'<g transform="translate(0,42) scale({scale})"><use href="#p8v2-map" opacity="0.72"/>'])
+    parts.extend(_p8_v2_panel_cells(field, risk_grid, scene, registration))
+    parts.extend(_p8_v2_contours(risk_grid, scene, registration))
+    parts.append('<g class="registered-green-corridor" fill="none" stroke="#009E73" stroke-opacity="0.72" stroke-width="9" stroke-linecap="round">')
+    for edge in graph.edges:
+        route = {"path": [{"row": row, "col": col} for row, col in edge.path]}
+        parts.append(f'<polyline points="{_p8_v2_route_points(scene, registration, route)}"/>')
+    parts.append("</g>")
+    parts.extend(_p8_v2_routes(summary, scene, registration))
+    parts.append(_p8_v2_source_marker(scene, registration))
+    parts.append("</g>")
+    legend_y = registration.source_height_px * scale + 78
+    parts.append(f'<text x="24" y="{legend_y:.1f}" font-family="sans-serif" font-size="16">Green: registered corridor; blue dashed: prior ingress; purple solid: posterior ingress.</text>')
+    parts.append(f'<text x="24" y="{legend_y+32:.1f}" font-family="sans-serif" font-size="16">Planning field = cellwise max of t=300/360/420/480 s exposure; colored cells are not burning cells.</text>')
+    parts.append("</svg>")
+    output.write_text("\n".join(parts), encoding="utf-8")
+    return output.resolve()
+
+
+def render_p8_v2_grid_diagnostic_svg(config_path: str | Path, summary: dict, arrays: dict, output_path: str | Path) -> Path:
+    """Render exact cells and component provenance for the first forecast snapshot."""
+    parameters, scene, registration, _, encoded = _p8_v2_visual_context(config_path)
+    output = Path(output_path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    time_s = parameters.forecast_times_s[0]
+    key = f"t{time_s:g}"
+    field = np.asarray(arrays[f"posterior_exposure_{key}"], dtype=np.float64)
+    risk_grid = np.asarray(arrays[f"posterior_risk_level_{key}"], dtype=np.int8)
+    component_grid = np.asarray(arrays[f"posterior_exposure_component_{key}"], dtype=np.int32)
+    first_level = next(level.id for level in parameters.exposure_levels if level.upper_bound is not None)
+    component_classes = {
+        int(record["component_id"]): str(record["classification"])
+        for record in summary["risk_component_diagnostics"][key]["thresholds"][first_level]["components"]
+    }
+    scale = 0.72
+    width = int(registration.source_width_px * scale)
+    height = int(registration.source_height_px * scale + 150)
+    parts = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" data-fixed-color-scale="0:1">']
+    parts.extend(_p8_v2_svg_defs(registration, encoded))
+    parts.extend(['<rect width="100%" height="100%" fill="white"/>', f'<text x="24" y="28" font-family="sans-serif" font-size="21" font-weight="bold">Grid/component audit at t={time_s:g} s</text>', f'<g transform="translate(0,42) scale({scale})"><use href="#p8v2-map" opacity="0.72"/>'])
+    parts.extend(_p8_v2_panel_cells(field, risk_grid, scene, registration, diagnostic=True, component_grid=component_grid, component_classes=component_classes))
+    parts.append(_p8_v2_source_marker(scene, registration))
+    parts.append("</g>")
+    legend_y = registration.source_height_px * scale + 78
+    parts.append(f'<text x="24" y="{legend_y:.1f}" font-family="sans-serif" font-size="16">Green outline: source-connected; orange: threshold-disconnected but transport-connected; red: unexpected transport.</text>')
+    parts.append(f'<text x="24" y="{legend_y+32:.1f}" font-family="sans-serif" font-size="16">All 50×160 cells are retained. Hover a cell for exposure, level, component, and classification.</text>')
     parts.append("</svg>")
     output.write_text("\n".join(parts), encoding="utf-8")
     return output.resolve()

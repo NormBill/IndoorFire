@@ -11,7 +11,12 @@ from typing import Any
 import numpy as np
 
 from indoor_fire_world.simulation.p8_v2 import P8V2CaseOutput, build_p8_v2_context, run_p8_v2_case
-from indoor_fire_world.visualization.svg import render_p8_v2_forecast_svg
+from indoor_fire_world.visualization.svg import (
+    render_p8_v2_exposure_evolution_svg,
+    render_p8_v2_forecast_svg,
+    render_p8_v2_grid_diagnostic_svg,
+    render_p8_v2_planning_envelope_svg,
+)
 
 
 @dataclass(frozen=True)
@@ -49,6 +54,11 @@ def _row(run_id: str, output: P8V2CaseOutput) -> dict[str, Any]:
         "improvement_type": counterfactual.get("improvement_type"),
         "posterior_effective_sample_size": summary.get("posterior_weight_diagnostics", {}).get("effective_sample_size"),
         "reference_semantics": summary.get("reference_semantics"),
+        "ignition_model": summary.get("fire_source_semantics", {}).get("ignition_model"),
+        "secondary_ignition_mode": summary.get("fire_source_semantics", {}).get("secondary_ignition_mode"),
+        "transport_only_component_count": summary.get("transport_only_component_count"),
+        "unexpected_disconnected_component_count": summary.get("unexpected_disconnected_component_count"),
+        "model_validation_status": summary.get("model_validation_status"),
     }
 
 
@@ -78,12 +88,21 @@ def run_p8_v2_suite(config_path: str | Path) -> P8V2SuiteOutput:
     for row in valid_rows:
         outcome = str(row["route_outcome"])
         route_outcomes[outcome] = route_outcomes.get(outcome, 0) + 1
+    unexpected_components = sum(int(row["unexpected_disconnected_component_count"] or 0) for row in rows)
+    if unexpected_components:
+        raise RuntimeError(
+            f"P8 v2 transport validation found {unexpected_components} continuous-support components "
+            "that cannot be traced to the single microwave source"
+        )
     summary = {
         "schema_version": 2,
         "experiment_id": context.parameters.experiment_id,
         "assumption_status": "simulation_assumed",
         "reference_provider": context.parameters.reference_provider,
         "reference_semantics": primary.summary["reference_semantics"],
+        "fire_source_semantics": primary.summary["fire_source_semantics"],
+        "planning_field_semantics": primary.summary["planning_field_semantics"],
+        "model_validation_status": "passed",
         "matrix_shape": {"scenarios": 3, "observation_times": 4, "observation_points": 4, "normal_cases": len(cases)},
         "primary_run_id": primary_id,
         "success_metrics": {
@@ -114,6 +133,24 @@ def write_p8_v2_artifacts(output: P8V2SuiteOutput, config_path: str | Path, targ
     arrays_path = target / "arrays.npz"
     np.savez_compressed(arrays_path, **output.primary.arrays)
     figure_path = render_p8_v2_forecast_svg(config_path, output.primary.summary, output.primary.arrays, target / "forecast_exposure_and_ingress.svg")
+    evolution_path = render_p8_v2_exposure_evolution_svg(
+        config_path,
+        output.primary.summary,
+        output.primary.arrays,
+        target / "forecast_exposure_evolution.svg",
+    )
+    planning_path = render_p8_v2_planning_envelope_svg(
+        config_path,
+        output.primary.summary,
+        output.primary.arrays,
+        target / "planning_envelope_and_ingress.svg",
+    )
+    diagnostic_path = render_p8_v2_grid_diagnostic_svg(
+        config_path,
+        output.primary.summary,
+        output.primary.arrays,
+        target / "forecast_exposure_grid_diagnostic.svg",
+    )
     manifest_path = target / "fds_manifest.json"
     manifest_path.write_text(json.dumps({
         "schema_version": 1,
@@ -122,4 +159,13 @@ def write_p8_v2_artifacts(output: P8V2SuiteOutput, config_path: str | Path, targ
         "reference_semantics": output.summary["reference_semantics"],
         "required_before_fds_claim": ["official_fds_version", "fds_input_sha256", "converted_arrays_sha256"],
     }, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    return {"summary": summary_path.resolve(), "matrix": matrix_path.resolve(), "arrays": arrays_path.resolve(), "visualization": figure_path, "fds_manifest": manifest_path.resolve()}
+    return {
+        "summary": summary_path.resolve(),
+        "matrix": matrix_path.resolve(),
+        "arrays": arrays_path.resolve(),
+        "visualization": figure_path,
+        "exposure_evolution": evolution_path,
+        "planning_envelope": planning_path,
+        "grid_diagnostic": diagnostic_path,
+        "fds_manifest": manifest_path.resolve(),
+    }
