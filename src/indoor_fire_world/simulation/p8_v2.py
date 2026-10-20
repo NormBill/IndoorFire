@@ -685,6 +685,13 @@ def run_p8_v2_case(context: P8V2Context, scenario_id: str, observation_time_s: f
                 "nonnegative": "deterministic row-major component ID for exposure above the first configured boundary",
             },
         },
+        "synthetic_reference_risk_grid": {
+            "role": "model-comparison reference only; not real W1 ground truth",
+            "field_source": parameters.reference_provider,
+            "threshold_identity": "same configured exposure thresholds as posterior risk grid",
+            "counts_by_forecast_time": {},
+            "posterior_comparison_by_forecast_time": {},
+        },
         "risk_component_diagnostics": {},
         "transport_only_component_count": 0,
         "weakly_supported_component_count": 0,
@@ -731,6 +738,8 @@ def run_p8_v2_case(context: P8V2Context, scenario_id: str, observation_time_s: f
         arrays[f"posterior_smoke_{key}"] = posterior_forecasts[time_s].mean.smoke
         hazard = hazard_model.compute(posterior_forecasts[time_s].mean)
         exposure = hazard.field
+        reference_hazard = hazard_model.compute(reference[time_s])
+        reference_exposure = reference_hazard.field
         forecast_mean = posterior_forecasts[time_s].mean
         transport_support = np.maximum.reduce([
             np.maximum(np.asarray(forecast_mean.temperature) - context.ambient_temperature_c, 0.0) / 50.0,
@@ -738,6 +747,9 @@ def run_p8_v2_case(context: P8V2Context, scenario_id: str, observation_time_s: f
             np.asarray(forecast_mean.co) / 0.30,
         ])
         risk_levels, level_counts = _risk_level_grid(context, exposure)
+        reference_risk_levels, reference_level_counts = _risk_level_grid(
+            context, reference_exposure
+        )
         component_grid, component_diagnostics = _exposure_component_diagnostics(
             context,
             exposure,
@@ -748,13 +760,33 @@ def run_p8_v2_case(context: P8V2Context, scenario_id: str, observation_time_s: f
         for modality, code in MODALITY_CODES.items():
             dominant_codes[np.asarray(hazard.dominant_modality) == modality] = code
         arrays[f"posterior_exposure_{key}"] = exposure
+        arrays[f"synthetic_reference_exposure_{key}"] = reference_exposure
         arrays[f"posterior_transport_support_{key}"] = transport_support
         arrays[f"posterior_risk_level_{key}"] = risk_levels
+        arrays[f"synthetic_reference_risk_level_{key}"] = reference_risk_levels
         arrays[f"posterior_dominant_modality_{key}"] = dominant_codes
         arrays[f"posterior_exposure_component_{key}"] = component_grid
         for modality in MODALITIES:
             arrays[f"posterior_{modality}_severity_{key}"] = np.asarray(getattr(hazard, modality))
         summary["risk_grid"]["counts_by_forecast_time"][key] = level_counts
+        summary["synthetic_reference_risk_grid"]["counts_by_forecast_time"][key] = reference_level_counts
+        comparable_reference = (risk_levels >= 0) & (reference_risk_levels >= 0)
+        level_error = risk_levels.astype(np.int16) - reference_risk_levels.astype(np.int16)
+        summary["synthetic_reference_risk_grid"]["posterior_comparison_by_forecast_time"][key] = {
+            "exposure_mae": float(np.mean(np.abs(exposure - reference_exposure))),
+            "exact_level_agreement_cell_count": int(
+                np.count_nonzero(comparable_reference & (level_error == 0))
+            ),
+            "posterior_higher_level_cell_count": int(
+                np.count_nonzero(comparable_reference & (level_error > 0))
+            ),
+            "posterior_lower_level_cell_count": int(
+                np.count_nonzero(comparable_reference & (level_error < 0))
+            ),
+            "maximum_absolute_level_difference": int(
+                np.max(np.abs(level_error[comparable_reference]))
+            ),
+        }
         summary["risk_component_diagnostics"][key] = component_diagnostics
         summary["transport_only_component_count"] += component_diagnostics[
             "transport_only_component_count_across_thresholds"

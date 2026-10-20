@@ -15,6 +15,8 @@ from indoor_fire_world.visualization.svg import (
     render_p8_v2_exposure_evolution_svg,
     render_p8_v2_grid_diagnostic_svg,
     render_p8_v2_planning_envelope_svg,
+    render_p8_v2_posterior_reference_comparison_svg,
+    render_p8_v2_synthetic_reference_risk_svg,
 )
 
 
@@ -128,6 +130,31 @@ class P8V2Tests(unittest.TestCase):
                 remaining[selected] = False
             np.testing.assert_array_equal(levels, expected)
 
+    def test_synthetic_reference_risk_uses_same_grid_and_thresholds(self) -> None:
+        metadata = self.case.summary["synthetic_reference_risk_grid"]
+        self.assertIn("not real W1 ground truth", metadata["role"])
+        bounds = [level.upper_bound for level in self.parameters.exposure_levels]
+        for time_s in self.parameters.forecast_times_s:
+            key = f"t{time_s:g}"
+            exposure = self.case.arrays[f"synthetic_reference_exposure_{key}"]
+            levels = self.case.arrays[f"synthetic_reference_risk_level_{key}"]
+            self.assertEqual(exposure.shape, (50, 160))
+            self.assertEqual(levels.shape, (50, 160))
+            expected = np.full(levels.shape, -1, dtype=np.int8)
+            remaining = levels >= 0
+            for index, upper_bound in enumerate(bounds):
+                selected = remaining if upper_bound is None else remaining & (exposure <= upper_bound + 1e-12)
+                expected[selected] = index
+                remaining[selected] = False
+            np.testing.assert_array_equal(levels, expected)
+            comparison = metadata["posterior_comparison_by_forecast_time"][key]
+            self.assertEqual(
+                comparison["exact_level_agreement_cell_count"]
+                + comparison["posterior_higher_level_cell_count"]
+                + comparison["posterior_lower_level_cell_count"],
+                5800,
+            )
+
     def test_continuous_fields_and_component_provenance_are_auditable(self) -> None:
         allowed = {
             "source_connected_exposure",
@@ -203,20 +230,29 @@ class P8V2Tests(unittest.TestCase):
             evolution = render_p8_v2_exposure_evolution_svg(CONFIG, self.case.summary, self.case.arrays, root / "evolution.svg")
             planning = render_p8_v2_planning_envelope_svg(CONFIG, self.case.summary, self.case.arrays, root / "planning.svg")
             diagnostic = render_p8_v2_grid_diagnostic_svg(CONFIG, self.case.summary, self.case.arrays, root / "diagnostic.svg")
+            reference = render_p8_v2_synthetic_reference_risk_svg(CONFIG, self.case.summary, self.case.arrays, root / "reference.svg")
+            comparison = render_p8_v2_posterior_reference_comparison_svg(CONFIG, self.case.summary, self.case.arrays, root / "comparison.svg")
             categorical_text = categorical.read_text(encoding="utf-8")
             evolution_text = evolution.read_text(encoding="utf-8")
             planning_text = planning.read_text(encoding="utf-8")
             diagnostic_text = diagnostic.read_text(encoding="utf-8")
+            reference_text = reference.read_text(encoding="utf-8")
+            comparison_text = comparison.read_text(encoding="utf-8")
             self.assertIn('data-fixed-color-scale="0:1"', evolution_text)
             self.assertEqual(categorical_text.count('class="risk-level-cell"'), 4 * 50 * 160)
             self.assertEqual(categorical_text.count('data-burning="false"'), 4 * 50 * 160)
             self.assertIn('data-risk-map-source="posterior_model_forecast"', categorical_text)
-            self.assertIn("not used to construct this risk map", categorical_text)
+            self.assertIn("not used to construct this posterior risk map", categorical_text)
             self.assertEqual(evolution_text.count('class="registered-cell"'), 4 * 50 * 160)
             self.assertEqual(planning_text.count('class="registered-cell"'), 50 * 160)
             self.assertEqual(diagnostic_text.count('class="registered-cell"'), 50 * 160)
             self.assertIn("Colored cells indicate forecast exposure, not burning or secondary ignition", evolution_text)
             self.assertIn('data-ignition-source="microwave"', planning_text)
+            self.assertEqual(reference_text.count('class="risk-level-cell"'), 4 * 50 * 160)
+            self.assertIn('data-risk-map-source="synthetic_reference_model"', reference_text)
+            self.assertIn("not measured W1 ground truth", reference_text)
+            self.assertEqual(comparison_text.count('class="risk-level-cell"'), 8 * 50 * 160)
+            self.assertIn('data-comparison="posterior_vs_synthetic_reference"', comparison_text)
 
     def test_counterfactual_uses_one_posterior_forecast_sequence(self) -> None:
         counterfactual = self.case.summary["posterior_counterfactual"]

@@ -5594,6 +5594,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 30,
+            "elevated": 31,
+            "extreme": 90,
+            "high": 25,
+            "minimal": 5624
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 34,
+            "extreme": 97,
+            "high": 29,
+            "minimal": 5612
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 38,
+            "extreme": 98,
+            "high": 32,
+            "minimal": 5604
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 29,
+            "elevated": 37,
+            "extreme": 98,
+            "high": 33,
+            "minimal": 5603
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5564,
+            "exposure_mae": 0.007175367109760346,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 236,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 5297,
+            "exposure_mae": 0.017033108341841106,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 503,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 5029,
+            "exposure_mae": 0.026105702572617056,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 771,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 4837,
+            "exposure_mae": 0.03343972898680758,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 963,
+            "posterior_lower_level_cell_count": 0
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 25,
       "ugv_approach": {
         "feasible": true,
@@ -11103,6 +11172,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 30,
+            "elevated": 31,
+            "extreme": 90,
+            "high": 25,
+            "minimal": 5624
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 34,
+            "extreme": 97,
+            "high": 29,
+            "minimal": 5612
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 38,
+            "extreme": 98,
+            "high": 32,
+            "minimal": 5604
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 29,
+            "elevated": 37,
+            "extreme": 98,
+            "high": 33,
+            "minimal": 5603
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5525,
+            "exposure_mae": 0.009184822068006472,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 275,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 5227,
+            "exposure_mae": 0.020753792228508008,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 573,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 4949,
+            "exposure_mae": 0.03160350653824017,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 851,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 4730,
+            "exposure_mae": 0.04017600436992343,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 1070,
+            "posterior_lower_level_cell_count": 0
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 25,
       "ugv_approach": {
@@ -17168,6 +17306,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 30,
+            "elevated": 31,
+            "extreme": 90,
+            "high": 25,
+            "minimal": 5624
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 34,
+            "extreme": 97,
+            "high": 29,
+            "minimal": 5612
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 38,
+            "extreme": 98,
+            "high": 32,
+            "minimal": 5604
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 29,
+            "elevated": 37,
+            "extreme": 98,
+            "high": 33,
+            "minimal": 5603
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5555,
+            "exposure_mae": 0.007579245961060135,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 245,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 5278,
+            "exposure_mae": 0.01816021724399338,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 522,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 5005,
+            "exposure_mae": 0.027924985220246463,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 795,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 4809,
+            "exposure_mae": 0.0357373491480175,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 991,
+            "posterior_lower_level_cell_count": 0
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 27,
       "ugv_approach": {
@@ -24877,6 +25084,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 30,
+            "elevated": 31,
+            "extreme": 90,
+            "high": 25,
+            "minimal": 5624
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 34,
+            "extreme": 97,
+            "high": 29,
+            "minimal": 5612
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 38,
+            "extreme": 98,
+            "high": 32,
+            "minimal": 5604
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 29,
+            "elevated": 37,
+            "extreme": 98,
+            "high": 33,
+            "minimal": 5603
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5633,
+            "exposure_mae": 0.004602853748087808,
+            "maximum_absolute_level_difference": 2,
+            "posterior_higher_level_cell_count": 167,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 5427,
+            "exposure_mae": 0.011762077801428161,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 373,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 5249,
+            "exposure_mae": 0.01813611009301421,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 551,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 5076,
+            "exposure_mae": 0.023545290132030813,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 724,
+            "posterior_lower_level_cell_count": 0
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 23,
       "ugv_approach": {
         "feasible": true,
@@ -32136,6 +32412,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 30,
+            "elevated": 31,
+            "extreme": 90,
+            "high": 25,
+            "minimal": 5624
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 34,
+            "extreme": 97,
+            "high": 29,
+            "minimal": 5612
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 38,
+            "extreme": 98,
+            "high": 32,
+            "minimal": 5604
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 29,
+            "elevated": 37,
+            "extreme": 98,
+            "high": 33,
+            "minimal": 5603
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5701,
+            "exposure_mae": 0.0034745737446718826,
+            "maximum_absolute_level_difference": 2,
+            "posterior_higher_level_cell_count": 99,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 5592,
+            "exposure_mae": 0.007839870082060371,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 208,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 5512,
+            "exposure_mae": 0.010821872189574986,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 288,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 5460,
+            "exposure_mae": 0.01278575210261267,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 340,
+            "posterior_lower_level_cell_count": 0
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 1,
       "ugv_approach": {
@@ -39552,6 +39897,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 30,
+            "elevated": 31,
+            "extreme": 90,
+            "high": 25,
+            "minimal": 5624
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 34,
+            "extreme": 97,
+            "high": 29,
+            "minimal": 5612
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 38,
+            "extreme": 98,
+            "high": 32,
+            "minimal": 5604
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 29,
+            "elevated": 37,
+            "extreme": 98,
+            "high": 33,
+            "minimal": 5603
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5687,
+            "exposure_mae": 0.00343631771448458,
+            "maximum_absolute_level_difference": 2,
+            "posterior_higher_level_cell_count": 113,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 5571,
+            "exposure_mae": 0.007877728632143744,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 229,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 5458,
+            "exposure_mae": 0.011133765913194094,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 342,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 5375,
+            "exposure_mae": 0.013535317654322266,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 425,
+            "posterior_lower_level_cell_count": 0
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 8,
       "ugv_approach": {
@@ -47276,6 +47690,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 30,
+            "elevated": 31,
+            "extreme": 90,
+            "high": 25,
+            "minimal": 5624
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 34,
+            "extreme": 97,
+            "high": 29,
+            "minimal": 5612
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 38,
+            "extreme": 98,
+            "high": 32,
+            "minimal": 5604
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 29,
+            "elevated": 37,
+            "extreme": 98,
+            "high": 33,
+            "minimal": 5603
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5570,
+            "exposure_mae": 0.006494662476873512,
+            "maximum_absolute_level_difference": 2,
+            "posterior_higher_level_cell_count": 230,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 5336,
+            "exposure_mae": 0.01507998996920922,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 464,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 5088,
+            "exposure_mae": 0.023016337586451097,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 712,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 4910,
+            "exposure_mae": 0.029622996096614198,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 890,
+            "posterior_lower_level_cell_count": 0
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 25,
       "ugv_approach": {
@@ -55125,6 +55608,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 30,
+            "elevated": 31,
+            "extreme": 90,
+            "high": 25,
+            "minimal": 5624
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 34,
+            "extreme": 97,
+            "high": 29,
+            "minimal": 5612
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 38,
+            "extreme": 98,
+            "high": 32,
+            "minimal": 5604
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 29,
+            "elevated": 37,
+            "extreme": 98,
+            "high": 33,
+            "minimal": 5603
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5549,
+            "exposure_mae": 0.008763302458809635,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 243,
+            "posterior_lower_level_cell_count": 8
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 5248,
+            "exposure_mae": 0.021385638479677033,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 552,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 4965,
+            "exposure_mae": 0.03364162651216864,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 835,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 4801,
+            "exposure_mae": 0.04278517924733653,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 999,
+            "posterior_lower_level_cell_count": 0
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 30,
       "ugv_approach": {
         "feasible": true,
@@ -62944,6 +63496,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 30,
+            "elevated": 31,
+            "extreme": 90,
+            "high": 25,
+            "minimal": 5624
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 34,
+            "extreme": 97,
+            "high": 29,
+            "minimal": 5612
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 38,
+            "extreme": 98,
+            "high": 32,
+            "minimal": 5604
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 29,
+            "elevated": 37,
+            "extreme": 98,
+            "high": 33,
+            "minimal": 5603
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5493,
+            "exposure_mae": 0.012346302964620649,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 294,
+            "posterior_lower_level_cell_count": 13
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 5141,
+            "exposure_mae": 0.029174328353387097,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 653,
+            "posterior_lower_level_cell_count": 6
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 4827,
+            "exposure_mae": 0.04517788328291692,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 966,
+            "posterior_lower_level_cell_count": 7
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 4706,
+            "exposure_mae": 0.055821590168030656,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 1085,
+            "posterior_lower_level_cell_count": 9
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 29,
       "ugv_approach": {
@@ -70861,6 +71482,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 30,
+            "elevated": 31,
+            "extreme": 90,
+            "high": 25,
+            "minimal": 5624
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 34,
+            "extreme": 97,
+            "high": 29,
+            "minimal": 5612
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 38,
+            "extreme": 98,
+            "high": 32,
+            "minimal": 5604
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 29,
+            "elevated": 37,
+            "extreme": 98,
+            "high": 33,
+            "minimal": 5603
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5648,
+            "exposure_mae": 0.0048775842319821955,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 87,
+            "posterior_lower_level_cell_count": 65
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 5517,
+            "exposure_mae": 0.010393212353097486,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 234,
+            "posterior_lower_level_cell_count": 49
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 5391,
+            "exposure_mae": 0.017172955179629114,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 363,
+            "posterior_lower_level_cell_count": 46
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 5281,
+            "exposure_mae": 0.022993555971670673,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 474,
+            "posterior_lower_level_cell_count": 45
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 33,
       "ugv_approach": {
         "feasible": true,
@@ -78664,6 +79354,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 30,
+            "elevated": 31,
+            "extreme": 90,
+            "high": 25,
+            "minimal": 5624
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 34,
+            "extreme": 97,
+            "high": 29,
+            "minimal": 5612
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 38,
+            "extreme": 98,
+            "high": 32,
+            "minimal": 5604
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 29,
+            "elevated": 37,
+            "extreme": 98,
+            "high": 33,
+            "minimal": 5603
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5493,
+            "exposure_mae": 0.012346302964620649,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 294,
+            "posterior_lower_level_cell_count": 13
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 5141,
+            "exposure_mae": 0.029174328353387097,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 653,
+            "posterior_lower_level_cell_count": 6
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 4827,
+            "exposure_mae": 0.04517788328291692,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 966,
+            "posterior_lower_level_cell_count": 7
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 4706,
+            "exposure_mae": 0.055821590168030656,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 1085,
+            "posterior_lower_level_cell_count": 9
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 29,
       "ugv_approach": {
@@ -86573,6 +87332,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 30,
+            "elevated": 31,
+            "extreme": 90,
+            "high": 25,
+            "minimal": 5624
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 34,
+            "extreme": 97,
+            "high": 29,
+            "minimal": 5612
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 38,
+            "extreme": 98,
+            "high": 32,
+            "minimal": 5604
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 29,
+            "elevated": 37,
+            "extreme": 98,
+            "high": 33,
+            "minimal": 5603
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5648,
+            "exposure_mae": 0.004877584231982812,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 87,
+            "posterior_lower_level_cell_count": 65
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 5517,
+            "exposure_mae": 0.010393212353100478,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 234,
+            "posterior_lower_level_cell_count": 49
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 5391,
+            "exposure_mae": 0.017172955179633916,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 363,
+            "posterior_lower_level_cell_count": 46
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 5281,
+            "exposure_mae": 0.02299355597167666,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 474,
+            "posterior_lower_level_cell_count": 45
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 33,
       "ugv_approach": {
         "feasible": true,
@@ -92206,6 +93034,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 30,
+            "elevated": 31,
+            "extreme": 90,
+            "high": 25,
+            "minimal": 5624
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 34,
+            "extreme": 97,
+            "high": 29,
+            "minimal": 5612
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 38,
+            "extreme": 98,
+            "high": 32,
+            "minimal": 5604
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 29,
+            "elevated": 37,
+            "extreme": 98,
+            "high": 33,
+            "minimal": 5603
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5313,
+            "exposure_mae": 0.017753220080304652,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 487,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 4856,
+            "exposure_mae": 0.03709061217847767,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 944,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 4446,
+            "exposure_mae": 0.0548818734484242,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 1354,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 4266,
+            "exposure_mae": 0.0676868183173411,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 1534,
+            "posterior_lower_level_cell_count": 0
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 32,
       "ugv_approach": {
@@ -98244,6 +99141,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 30,
+            "elevated": 31,
+            "extreme": 90,
+            "high": 25,
+            "minimal": 5624
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 34,
+            "extreme": 97,
+            "high": 29,
+            "minimal": 5612
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 38,
+            "extreme": 98,
+            "high": 32,
+            "minimal": 5604
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 29,
+            "elevated": 37,
+            "extreme": 98,
+            "high": 33,
+            "minimal": 5603
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5518,
+            "exposure_mae": 0.008751276847210067,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 282,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 5199,
+            "exposure_mae": 0.01972313782355311,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 601,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 4908,
+            "exposure_mae": 0.030087514151388,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 892,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 4688,
+            "exposure_mae": 0.03831013686103377,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 1112,
+            "posterior_lower_level_cell_count": 0
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 24,
       "ugv_approach": {
         "feasible": true,
@@ -103801,6 +104767,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 30,
+            "elevated": 31,
+            "extreme": 90,
+            "high": 25,
+            "minimal": 5624
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 34,
+            "extreme": 97,
+            "high": 29,
+            "minimal": 5612
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 38,
+            "extreme": 98,
+            "high": 32,
+            "minimal": 5604
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 29,
+            "elevated": 37,
+            "extreme": 98,
+            "high": 33,
+            "minimal": 5603
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5395,
+            "exposure_mae": 0.014253258777369918,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 405,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 4996,
+            "exposure_mae": 0.03022933244169025,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 804,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 4611,
+            "exposure_mae": 0.0454183631900607,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 1189,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 4431,
+            "exposure_mae": 0.05657023615009846,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 1369,
+            "posterior_lower_level_cell_count": 0
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 29,
       "ugv_approach": {
@@ -109871,6 +110906,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 30,
+            "elevated": 31,
+            "extreme": 90,
+            "high": 25,
+            "minimal": 5624
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 34,
+            "extreme": 97,
+            "high": 29,
+            "minimal": 5612
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 28,
+            "elevated": 38,
+            "extreme": 98,
+            "high": 32,
+            "minimal": 5604
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 29,
+            "elevated": 37,
+            "extreme": 98,
+            "high": 33,
+            "minimal": 5603
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5617,
+            "exposure_mae": 0.005134718962570804,
+            "maximum_absolute_level_difference": 2,
+            "posterior_higher_level_cell_count": 182,
+            "posterior_lower_level_cell_count": 1
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 5389,
+            "exposure_mae": 0.013812308584291668,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 411,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 5149,
+            "exposure_mae": 0.02172209198712673,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 651,
+            "posterior_lower_level_cell_count": 0
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 4977,
+            "exposure_mae": 0.028208426057667935,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 823,
+            "posterior_lower_level_cell_count": 0
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 26,
       "ugv_approach": {
         "feasible": true,
@@ -113346,6 +114450,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 128,
+            "elevated": 257,
+            "extreme": 217,
+            "high": 166,
+            "minimal": 5032
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 295,
+            "elevated": 453,
+            "extreme": 343,
+            "high": 329,
+            "minimal": 4380
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 499,
+            "elevated": 469,
+            "extreme": 447,
+            "high": 545,
+            "minimal": 3840
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 696,
+            "elevated": 364,
+            "extreme": 545,
+            "high": 530,
+            "minimal": 3665
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5206,
+            "exposure_mae": 0.018698555790288136,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 83,
+            "posterior_lower_level_cell_count": 511
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 4546,
+            "exposure_mae": 0.044511809488937945,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 218,
+            "posterior_lower_level_cell_count": 1036
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 4012,
+            "exposure_mae": 0.07019376279776969,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 304,
+            "posterior_lower_level_cell_count": 1484
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3849,
+            "exposure_mae": 0.08546773502522421,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 365,
+            "posterior_lower_level_cell_count": 1586
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 9,
       "ugv_approach": {
         "feasible": true,
@@ -115438,6 +116611,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 128,
+            "elevated": 257,
+            "extreme": 217,
+            "high": 166,
+            "minimal": 5032
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 295,
+            "elevated": 453,
+            "extreme": 343,
+            "high": 329,
+            "minimal": 4380
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 499,
+            "elevated": 469,
+            "extreme": 447,
+            "high": 545,
+            "minimal": 3840
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 696,
+            "elevated": 364,
+            "extreme": 545,
+            "high": 530,
+            "minimal": 3665
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5423,
+            "exposure_mae": 0.009894464850404997,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 205,
+            "posterior_lower_level_cell_count": 172
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 5076,
+            "exposure_mae": 0.017485355138773077,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 285,
+            "posterior_lower_level_cell_count": 439
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 4743,
+            "exposure_mae": 0.026054356014134465,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 280,
+            "posterior_lower_level_cell_count": 777
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 4765,
+            "exposure_mae": 0.027612759083286312,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 192,
+            "posterior_lower_level_cell_count": 843
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 24,
       "ugv_approach": {
         "feasible": true,
@@ -117457,6 +118699,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 128,
+            "elevated": 257,
+            "extreme": 217,
+            "high": 166,
+            "minimal": 5032
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 295,
+            "elevated": 453,
+            "extreme": 343,
+            "high": 329,
+            "minimal": 4380
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 499,
+            "elevated": 469,
+            "extreme": 447,
+            "high": 545,
+            "minimal": 3840
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 696,
+            "elevated": 364,
+            "extreme": 545,
+            "high": 530,
+            "minimal": 3665
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5170,
+            "exposure_mae": 0.014328949969688384,
+            "maximum_absolute_level_difference": 2,
+            "posterior_higher_level_cell_count": 604,
+            "posterior_lower_level_cell_count": 26
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 4965,
+            "exposure_mae": 0.020641903164713014,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 800,
+            "posterior_lower_level_cell_count": 35
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 5019,
+            "exposure_mae": 0.022275313980143454,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 689,
+            "posterior_lower_level_cell_count": 92
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 5024,
+            "exposure_mae": 0.021363557757502007,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 655,
+            "posterior_lower_level_cell_count": 121
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 22,
       "ugv_approach": {
@@ -119542,6 +120853,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 128,
+            "elevated": 257,
+            "extreme": 217,
+            "high": 166,
+            "minimal": 5032
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 295,
+            "elevated": 453,
+            "extreme": 343,
+            "high": 329,
+            "minimal": 4380
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 499,
+            "elevated": 469,
+            "extreme": 447,
+            "high": 545,
+            "minimal": 3840
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 696,
+            "elevated": 364,
+            "extreme": 545,
+            "high": 530,
+            "minimal": 3665
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5522,
+            "exposure_mae": 0.007039348070089247,
+            "maximum_absolute_level_difference": 2,
+            "posterior_higher_level_cell_count": 67,
+            "posterior_lower_level_cell_count": 211
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 5069,
+            "exposure_mae": 0.01664942332516871,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 131,
+            "posterior_lower_level_cell_count": 600
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 4717,
+            "exposure_mae": 0.02720063586281186,
+            "maximum_absolute_level_difference": 2,
+            "posterior_higher_level_cell_count": 145,
+            "posterior_lower_level_cell_count": 938
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 4736,
+            "exposure_mae": 0.030668443252850657,
+            "maximum_absolute_level_difference": 2,
+            "posterior_higher_level_cell_count": 60,
+            "posterior_lower_level_cell_count": 1004
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 24,
       "ugv_approach": {
         "feasible": true,
@@ -121217,6 +122597,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 128,
+            "elevated": 257,
+            "extreme": 217,
+            "high": 166,
+            "minimal": 5032
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 295,
+            "elevated": 453,
+            "extreme": 343,
+            "high": 329,
+            "minimal": 4380
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 499,
+            "elevated": 469,
+            "extreme": 447,
+            "high": 545,
+            "minimal": 3840
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 696,
+            "elevated": 364,
+            "extreme": 545,
+            "high": 530,
+            "minimal": 3665
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5198,
+            "exposure_mae": 0.019496448107749465,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 87,
+            "posterior_lower_level_cell_count": 515
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 4527,
+            "exposure_mae": 0.04671854196646876,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 231,
+            "posterior_lower_level_cell_count": 1042
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3999,
+            "exposure_mae": 0.07340844795316315,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 312,
+            "posterior_lower_level_cell_count": 1489
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3814,
+            "exposure_mae": 0.08933066329689891,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 379,
+            "posterior_lower_level_cell_count": 1607
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 4,
       "ugv_approach": {
@@ -122910,6 +124359,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 128,
+            "elevated": 257,
+            "extreme": 217,
+            "high": 166,
+            "minimal": 5032
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 295,
+            "elevated": 453,
+            "extreme": 343,
+            "high": 329,
+            "minimal": 4380
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 499,
+            "elevated": 469,
+            "extreme": 447,
+            "high": 545,
+            "minimal": 3840
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 696,
+            "elevated": 364,
+            "extreme": 545,
+            "high": 530,
+            "minimal": 3665
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5119,
+            "exposure_mae": 0.0212231454487524,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 324,
+            "posterior_lower_level_cell_count": 357
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 4578,
+            "exposure_mae": 0.047348717415336534,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 516,
+            "posterior_lower_level_cell_count": 706
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 4132,
+            "exposure_mae": 0.06897593779959633,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 699,
+            "posterior_lower_level_cell_count": 969
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 4103,
+            "exposure_mae": 0.08368096420095668,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 845,
+            "posterior_lower_level_cell_count": 852
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 4,
       "ugv_approach": {
         "feasible": true,
@@ -124569,6 +126087,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 128,
+            "elevated": 257,
+            "extreme": 217,
+            "high": 166,
+            "minimal": 5032
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 295,
+            "elevated": 453,
+            "extreme": 343,
+            "high": 329,
+            "minimal": 4380
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 499,
+            "elevated": 469,
+            "extreme": 447,
+            "high": 545,
+            "minimal": 3840
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 696,
+            "elevated": 364,
+            "extreme": 545,
+            "high": 530,
+            "minimal": 3665
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5198,
+            "exposure_mae": 0.019496448656001895,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 87,
+            "posterior_lower_level_cell_count": 515
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 4527,
+            "exposure_mae": 0.046718543329484365,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 231,
+            "posterior_lower_level_cell_count": 1042
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3999,
+            "exposure_mae": 0.07340845017212749,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 312,
+            "posterior_lower_level_cell_count": 1489
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3814,
+            "exposure_mae": 0.0893306658710408,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 379,
+            "posterior_lower_level_cell_count": 1607
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 4,
       "ugv_approach": {
@@ -126254,6 +127841,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 128,
+            "elevated": 257,
+            "extreme": 217,
+            "high": 166,
+            "minimal": 5032
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 295,
+            "elevated": 453,
+            "extreme": 343,
+            "high": 329,
+            "minimal": 4380
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 499,
+            "elevated": 469,
+            "extreme": 447,
+            "high": 545,
+            "minimal": 3840
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 696,
+            "elevated": 364,
+            "extreme": 545,
+            "high": 530,
+            "minimal": 3665
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5198,
+            "exposure_mae": 0.019496448512073015,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 87,
+            "posterior_lower_level_cell_count": 515
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 4527,
+            "exposure_mae": 0.04671854297721019,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 231,
+            "posterior_lower_level_cell_count": 1042
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3999,
+            "exposure_mae": 0.07340844959699316,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 312,
+            "posterior_lower_level_cell_count": 1489
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3814,
+            "exposure_mae": 0.08933066519645666,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 379,
+            "posterior_lower_level_cell_count": 1607
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 4,
       "ugv_approach": {
         "feasible": true,
@@ -127929,6 +129585,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 128,
+            "elevated": 257,
+            "extreme": 217,
+            "high": 166,
+            "minimal": 5032
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 295,
+            "elevated": 453,
+            "extreme": 343,
+            "high": 329,
+            "minimal": 4380
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 499,
+            "elevated": 469,
+            "extreme": 447,
+            "high": 545,
+            "minimal": 3840
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 696,
+            "elevated": 364,
+            "extreme": 545,
+            "high": 530,
+            "minimal": 3665
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5198,
+            "exposure_mae": 0.019496448656001895,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 87,
+            "posterior_lower_level_cell_count": 515
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 4527,
+            "exposure_mae": 0.046718543329484365,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 231,
+            "posterior_lower_level_cell_count": 1042
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3999,
+            "exposure_mae": 0.07340845017212749,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 312,
+            "posterior_lower_level_cell_count": 1489
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3814,
+            "exposure_mae": 0.0893306658710408,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 379,
+            "posterior_lower_level_cell_count": 1607
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 4,
       "ugv_approach": {
@@ -129962,6 +131687,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 128,
+            "elevated": 257,
+            "extreme": 217,
+            "high": 166,
+            "minimal": 5032
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 295,
+            "elevated": 453,
+            "extreme": 343,
+            "high": 329,
+            "minimal": 4380
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 499,
+            "elevated": 469,
+            "extreme": 447,
+            "high": 545,
+            "minimal": 3840
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 696,
+            "elevated": 364,
+            "extreme": 545,
+            "high": 530,
+            "minimal": 3665
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5088,
+            "exposure_mae": 0.02447028551445199,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 571,
+            "posterior_lower_level_cell_count": 141
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 4663,
+            "exposure_mae": 0.04107844277491406,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 813,
+            "posterior_lower_level_cell_count": 324
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 4528,
+            "exposure_mae": 0.04845500517396217,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 743,
+            "posterior_lower_level_cell_count": 529
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 4506,
+            "exposure_mae": 0.047086451721868955,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 676,
+            "posterior_lower_level_cell_count": 618
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 21,
       "ugv_approach": {
         "feasible": true,
@@ -131621,6 +133415,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 128,
+            "elevated": 257,
+            "extreme": 217,
+            "high": 166,
+            "minimal": 5032
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 295,
+            "elevated": 453,
+            "extreme": 343,
+            "high": 329,
+            "minimal": 4380
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 499,
+            "elevated": 469,
+            "extreme": 447,
+            "high": 545,
+            "minimal": 3840
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 696,
+            "elevated": 364,
+            "extreme": 545,
+            "high": 530,
+            "minimal": 3665
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5198,
+            "exposure_mae": 0.019496448656001895,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 87,
+            "posterior_lower_level_cell_count": 515
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 4527,
+            "exposure_mae": 0.046718543329484365,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 231,
+            "posterior_lower_level_cell_count": 1042
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3999,
+            "exposure_mae": 0.07340845017212749,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 312,
+            "posterior_lower_level_cell_count": 1489
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3814,
+            "exposure_mae": 0.0893306658710408,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 379,
+            "posterior_lower_level_cell_count": 1607
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 4,
       "ugv_approach": {
@@ -133305,6 +135168,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 128,
+            "elevated": 257,
+            "extreme": 217,
+            "high": 166,
+            "minimal": 5032
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 295,
+            "elevated": 453,
+            "extreme": 343,
+            "high": 329,
+            "minimal": 4380
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 499,
+            "elevated": 469,
+            "extreme": 447,
+            "high": 545,
+            "minimal": 3840
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 696,
+            "elevated": 364,
+            "extreme": 545,
+            "high": 530,
+            "minimal": 3665
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5198,
+            "exposure_mae": 0.019496448656001895,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 87,
+            "posterior_lower_level_cell_count": 515
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 4527,
+            "exposure_mae": 0.046718543329484365,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 231,
+            "posterior_lower_level_cell_count": 1042
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3999,
+            "exposure_mae": 0.07340845017212749,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 312,
+            "posterior_lower_level_cell_count": 1489
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3814,
+            "exposure_mae": 0.0893306658710408,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 379,
+            "posterior_lower_level_cell_count": 1607
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 4,
       "ugv_approach": {
@@ -135462,6 +137394,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 128,
+            "elevated": 257,
+            "extreme": 217,
+            "high": 166,
+            "minimal": 5032
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 295,
+            "elevated": 453,
+            "extreme": 343,
+            "high": 329,
+            "minimal": 4380
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 499,
+            "elevated": 469,
+            "extreme": 447,
+            "high": 545,
+            "minimal": 3840
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 696,
+            "elevated": 364,
+            "extreme": 545,
+            "high": 530,
+            "minimal": 3665
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5213,
+            "exposure_mae": 0.017984344156287205,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 4,
+            "posterior_lower_level_cell_count": 583
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 4544,
+            "exposure_mae": 0.03853660730388189,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 38,
+            "posterior_lower_level_cell_count": 1218
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 4106,
+            "exposure_mae": 0.05729867609356913,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 43,
+            "posterior_lower_level_cell_count": 1651
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3971,
+            "exposure_mae": 0.06850486210876101,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 8,
+            "posterior_lower_level_cell_count": 1821
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 28,
       "ugv_approach": {
         "feasible": true,
@@ -137594,6 +139595,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 128,
+            "elevated": 257,
+            "extreme": 217,
+            "high": 166,
+            "minimal": 5032
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 295,
+            "elevated": 453,
+            "extreme": 343,
+            "high": 329,
+            "minimal": 4380
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 499,
+            "elevated": 469,
+            "extreme": 447,
+            "high": 545,
+            "minimal": 3840
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 696,
+            "elevated": 364,
+            "extreme": 545,
+            "high": 530,
+            "minimal": 3665
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5571,
+            "exposure_mae": 0.0041637239379702816,
+            "maximum_absolute_level_difference": 1,
+            "posterior_higher_level_cell_count": 188,
+            "posterior_lower_level_cell_count": 41
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 5163,
+            "exposure_mae": 0.013117185998221028,
+            "maximum_absolute_level_difference": 2,
+            "posterior_higher_level_cell_count": 371,
+            "posterior_lower_level_cell_count": 266
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 4848,
+            "exposure_mae": 0.023054138240689866,
+            "maximum_absolute_level_difference": 2,
+            "posterior_higher_level_cell_count": 469,
+            "posterior_lower_level_cell_count": 483
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 4744,
+            "exposure_mae": 0.02808900550854973,
+            "maximum_absolute_level_difference": 2,
+            "posterior_higher_level_cell_count": 524,
+            "posterior_lower_level_cell_count": 532
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 26,
       "ugv_approach": {
         "feasible": true,
@@ -139633,6 +141703,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 128,
+            "elevated": 257,
+            "extreme": 217,
+            "high": 166,
+            "minimal": 5032
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 295,
+            "elevated": 453,
+            "extreme": 343,
+            "high": 329,
+            "minimal": 4380
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 499,
+            "elevated": 469,
+            "extreme": 447,
+            "high": 545,
+            "minimal": 3840
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 696,
+            "elevated": 364,
+            "extreme": 545,
+            "high": 530,
+            "minimal": 3665
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5470,
+            "exposure_mae": 0.006259902924973705,
+            "maximum_absolute_level_difference": 1,
+            "posterior_higher_level_cell_count": 320,
+            "posterior_lower_level_cell_count": 10
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 5177,
+            "exposure_mae": 0.013549561922553664,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 538,
+            "posterior_lower_level_cell_count": 85
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 4895,
+            "exposure_mae": 0.02293497967963923,
+            "maximum_absolute_level_difference": 2,
+            "posterior_higher_level_cell_count": 614,
+            "posterior_lower_level_cell_count": 291
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 4772,
+            "exposure_mae": 0.027173415138050952,
+            "maximum_absolute_level_difference": 2,
+            "posterior_higher_level_cell_count": 669,
+            "posterior_lower_level_cell_count": 359
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 23,
       "ugv_approach": {
@@ -141738,6 +143877,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 128,
+            "elevated": 257,
+            "extreme": 217,
+            "high": 166,
+            "minimal": 5032
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 295,
+            "elevated": 453,
+            "extreme": 343,
+            "high": 329,
+            "minimal": 4380
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 499,
+            "elevated": 469,
+            "extreme": 447,
+            "high": 545,
+            "minimal": 3840
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 696,
+            "elevated": 364,
+            "extreme": 545,
+            "high": 530,
+            "minimal": 3665
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 5494,
+            "exposure_mae": 0.006589968932842458,
+            "maximum_absolute_level_difference": 2,
+            "posterior_higher_level_cell_count": 246,
+            "posterior_lower_level_cell_count": 60
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 5041,
+            "exposure_mae": 0.0184859894872882,
+            "maximum_absolute_level_difference": 2,
+            "posterior_higher_level_cell_count": 457,
+            "posterior_lower_level_cell_count": 302
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 4708,
+            "exposure_mae": 0.030699439419790586,
+            "maximum_absolute_level_difference": 2,
+            "posterior_higher_level_cell_count": 591,
+            "posterior_lower_level_cell_count": 501
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 4565,
+            "exposure_mae": 0.037705877294419196,
+            "maximum_absolute_level_difference": 3,
+            "posterior_higher_level_cell_count": 691,
+            "posterior_lower_level_cell_count": 544
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 25,
       "ugv_approach": {
         "feasible": true,
@@ -143393,6 +145601,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 498,
+            "elevated": 345,
+            "extreme": 677,
+            "high": 529,
+            "minimal": 3751
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 667,
+            "elevated": 203,
+            "extreme": 1311,
+            "high": 279,
+            "minimal": 3340
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 566,
+            "elevated": 233,
+            "extreme": 1644,
+            "high": 227,
+            "minimal": 3130
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 538,
+            "elevated": 235,
+            "extreme": 1781,
+            "high": 262,
+            "minimal": 2984
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 3955,
+            "exposure_mae": 0.09866292852039124,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 185,
+            "posterior_lower_level_cell_count": 1660
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 3596,
+            "exposure_mae": 0.15621802659252843,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 315,
+            "posterior_lower_level_cell_count": 1889
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3427,
+            "exposure_mae": 0.17134196557611,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 412,
+            "posterior_lower_level_cell_count": 1961
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3376,
+            "exposure_mae": 0.1713157984725197,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 463,
+            "posterior_lower_level_cell_count": 1961
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 3,
       "ugv_approach": {
@@ -145086,6 +147363,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 498,
+            "elevated": 345,
+            "extreme": 677,
+            "high": 529,
+            "minimal": 3751
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 667,
+            "elevated": 203,
+            "extreme": 1311,
+            "high": 279,
+            "minimal": 3340
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 566,
+            "elevated": 233,
+            "extreme": 1644,
+            "high": 227,
+            "minimal": 3130
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 538,
+            "elevated": 235,
+            "extreme": 1781,
+            "high": 262,
+            "minimal": 2984
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 3930,
+            "exposure_mae": 0.09545073132281783,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 408,
+            "posterior_lower_level_cell_count": 1462
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 3700,
+            "exposure_mae": 0.13994620714201184,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 553,
+            "posterior_lower_level_cell_count": 1547
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3783,
+            "exposure_mae": 0.14818942268955848,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 650,
+            "posterior_lower_level_cell_count": 1367
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3857,
+            "exposure_mae": 0.14619388307400302,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 751,
+            "posterior_lower_level_cell_count": 1192
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 4,
       "ugv_approach": {
         "feasible": true,
@@ -146725,6 +149071,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 498,
+            "elevated": 345,
+            "extreme": 677,
+            "high": 529,
+            "minimal": 3751
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 667,
+            "elevated": 203,
+            "extreme": 1311,
+            "high": 279,
+            "minimal": 3340
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 566,
+            "elevated": 233,
+            "extreme": 1644,
+            "high": 227,
+            "minimal": 3130
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 538,
+            "elevated": 235,
+            "extreme": 1781,
+            "high": 262,
+            "minimal": 2984
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 3950,
+            "exposure_mae": 0.09853904774126188,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 193,
+            "posterior_lower_level_cell_count": 1657
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 3595,
+            "exposure_mae": 0.15581733475423945,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 322,
+            "posterior_lower_level_cell_count": 1883
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3433,
+            "exposure_mae": 0.1706534061129094,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 417,
+            "posterior_lower_level_cell_count": 1950
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3379,
+            "exposure_mae": 0.17041277140194044,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 469,
+            "posterior_lower_level_cell_count": 1952
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 3,
       "ugv_approach": {
@@ -148410,6 +150825,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 498,
+            "elevated": 345,
+            "extreme": 677,
+            "high": 529,
+            "minimal": 3751
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 667,
+            "elevated": 203,
+            "extreme": 1311,
+            "high": 279,
+            "minimal": 3340
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 566,
+            "elevated": 233,
+            "extreme": 1644,
+            "high": 227,
+            "minimal": 3130
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 538,
+            "elevated": 235,
+            "extreme": 1781,
+            "high": 262,
+            "minimal": 2984
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 3930,
+            "exposure_mae": 0.0954508275454249,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 408,
+            "posterior_lower_level_cell_count": 1462
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 3700,
+            "exposure_mae": 0.13994634404088155,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 553,
+            "posterior_lower_level_cell_count": 1547
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3783,
+            "exposure_mae": 0.14818957381470113,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 650,
+            "posterior_lower_level_cell_count": 1367
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3857,
+            "exposure_mae": 0.1461940377406014,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 751,
+            "posterior_lower_level_cell_count": 1192
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 4,
       "ugv_approach": {
         "feasible": true,
@@ -150065,6 +152549,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 498,
+            "elevated": 345,
+            "extreme": 677,
+            "high": 529,
+            "minimal": 3751
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 667,
+            "elevated": 203,
+            "extreme": 1311,
+            "high": 279,
+            "minimal": 3340
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 566,
+            "elevated": 233,
+            "extreme": 1644,
+            "high": 227,
+            "minimal": 3130
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 538,
+            "elevated": 235,
+            "extreme": 1781,
+            "high": 262,
+            "minimal": 2984
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 3949,
+            "exposure_mae": 0.0985367240425019,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 194,
+            "posterior_lower_level_cell_count": 1657
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 3595,
+            "exposure_mae": 0.15580981001759858,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 322,
+            "posterior_lower_level_cell_count": 1883
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3434,
+            "exposure_mae": 0.17064053760914433,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 417,
+            "posterior_lower_level_cell_count": 1949
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3379,
+            "exposure_mae": 0.17039600526841098,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 469,
+            "posterior_lower_level_cell_count": 1952
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 3,
       "ugv_approach": {
@@ -151758,6 +154311,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 498,
+            "elevated": 345,
+            "extreme": 677,
+            "high": 529,
+            "minimal": 3751
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 667,
+            "elevated": 203,
+            "extreme": 1311,
+            "high": 279,
+            "minimal": 3340
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 566,
+            "elevated": 233,
+            "extreme": 1644,
+            "high": 227,
+            "minimal": 3130
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 538,
+            "elevated": 235,
+            "extreme": 1781,
+            "high": 262,
+            "minimal": 2984
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 3930,
+            "exposure_mae": 0.09545082754555659,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 408,
+            "posterior_lower_level_cell_count": 1462
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 3700,
+            "exposure_mae": 0.13994634403992978,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 553,
+            "posterior_lower_level_cell_count": 1547
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3783,
+            "exposure_mae": 0.1481895738135626,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 650,
+            "posterior_lower_level_cell_count": 1367
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3857,
+            "exposure_mae": 0.14619403774013498,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 751,
+            "posterior_lower_level_cell_count": 1192
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 4,
       "ugv_approach": {
         "feasible": true,
@@ -153397,6 +156019,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 498,
+            "elevated": 345,
+            "extreme": 677,
+            "high": 529,
+            "minimal": 3751
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 667,
+            "elevated": 203,
+            "extreme": 1311,
+            "high": 279,
+            "minimal": 3340
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 566,
+            "elevated": 233,
+            "extreme": 1644,
+            "high": 227,
+            "minimal": 3130
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 538,
+            "elevated": 235,
+            "extreme": 1781,
+            "high": 262,
+            "minimal": 2984
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 3949,
+            "exposure_mae": 0.09853672404249095,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 194,
+            "posterior_lower_level_cell_count": 1657
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 3595,
+            "exposure_mae": 0.15580981001756322,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 322,
+            "posterior_lower_level_cell_count": 1883
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3434,
+            "exposure_mae": 0.17064053760908407,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 417,
+            "posterior_lower_level_cell_count": 1949
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3379,
+            "exposure_mae": 0.17039600526833254,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 469,
+            "posterior_lower_level_cell_count": 1952
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 3,
       "ugv_approach": {
@@ -155062,6 +157753,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 498,
+            "elevated": 345,
+            "extreme": 677,
+            "high": 529,
+            "minimal": 3751
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 667,
+            "elevated": 203,
+            "extreme": 1311,
+            "high": 279,
+            "minimal": 3340
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 566,
+            "elevated": 233,
+            "extreme": 1644,
+            "high": 227,
+            "minimal": 3130
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 538,
+            "elevated": 235,
+            "extreme": 1781,
+            "high": 262,
+            "minimal": 2984
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 3949,
+            "exposure_mae": 0.09853672404249095,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 194,
+            "posterior_lower_level_cell_count": 1657
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 3595,
+            "exposure_mae": 0.15580981001756322,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 322,
+            "posterior_lower_level_cell_count": 1883
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3434,
+            "exposure_mae": 0.17064053760908407,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 417,
+            "posterior_lower_level_cell_count": 1949
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3379,
+            "exposure_mae": 0.17039600526833254,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 469,
+            "posterior_lower_level_cell_count": 1952
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 3,
       "ugv_approach": {
         "feasible": true,
@@ -156717,6 +159477,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 498,
+            "elevated": 345,
+            "extreme": 677,
+            "high": 529,
+            "minimal": 3751
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 667,
+            "elevated": 203,
+            "extreme": 1311,
+            "high": 279,
+            "minimal": 3340
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 566,
+            "elevated": 233,
+            "extreme": 1644,
+            "high": 227,
+            "minimal": 3130
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 538,
+            "elevated": 235,
+            "extreme": 1781,
+            "high": 262,
+            "minimal": 2984
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 3949,
+            "exposure_mae": 0.09853672404249095,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 194,
+            "posterior_lower_level_cell_count": 1657
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 3595,
+            "exposure_mae": 0.15580981001756322,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 322,
+            "posterior_lower_level_cell_count": 1883
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3434,
+            "exposure_mae": 0.17064053760908407,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 417,
+            "posterior_lower_level_cell_count": 1949
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3379,
+            "exposure_mae": 0.17039600526833254,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 469,
+            "posterior_lower_level_cell_count": 1952
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 3,
       "ugv_approach": {
@@ -158410,6 +161239,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 498,
+            "elevated": 345,
+            "extreme": 677,
+            "high": 529,
+            "minimal": 3751
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 667,
+            "elevated": 203,
+            "extreme": 1311,
+            "high": 279,
+            "minimal": 3340
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 566,
+            "elevated": 233,
+            "extreme": 1644,
+            "high": 227,
+            "minimal": 3130
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 538,
+            "elevated": 235,
+            "extreme": 1781,
+            "high": 262,
+            "minimal": 2984
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 3930,
+            "exposure_mae": 0.09545082754555659,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 408,
+            "posterior_lower_level_cell_count": 1462
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 3700,
+            "exposure_mae": 0.13994634403992978,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 553,
+            "posterior_lower_level_cell_count": 1547
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3783,
+            "exposure_mae": 0.1481895738135626,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 650,
+            "posterior_lower_level_cell_count": 1367
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3857,
+            "exposure_mae": 0.14619403774013498,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 751,
+            "posterior_lower_level_cell_count": 1192
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 4,
       "ugv_approach": {
         "feasible": true,
@@ -160049,6 +162947,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 498,
+            "elevated": 345,
+            "extreme": 677,
+            "high": 529,
+            "minimal": 3751
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 667,
+            "elevated": 203,
+            "extreme": 1311,
+            "high": 279,
+            "minimal": 3340
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 566,
+            "elevated": 233,
+            "extreme": 1644,
+            "high": 227,
+            "minimal": 3130
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 538,
+            "elevated": 235,
+            "extreme": 1781,
+            "high": 262,
+            "minimal": 2984
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 3949,
+            "exposure_mae": 0.09853672404249095,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 194,
+            "posterior_lower_level_cell_count": 1657
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 3595,
+            "exposure_mae": 0.15580981001756322,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 322,
+            "posterior_lower_level_cell_count": 1883
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3434,
+            "exposure_mae": 0.17064053760908407,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 417,
+            "posterior_lower_level_cell_count": 1949
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3379,
+            "exposure_mae": 0.17039600526833254,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 469,
+            "posterior_lower_level_cell_count": 1952
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 3,
       "ugv_approach": {
@@ -161713,6 +164680,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 498,
+            "elevated": 345,
+            "extreme": 677,
+            "high": 529,
+            "minimal": 3751
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 667,
+            "elevated": 203,
+            "extreme": 1311,
+            "high": 279,
+            "minimal": 3340
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 566,
+            "elevated": 233,
+            "extreme": 1644,
+            "high": 227,
+            "minimal": 3130
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 538,
+            "elevated": 235,
+            "extreme": 1781,
+            "high": 262,
+            "minimal": 2984
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 3949,
+            "exposure_mae": 0.09853672404249095,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 194,
+            "posterior_lower_level_cell_count": 1657
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 3595,
+            "exposure_mae": 0.15580981001756322,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 322,
+            "posterior_lower_level_cell_count": 1883
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3434,
+            "exposure_mae": 0.17064053760908407,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 417,
+            "posterior_lower_level_cell_count": 1949
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3379,
+            "exposure_mae": 0.17039600526833254,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 469,
+            "posterior_lower_level_cell_count": 1952
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 3,
       "ugv_approach": {
@@ -163389,6 +166425,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 498,
+            "elevated": 345,
+            "extreme": 677,
+            "high": 529,
+            "minimal": 3751
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 667,
+            "elevated": 203,
+            "extreme": 1311,
+            "high": 279,
+            "minimal": 3340
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 566,
+            "elevated": 233,
+            "extreme": 1644,
+            "high": 227,
+            "minimal": 3130
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 538,
+            "elevated": 235,
+            "extreme": 1781,
+            "high": 262,
+            "minimal": 2984
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 3911,
+            "exposure_mae": 0.09535901053877736,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 360,
+            "posterior_lower_level_cell_count": 1529
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 3657,
+            "exposure_mae": 0.14214921027342675,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 499,
+            "posterior_lower_level_cell_count": 1644
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3675,
+            "exposure_mae": 0.1511781007129021,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 594,
+            "posterior_lower_level_cell_count": 1531
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3791,
+            "exposure_mae": 0.14809471887881448,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 661,
+            "posterior_lower_level_cell_count": 1348
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 4,
       "ugv_approach": {
@@ -165462,6 +168567,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 498,
+            "elevated": 345,
+            "extreme": 677,
+            "high": 529,
+            "minimal": 3751
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 667,
+            "elevated": 203,
+            "extreme": 1311,
+            "high": 279,
+            "minimal": 3340
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 566,
+            "elevated": 233,
+            "extreme": 1644,
+            "high": 227,
+            "minimal": 3130
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 538,
+            "elevated": 235,
+            "extreme": 1781,
+            "high": 262,
+            "minimal": 2984
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 4045,
+            "exposure_mae": 0.07931848790051874,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 165,
+            "posterior_lower_level_cell_count": 1590
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 3795,
+            "exposure_mae": 0.11621625774645152,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 281,
+            "posterior_lower_level_cell_count": 1724
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3825,
+            "exposure_mae": 0.11881304559701453,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 369,
+            "posterior_lower_level_cell_count": 1606
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3903,
+            "exposure_mae": 0.11212234254332645,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 422,
+            "posterior_lower_level_cell_count": 1475
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 23,
       "ugv_approach": {
         "feasible": true,
@@ -167402,6 +170576,75 @@
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
       },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 498,
+            "elevated": 345,
+            "extreme": 677,
+            "high": 529,
+            "minimal": 3751
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 667,
+            "elevated": 203,
+            "extreme": 1311,
+            "high": 279,
+            "minimal": 3340
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 566,
+            "elevated": 233,
+            "extreme": 1644,
+            "high": 227,
+            "minimal": 3130
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 538,
+            "elevated": 235,
+            "extreme": 1781,
+            "high": 262,
+            "minimal": 2984
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 4035,
+            "exposure_mae": 0.08846956933511442,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 94,
+            "posterior_lower_level_cell_count": 1671
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 3722,
+            "exposure_mae": 0.13414471056013652,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 208,
+            "posterior_lower_level_cell_count": 1870
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3598,
+            "exposure_mae": 0.14213269030531472,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 299,
+            "posterior_lower_level_cell_count": 1903
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3580,
+            "exposure_mae": 0.137225348537618,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 353,
+            "posterior_lower_level_cell_count": 1867
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
+      },
       "transport_only_component_count": 18,
       "ugv_approach": {
         "feasible": true,
@@ -169125,6 +172368,75 @@
         "secondary_ignition_added": false,
         "semantics": "simulation_assumed_not_calibrated",
         "thresholds_or_palette_modified": false
+      },
+      "synthetic_reference_risk_grid": {
+        "counts_by_forecast_time": {
+          "t300": {
+            "blocked": 2200,
+            "critical": 498,
+            "elevated": 345,
+            "extreme": 677,
+            "high": 529,
+            "minimal": 3751
+          },
+          "t360": {
+            "blocked": 2200,
+            "critical": 667,
+            "elevated": 203,
+            "extreme": 1311,
+            "high": 279,
+            "minimal": 3340
+          },
+          "t420": {
+            "blocked": 2200,
+            "critical": 566,
+            "elevated": 233,
+            "extreme": 1644,
+            "high": 227,
+            "minimal": 3130
+          },
+          "t480": {
+            "blocked": 2200,
+            "critical": 538,
+            "elevated": 235,
+            "extreme": 1781,
+            "high": 262,
+            "minimal": 2984
+          }
+        },
+        "field_source": "reduced_order_fixture",
+        "posterior_comparison_by_forecast_time": {
+          "t300": {
+            "exact_level_agreement_cell_count": 3938,
+            "exposure_mae": 0.0940091254234389,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 394,
+            "posterior_lower_level_cell_count": 1468
+          },
+          "t360": {
+            "exact_level_agreement_cell_count": 3708,
+            "exposure_mae": 0.13811877983309503,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 534,
+            "posterior_lower_level_cell_count": 1558
+          },
+          "t420": {
+            "exact_level_agreement_cell_count": 3778,
+            "exposure_mae": 0.14618047726897843,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 635,
+            "posterior_lower_level_cell_count": 1387
+          },
+          "t480": {
+            "exact_level_agreement_cell_count": 3855,
+            "exposure_mae": 0.14383293156347385,
+            "maximum_absolute_level_difference": 4,
+            "posterior_higher_level_cell_count": 731,
+            "posterior_lower_level_cell_count": 1214
+          }
+        },
+        "role": "model-comparison reference only; not real W1 ground truth",
+        "threshold_identity": "same configured exposure thresholds as posterior risk grid"
       },
       "transport_only_component_count": 6,
       "ugv_approach": {

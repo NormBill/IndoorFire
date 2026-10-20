@@ -17,6 +17,8 @@ from indoor_fire_world.visualization.svg import (
     render_p8_v2_forecast_svg,
     render_p8_v2_grid_diagnostic_svg,
     render_p8_v2_planning_envelope_svg,
+    render_p8_v2_posterior_reference_comparison_svg,
+    render_p8_v2_synthetic_reference_risk_svg,
 )
 
 
@@ -161,6 +163,18 @@ def write_p8_v2_artifacts(output: P8V2SuiteOutput, config_path: str | Path, targ
         output.primary.arrays,
         target / "forecast_exposure_grid_diagnostic.svg",
     )
+    reference_risk_path = render_p8_v2_synthetic_reference_risk_svg(
+        config_path,
+        output.primary.summary,
+        output.primary.arrays,
+        target / "synthetic_reference_risk_level_grid.svg",
+    )
+    comparison_path = render_p8_v2_posterior_reference_comparison_svg(
+        config_path,
+        output.primary.summary,
+        output.primary.arrays,
+        target / "posterior_vs_synthetic_reference_risk.svg",
+    )
     manifest_path = target / "fds_manifest.json"
     manifest_path.write_text(json.dumps({
         "schema_version": 1,
@@ -178,5 +192,7 @@ def write_p8_v2_artifacts(output: P8V2SuiteOutput, config_path: str | Path, targ
         "exposure_evolution": evolution_path,
         "planning_envelope": planning_path,
         "grid_diagnostic": diagnostic_path,
+        "synthetic_reference_risk_map": reference_risk_path,
+        "posterior_reference_comparison": comparison_path,
         "fds_manifest": manifest_path.resolve(),
     }

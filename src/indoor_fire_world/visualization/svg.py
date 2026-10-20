@@ -243,12 +243,14 @@ def _p8_v2_categorical_cells(
     levels,
     scene,
     registration,
+    *,
+    provenance: str = "posterior_model_forecast",
 ) -> list[str]:
     """Render one explicit model-predicted level for every registered cell."""
     rows, cols = risk_grid.shape
     parts = [
         f'<g class="categorical-risk-grid" data-grid-cell-count="{rows*cols}" '
-        'data-risk-map-provenance="posterior_model_forecast" shape-rendering="crispEdges">'
+        f'data-risk-map-provenance="{escape(provenance)}" shape-rendering="crispEdges">'
     ]
     for row in range(rows):
         for col in range(cols):
@@ -293,6 +295,7 @@ def _render_p8_v2_categorical_risk(
     output_path: str | Path,
     *,
     include_routes: bool,
+    source_kind: str = "posterior",
 ) -> Path:
     parameters, scene, registration, _, encoded = _p8_v2_visual_context(config_path)
     output = Path(output_path)
@@ -302,9 +305,17 @@ def _render_p8_v2_categorical_risk(
     panel_height = registration.source_height_px * panel_scale
     width = int(panel_width * 2)
     height = int(panel_height * 2 + 260)
+    if source_kind not in {"posterior", "synthetic_reference"}:
+        raise ValueError("P8 v2 categorical risk source must be posterior or synthetic_reference")
+    is_reference = source_kind == "synthetic_reference"
+    map_source = "synthetic_reference_model" if is_reference else "posterior_model_forecast"
+    title_prefix = "Synthetic-reference" if is_reference else "Posterior forecast"
+    field_prefix = "synthetic_reference_exposure" if is_reference else "posterior_exposure"
+    level_prefix = "synthetic_reference_risk_level" if is_reference else "posterior_risk_level"
+    counts_root = "synthetic_reference_risk_grid" if is_reference else "risk_grid"
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
-        f'viewBox="0 0 {width} {height}" data-risk-map-source="posterior_model_forecast">'
+        f'viewBox="0 0 {width} {height}" data-risk-map-source="{map_source}">'
     ]
     parts.extend(_p8_v2_svg_defs(registration, encoded))
     parts.append('<rect width="100%" height="100%" fill="white"/>')
@@ -312,16 +323,16 @@ def _render_p8_v2_categorical_risk(
         key = f"t{time_s:g}"
         offset_x = (index % 2) * panel_width
         offset_y = (index // 2) * panel_height + 48
-        field = np.asarray(arrays[f"posterior_exposure_{key}"], dtype=np.float64)
-        risk_grid = np.asarray(arrays[f"posterior_risk_level_{key}"], dtype=np.int8)
-        counts = summary["risk_grid"]["counts_by_forecast_time"][key]
+        field = np.asarray(arrays[f"{field_prefix}_{key}"], dtype=np.float64)
+        risk_grid = np.asarray(arrays[f"{level_prefix}_{key}"], dtype=np.int8)
+        counts = summary[counts_root]["counts_by_forecast_time"][key]
         nonminimal = sum(
             int(counts[level.id]) for level in parameters.exposure_levels[1:]
         )
         parts.append(
             f'<text x="{offset_x+panel_width/2:.1f}" y="{offset_y-24:.1f}" '
             'text-anchor="middle" font-family="sans-serif" font-size="20" '
-            f'font-weight="bold">Posterior forecast exposure-risk levels — t={time_s:g} s</text>'
+            f'font-weight="bold">{title_prefix} exposure-risk levels — t={time_s:g} s</text>'
         )
         parts.append(
             f'<text x="{offset_x+panel_width/2:.1f}" y="{offset_y-6:.1f}" '
@@ -334,7 +345,12 @@ def _render_p8_v2_categorical_risk(
         )
         parts.extend(
             _p8_v2_categorical_cells(
-                field, risk_grid, parameters.exposure_levels, scene, registration
+                field,
+                risk_grid,
+                parameters.exposure_levels,
+                scene,
+                registration,
+                provenance=map_source,
             )
         )
         parts.append(_p8_v2_source_marker(scene, registration))
@@ -368,10 +384,14 @@ def _render_p8_v2_categorical_risk(
         'Each traversable cell is classified from the posterior ensemble forecast at that time. '
         'Blocked cells are hatched and have no risk level.</text>'
     )
+    provenance_note = (
+        "This is the configured synthetic model-comparison reference, not measured W1 ground truth."
+        if is_reference
+        else "The synthetic reference is used only to synthesize observations and evaluate forecast error; it is not used to construct this posterior risk map."
+    )
     parts.append(
         f'<text x="24" y="{legend_y+76}" font-family="sans-serif" font-size="16">'
-        'Ground truth is used only to synthesize observations and evaluate forecast error; it is '
-        'not used to construct this risk map.</text>'
+        f'{escape(provenance_note)}</text>'
     )
     parts.append(
         f'<text x="24" y="{legend_y+104}" font-family="sans-serif" font-size="16" '
@@ -440,6 +460,124 @@ def render_p8_v2_categorical_risk_svg(config_path: str | Path, summary: dict, ar
     return _render_p8_v2_categorical_risk(
         config_path, summary, arrays, output_path, include_routes=False
     )
+
+
+def render_p8_v2_synthetic_reference_risk_svg(
+    config_path: str | Path,
+    summary: dict,
+    arrays: dict,
+    output_path: str | Path,
+) -> Path:
+    """Render the synthetic comparison reference with the posterior map's thresholds."""
+    return _render_p8_v2_categorical_risk(
+        config_path,
+        summary,
+        arrays,
+        output_path,
+        include_routes=False,
+        source_kind="synthetic_reference",
+    )
+
+
+def render_p8_v2_posterior_reference_comparison_svg(
+    config_path: str | Path,
+    summary: dict,
+    arrays: dict,
+    output_path: str | Path,
+) -> Path:
+    """Render synthetic reference and posterior risk grids on one shared scale."""
+    parameters, scene, registration, _, encoded = _p8_v2_visual_context(config_path)
+    output = Path(output_path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    panel_scale = 0.24
+    panel_width = registration.source_width_px * panel_scale
+    panel_height = registration.source_height_px * panel_scale
+    row_gap = 42
+    width = int(panel_width * 4)
+    height = int(panel_height * 2 + row_gap * 2 + 190)
+    parts = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+        f'viewBox="0 0 {width} {height}" data-comparison="posterior_vs_synthetic_reference">'
+    ]
+    parts.extend(_p8_v2_svg_defs(registration, encoded))
+    parts.append('<rect width="100%" height="100%" fill="white"/>')
+    sources = (
+        (
+            "Synthetic reference",
+            "synthetic_reference_exposure",
+            "synthetic_reference_risk_level",
+            "synthetic_reference_model",
+        ),
+        (
+            "Posterior forecast",
+            "posterior_exposure",
+            "posterior_risk_level",
+            "posterior_model_forecast",
+        ),
+    )
+    for row_index, (label, field_prefix, level_prefix, provenance) in enumerate(sources):
+        for column_index, time_s in enumerate(parameters.forecast_times_s):
+            key = f"t{time_s:g}"
+            offset_x = column_index * panel_width
+            offset_y = row_gap + row_index * (panel_height + row_gap)
+            field = np.asarray(arrays[f"{field_prefix}_{key}"], dtype=np.float64)
+            risk_grid = np.asarray(arrays[f"{level_prefix}_{key}"], dtype=np.int8)
+            parts.append(
+                f'<text x="{offset_x+panel_width/2:.1f}" y="{offset_y-12:.1f}" '
+                'text-anchor="middle" font-family="sans-serif" font-size="16" '
+                f'font-weight="bold">{label} — t={time_s:g} s</text>'
+            )
+            parts.append(
+                f'<g transform="translate({offset_x:.2f},{offset_y:.2f}) scale({panel_scale})">'
+                '<use href="#p8v2-map" opacity="0.62"/>'
+            )
+            parts.extend(
+                _p8_v2_categorical_cells(
+                    field,
+                    risk_grid,
+                    parameters.exposure_levels,
+                    scene,
+                    registration,
+                    provenance=provenance,
+                )
+            )
+            parts.append(_p8_v2_source_marker(scene, registration))
+            parts.append("</g>")
+            if row_index == 1:
+                comparison = summary["synthetic_reference_risk_grid"][
+                    "posterior_comparison_by_forecast_time"
+                ][key]
+                parts.append(
+                    f'<text x="{offset_x+panel_width/2:.1f}" '
+                    f'y="{offset_y+panel_height+19:.1f}" text-anchor="middle" '
+                    'font-family="sans-serif" font-size="12">'
+                    f'level agreement={comparison["exact_level_agreement_cell_count"]}/5800; '
+                    f'exposure MAE={comparison["exposure_mae"]:.3f}</text>'
+                )
+    legend_y = panel_height * 2 + row_gap * 2 + 74
+    parts.append(
+        f'<text x="24" y="{legend_y}" font-family="sans-serif" font-size="16" '
+        'font-weight="bold">Shared exposure-risk levels:</text>'
+    )
+    x = 250
+    for level in parameters.exposure_levels:
+        parts.append(
+            f'<rect x="{x}" y="{legend_y-17}" width="22" height="22" fill="{level.color}" '
+            f'stroke="#222"/><text x="{x+28}" y="{legend_y}" font-family="sans-serif" '
+            f'font-size="13">{escape(level.id)}</text>'
+        )
+        x += 155
+    parts.append(
+        f'<text x="24" y="{legend_y+38}" font-family="sans-serif" font-size="15">'
+        'Both rows use identical posterior-planning thresholds and the registered 50×160 grid; no panel normalization.</text>'
+    )
+    parts.append(
+        f'<text x="24" y="{legend_y+68}" font-family="sans-serif" font-size="15" '
+        'font-weight="bold" fill="#9C2F21">Synthetic reference is a simulation comparison target, not measured W1 ground truth. Colored cells are exposure, not burning.</text>'
+    )
+    parts.append("</svg>")
+    output.write_text("\n".join(parts), encoding="utf-8")
+    return output.resolve()
 
 
 def render_p8_v2_exposure_evolution_svg(config_path: str | Path, summary: dict, arrays: dict, output_path: str | Path) -> Path:

@@ -131,6 +131,13 @@ diffusion and slows pollutant decay to provide a more severe simulation stress
 case. It does not change the risk thresholds or palette, add secondary ignition,
 or claim W1 calibration.
 
+For forecast validation, `synthetic_reference_risk_level_grid.svg` applies the
+same registered grid, fixed `[0,1]` scale, and categorical thresholds to the
+configured synthetic reference. `posterior_vs_synthetic_reference_risk.svg`
+places reference and posterior maps side by side at all four forecast times and
+reports exact level agreement and exposure MAE. The reference row is a
+simulation comparison target, not measured W1 ground truth.
+
 ## Legacy P8 registered-map snapshot closed loop
 
 `configs/p8_registered_closed_loop.yaml` integrates the Gate 1 registered map,
