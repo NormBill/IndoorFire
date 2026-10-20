@@ -73,6 +73,10 @@ class P8V2Tests(unittest.TestCase):
         self.assertEqual(semantics["secondary_ignition_count"], 0)
         self.assertEqual(int(np.sum(self.case.arrays["primary_source_mask"])), 1)
         self.assertFalse(np.any(self.case.arrays["secondary_ignition_mask"]))
+        profile = self.case.summary["spread_severity_profile"]
+        self.assertEqual(profile["id"], "enhanced_persistent_smoke_v1")
+        self.assertFalse(profile["thresholds_or_palette_modified"])
+        self.assertFalse(profile["secondary_ignition_added"])
         for scenario in self.parameters.scenarios:
             reference = load_fire_parameters(scenario.reference_config)
             self.assertEqual(reference.source_semantic_id, "microwave")
@@ -125,7 +129,11 @@ class P8V2Tests(unittest.TestCase):
             np.testing.assert_array_equal(levels, expected)
 
     def test_continuous_fields_and_component_provenance_are_auditable(self) -> None:
-        allowed = {"source_connected_exposure", "threshold_disconnected_transport_region"}
+        allowed = {
+            "source_connected_exposure",
+            "threshold_disconnected_transport_region",
+            "weakly_supported_transport_region",
+        }
         self.assertEqual(self.case.summary["model_validation_status"], "passed")
         self.assertEqual(self.case.summary["unexpected_disconnected_component_count"], 0)
         for time_s in self.parameters.forecast_times_s:
@@ -136,9 +144,18 @@ class P8V2Tests(unittest.TestCase):
             self.assertEqual(self.case.arrays[f"posterior_exposure_component_{key}"].shape, (50, 160))
             diagnostics = self.case.summary["risk_component_diagnostics"][key]
             self.assertGreater(diagnostics["continuous_support_epsilon"], 0.0)
+            self.assertGreater(
+                diagnostics["meaningful_support_threshold"],
+                diagnostics["continuous_support_epsilon"],
+            )
             for threshold in diagnostics["thresholds"].values():
                 for component in threshold["components"]:
                     self.assertIn(component["classification"], allowed)
+                    if component["classification"] == "threshold_disconnected_transport_region":
+                        self.assertTrue(component["source_connected_in_meaningful_support"])
+                    if component["classification"] == "weakly_supported_transport_region":
+                        self.assertTrue(component["source_connected_in_continuous_support"])
+                        self.assertFalse(component["source_connected_in_meaningful_support"])
 
     def test_planning_field_is_cellwise_worst_case_envelope(self) -> None:
         snapshots = np.stack([
@@ -167,6 +184,18 @@ class P8V2Tests(unittest.TestCase):
                 transitions["increased_risk_cell_count"] + transitions["decreased_risk_cell_count"],
             )
 
+    def test_enhanced_spread_profile_has_material_temporal_growth(self) -> None:
+        counts = self.case.summary["risk_grid"]["counts_by_forecast_time"]
+        nonminimal_300 = 5800 - counts["t300"]["minimal"]
+        nonminimal_480 = 5800 - counts["t480"]["minimal"]
+        self.assertGreater(nonminimal_480, 2 * nonminimal_300)
+        self.assertGreater(counts["t480"]["extreme"], counts["t300"]["extreme"])
+        for key in ("t360", "t420", "t480"):
+            self.assertGreaterEqual(
+                self.case.summary["risk_level_change_from_previous_time"][key]["changed_cell_count"],
+                500,
+            )
+
     def test_visualizations_use_fixed_scale_and_render_every_cell(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -180,6 +209,7 @@ class P8V2Tests(unittest.TestCase):
             diagnostic_text = diagnostic.read_text(encoding="utf-8")
             self.assertIn('data-fixed-color-scale="0:1"', evolution_text)
             self.assertEqual(categorical_text.count('class="risk-level-cell"'), 4 * 50 * 160)
+            self.assertEqual(categorical_text.count('data-burning="false"'), 4 * 50 * 160)
             self.assertIn('data-risk-map-source="posterior_model_forecast"', categorical_text)
             self.assertIn("not used to construct this risk map", categorical_text)
             self.assertEqual(evolution_text.count('class="registered-cell"'), 4 * 50 * 160)

@@ -57,7 +57,9 @@ def _row(run_id: str, output: P8V2CaseOutput) -> dict[str, Any]:
         "reference_semantics": summary.get("reference_semantics"),
         "ignition_model": summary.get("fire_source_semantics", {}).get("ignition_model"),
         "secondary_ignition_mode": summary.get("fire_source_semantics", {}).get("secondary_ignition_mode"),
+        "spread_severity_profile": summary.get("spread_severity_profile", {}).get("id"),
         "transport_only_component_count": summary.get("transport_only_component_count"),
+        "weakly_supported_component_count": summary.get("weakly_supported_component_count"),
         "unexpected_disconnected_component_count": summary.get("unexpected_disconnected_component_count"),
         "model_validation_status": summary.get("model_validation_status"),
     }
@@ -102,6 +104,7 @@ def run_p8_v2_suite(config_path: str | Path) -> P8V2SuiteOutput:
         "reference_provider": context.parameters.reference_provider,
         "reference_semantics": primary.summary["reference_semantics"],
         "fire_source_semantics": primary.summary["fire_source_semantics"],
+        "spread_severity_profile": primary.summary["spread_severity_profile"],
         "planning_field_semantics": primary.summary["planning_field_semantics"],
         "model_validation_status": "passed",
         "matrix_shape": {"scenarios": 3, "observation_times": 4, "observation_points": 4, "normal_cases": len(cases)},

@@ -3,16 +3,16 @@
   "model_name": "p8v2_high_intensity_appliance_fixture",
   "time_step_s": 0.1,
   "ambient_temperature_c": 22.0,
-  "ventilation_mps": [-0.14, -0.06],
-  "diffusion_m2_per_s": {"temperature": 0.10, "smoke": 0.09, "co": 0.09},
-  "decay_per_s": {"smoke": 0.008, "co": 0.010},
-  "temperature_relaxation_per_s": 0.013,
+  "ventilation_mps": [-0.11, -0.045],
+  "diffusion_m2_per_s": {"temperature": 0.10, "smoke": 0.095, "co": 0.095},
+  "decay_per_s": {"smoke": 0.0055, "co": 0.0065},
+  "temperature_relaxation_per_s": 0.011,
   "source": {
     "enabled": true, "source_type": "microwave_electrical_fault", "semantic_id": "microwave",
-    "fire_growth_rate_kw_per_s2": 0.014, "max_heat_release_rate_kw": 700.0,
-    "temperature_gain_c_per_kw_s": 0.095, "smoke_yield_per_kw_s": 0.014, "co_yield_per_kw_s": 0.0040
+    "fire_growth_rate_kw_per_s2": 0.014, "max_heat_release_rate_kw": 1100.0,
+    "temperature_gain_c_per_kw_s": 0.098, "smoke_yield_per_kw_s": 0.0155, "co_yield_per_kw_s": 0.0042
   },
   "visibility": {"clear_air_visibility_m": 30.0, "smoke_extinction_per_concentration": 3.0},
   "assumption_status": "simulation_assumed_synthetic_reference",
-  "notes": "Reduced-order test fixture for a high-intensity single-source microwave-origin fire; no cable propagation or secondary ignition; not FDS or real W1 truth."
+  "notes": "Enhanced high-intensity single-source microwave-origin synthetic reference; no cable propagation or secondary ignition; not FDS or real W1 truth."
 }

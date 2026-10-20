@@ -3,16 +3,16 @@
   "model_name": "p8v2_reduced_order_candidate_base",
   "time_step_s": 0.15,
   "ambient_temperature_c": 22.0,
-  "ventilation_mps": [-0.10, -0.04],
-  "diffusion_m2_per_s": {"temperature": 0.08, "smoke": 0.06, "co": 0.07},
-  "decay_per_s": {"smoke": 0.010, "co": 0.012},
-  "temperature_relaxation_per_s": 0.015,
+  "ventilation_mps": [-0.08, -0.03],
+  "diffusion_m2_per_s": {"temperature": 0.08, "smoke": 0.075, "co": 0.075},
+  "decay_per_s": {"smoke": 0.007, "co": 0.008},
+  "temperature_relaxation_per_s": 0.012,
   "source": {
     "enabled": true, "source_type": "microwave_electrical_fault", "semantic_id": "microwave",
-    "fire_growth_rate_kw_per_s2": 0.008, "max_heat_release_rate_kw": 420.0,
-    "temperature_gain_c_per_kw_s": 0.075, "smoke_yield_per_kw_s": 0.011, "co_yield_per_kw_s": 0.0030
+    "fire_growth_rate_kw_per_s2": 0.008, "max_heat_release_rate_kw": 700.0,
+    "temperature_gain_c_per_kw_s": 0.078, "smoke_yield_per_kw_s": 0.0125, "co_yield_per_kw_s": 0.0032
   },
   "visibility": {"clear_air_visibility_m": 30.0, "smoke_extinction_per_concentration": 3.0},
   "assumption_status": "simulation_assumed_candidate_base",
-  "notes": "Shared candidate base chosen to span, rather than reproduce, the three synthetic reference branches."
+  "notes": "Enhanced persistent-smoke simulation stress profile. Higher sustained HRR, yield and diffusion plus slower decay increase forecast exposure without secondary ignition; not W1 calibration."
 }

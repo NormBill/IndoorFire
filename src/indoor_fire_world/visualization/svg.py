@@ -223,6 +223,7 @@ def _p8_v2_panel_cells(
                 stroke = {
                     "source_connected_exposure": "#009E73",
                     "threshold_disconnected_transport_region": "#E69F00",
+                    "weakly_supported_transport_region": "#7B3294",
                     "unexpected_disconnected_transport": "#D73027",
                 }.get(classification, "#FFFFFF")
                 stroke_width = "0.9"
@@ -261,11 +262,12 @@ def _p8_v2_categorical_cells(
             opacity = "0.48" if blocked else "0.82"
             parts.append(
                 f'<rect class="risk-level-cell" data-row="{row}" data-col="{col}" '
-                f'data-risk-level="{escape(level_id)}" x="{px:.2f}" y="{py:.2f}" '
+                f'data-risk-level="{escape(level_id)}" data-burning="false" x="{px:.2f}" y="{py:.2f}" '
                 f'width="{cell_width:.2f}" height="{cell_height:.2f}" fill="{fill}" '
                 f'fill-opacity="{opacity}" stroke="#FFFFFF" stroke-opacity="0.28" '
                 f'stroke-width="0.28"><title>row={row}, col={col}, model-predicted '
-                f'risk level={escape(level_id)}, exposure={float(field[row,col]):.6f}</title></rect>'
+                f'exposure-risk level={escape(level_id)}, exposure={float(field[row,col]):.6f}, '
+                f'burning=false</title></rect>'
             )
     parts.append("</g>")
     return parts
@@ -299,7 +301,7 @@ def _render_p8_v2_categorical_risk(
     panel_width = registration.source_width_px * panel_scale
     panel_height = registration.source_height_px * panel_scale
     width = int(panel_width * 2)
-    height = int(panel_height * 2 + 220)
+    height = int(panel_height * 2 + 260)
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
         f'viewBox="0 0 {width} {height}" data-risk-map-source="posterior_model_forecast">'
@@ -319,12 +321,12 @@ def _render_p8_v2_categorical_risk(
         parts.append(
             f'<text x="{offset_x+panel_width/2:.1f}" y="{offset_y-24:.1f}" '
             'text-anchor="middle" font-family="sans-serif" font-size="20" '
-            f'font-weight="bold">Posterior model-predicted risk levels — t={time_s:g} s</text>'
+            f'font-weight="bold">Posterior forecast exposure-risk levels — t={time_s:g} s</text>'
         )
         parts.append(
             f'<text x="{offset_x+panel_width/2:.1f}" y="{offset_y-6:.1f}" '
             'text-anchor="middle" font-family="sans-serif" font-size="14">'
-            f'{nonminimal} traversable cells above minimal risk; no ground-truth field used</text>'
+            f'{nonminimal} cells above minimal; colored cells are exposure, not fire</text>'
         )
         parts.append(
             f'<g transform="translate({offset_x:.2f},{offset_y:.2f}) scale({panel_scale})">'
@@ -342,7 +344,7 @@ def _render_p8_v2_categorical_risk(
     legend_y = panel_height * 2 + 108
     parts.append(
         f'<text x="24" y="{legend_y}" font-family="sans-serif" font-size="17" '
-        'font-weight="bold">Model-predicted risk level per 0.25 m grid cell:</text>'
+        'font-weight="bold">Model-predicted exposure-risk per 0.25 m grid cell:</text>'
     )
     x = 390
     lower_bound = 0.0
@@ -371,9 +373,13 @@ def _render_p8_v2_categorical_risk(
         'Ground truth is used only to synthesize observations and evaluate forecast error; it is '
         'not used to construct this risk map.</text>'
     )
+    parts.append(
+        f'<text x="24" y="{legend_y+104}" font-family="sans-serif" font-size="16" '
+        'font-weight="bold" fill="#9C2F21">Every colored cell has burning=false; only the microwave source marker denotes ignition.</text>'
+    )
     if include_routes:
         parts.append(
-            f'<text x="24" y="{legend_y+108}" font-family="sans-serif" font-size="15">'
+            f'<text x="24" y="{legend_y+136}" font-family="sans-serif" font-size="15">'
             'Blue dashed: prior ingress; purple solid: posterior ingress; circle/flame: the only ignition source.</text>'
         )
     parts.append("</svg>")
@@ -508,7 +514,7 @@ def render_p8_v2_grid_diagnostic_svg(config_path: str | Path, summary: dict, arr
     parts.append(_p8_v2_source_marker(scene, registration))
     parts.append("</g>")
     legend_y = registration.source_height_px * scale + 78
-    parts.append(f'<text x="24" y="{legend_y:.1f}" font-family="sans-serif" font-size="16">Green outline: source-connected; orange: threshold-disconnected but transport-connected; red: unexpected transport.</text>')
+    parts.append(f'<text x="24" y="{legend_y:.1f}" font-family="sans-serif" font-size="16">Green: source-connected; orange: meaningful transport; purple: weak numerical-tail support; red: unexpected disconnected transport.</text>')
     parts.append(f'<text x="24" y="{legend_y+32:.1f}" font-family="sans-serif" font-size="16">All 50×160 cells are retained. Hover a cell for exposure, level, component, and classification.</text>')
     parts.append("</svg>")
     output.write_text("\n".join(parts), encoding="utf-8")

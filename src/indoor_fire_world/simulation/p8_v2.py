@@ -321,13 +321,16 @@ def _component_record(
     component_id: int,
     *,
     source_connected_at_threshold: bool,
+    source_connected_in_meaningful_support: bool,
     source_connected_in_continuous_support: bool,
     source_connected_in_transport_domain: bool,
 ) -> dict[str, Any]:
     if source_connected_at_threshold:
         classification = "source_connected_exposure"
-    elif source_connected_in_transport_domain:
+    elif source_connected_in_meaningful_support:
         classification = "threshold_disconnected_transport_region"
+    elif source_connected_in_continuous_support:
+        classification = "weakly_supported_transport_region"
     else:
         classification = "unexpected_disconnected_transport"
     rows = np.asarray([cell[0] for cell in cells], dtype=np.float64)
@@ -346,6 +349,7 @@ def _component_record(
         "peak_exposure": max(float(field[row, col]) for row, col in cells),
         "dominant_modality": _dominant_component_modality(dominant, cells),
         "source_connected_at_threshold": source_connected_at_threshold,
+        "source_connected_in_meaningful_support": source_connected_in_meaningful_support,
         "source_connected_in_continuous_support": source_connected_in_continuous_support,
         "source_connected_in_transport_domain": source_connected_in_transport_domain,
         "classification": classification,
@@ -364,10 +368,15 @@ def _exposure_component_diagnostics(
     traversable = np.asarray(context.scene.occupancy.cells) == 0
     maximum = float(np.max(values[traversable]))
     support_epsilon = max(1e-12, 1e-6 * maximum)
+    meaningful_support_threshold = max(1e-12, 1e-2 * maximum)
     support_labels, support_components = _label_components(
         traversable & (support_values > support_epsilon)
     )
     source_support_id = int(support_labels[context.source_cell])
+    meaningful_labels, meaningful_components = _label_components(
+        traversable & (support_values > meaningful_support_threshold)
+    )
+    source_meaningful_id = int(meaningful_labels[context.source_cell])
     transport_domain_labels, _ = _label_components(traversable)
     source_transport_domain_id = int(transport_domain_labels[context.source_cell])
     support_records = [
@@ -378,6 +387,11 @@ def _exposure_component_diagnostics(
             cells,
             component_id,
             source_connected_at_threshold=component_id == source_support_id,
+            source_connected_in_meaningful_support=all(
+                source_meaningful_id >= 0
+                and int(meaningful_labels[row, col]) == source_meaningful_id
+                for row, col in cells
+            ),
             source_connected_in_continuous_support=component_id == source_support_id,
             source_connected_in_transport_domain=all(
                 int(transport_domain_labels[row, col]) == source_transport_domain_id
@@ -391,6 +405,7 @@ def _exposure_component_diagnostics(
     primary_component_grid = np.full(values.shape, -1, dtype=np.int32)
     primary_component_grid[~traversable] = -2
     transport_only_count = 0
+    weakly_supported_count = 0
     unexpected_count = sum(
         record["classification"] == "unexpected_disconnected_transport"
         for record in support_records
@@ -406,6 +421,11 @@ def _exposure_component_diagnostics(
         for component_id, cells in enumerate(components):
             support_ids = {int(support_labels[row, col]) for row, col in cells}
             connected_in_support = source_support_id >= 0 and support_ids == {source_support_id}
+            meaningful_ids = {int(meaningful_labels[row, col]) for row, col in cells}
+            connected_in_meaningful_support = (
+                source_meaningful_id >= 0
+                and meaningful_ids == {source_meaningful_id}
+            )
             connected_in_domain = all(
                 int(transport_domain_labels[row, col]) == source_transport_domain_id
                 for row, col in cells
@@ -417,10 +437,12 @@ def _exposure_component_diagnostics(
                 cells,
                 component_id,
                 source_connected_at_threshold=component_id == source_component_id,
+                source_connected_in_meaningful_support=connected_in_meaningful_support,
                 source_connected_in_continuous_support=connected_in_support,
                 source_connected_in_transport_domain=connected_in_domain,
             )
             transport_only_count += record["classification"] == "threshold_disconnected_transport_region"
+            weakly_supported_count += record["classification"] == "weakly_supported_transport_region"
             records.append(record)
         threshold_records[level.id] = {
             "superlevel_definition": f"exposure > {threshold:g}",
@@ -429,12 +451,16 @@ def _exposure_component_diagnostics(
         }
     return primary_component_grid, {
         "continuous_support_epsilon": support_epsilon,
+        "meaningful_support_threshold": meaningful_support_threshold,
+        "meaningful_support_definition": "transport support > 1% of snapshot peak; simulation diagnostic, not a certified physical threshold",
+        "meaningful_support_component_count": len(meaningful_components),
         "continuous_support_basis": "max(normalized_temperature_anomaly, normalized_raw_smoke, normalized_raw_co); no hazard safe-threshold clipping",
         "causal_connectivity_basis": "four-neighbour traversable transport domain used by the no-flux solver",
         "continuous_support_component_count": len(support_records),
         "continuous_support_components": support_records,
         "thresholds": threshold_records,
         "transport_only_component_count_across_thresholds": int(transport_only_count),
+        "weakly_supported_component_count_across_thresholds": int(weakly_supported_count),
         "unexpected_disconnected_component_count": int(unexpected_count),
     }
 
@@ -597,6 +623,12 @@ def run_p8_v2_case(context: P8V2Context, scenario_id: str, observation_time_s: f
             "fuel_chemistry_semantics": parameters.fire_source_semantics.fuel_chemistry_semantics,
             "interpretation": "Only the microwave cell is an ignition source; colored remote cells are forecast exposure, not burning cells.",
         },
+        "spread_severity_profile": {
+            "id": parameters.spread_profile_id,
+            "semantics": parameters.spread_profile_semantics,
+            "thresholds_or_palette_modified": False,
+            "secondary_ignition_added": False,
+        },
         "observation_time_s": observation_time_s,
         "handoff_time_s": parameters.handoff_time_s,
         "forecast_times_s": list(parameters.forecast_times_s),
@@ -655,6 +687,7 @@ def run_p8_v2_case(context: P8V2Context, scenario_id: str, observation_time_s: f
         },
         "risk_component_diagnostics": {},
         "transport_only_component_count": 0,
+        "weakly_supported_component_count": 0,
         "unexpected_disconnected_component_count": 0,
         "exposure_change_from_previous_time": {},
         "risk_level_change_from_previous_time": {},
@@ -725,6 +758,9 @@ def run_p8_v2_case(context: P8V2Context, scenario_id: str, observation_time_s: f
         summary["risk_component_diagnostics"][key] = component_diagnostics
         summary["transport_only_component_count"] += component_diagnostics[
             "transport_only_component_count_across_thresholds"
+        ]
+        summary["weakly_supported_component_count"] += component_diagnostics[
+            "weakly_supported_component_count_across_thresholds"
         ]
         summary["unexpected_disconnected_component_count"] += component_diagnostics[
             "unexpected_disconnected_component_count"

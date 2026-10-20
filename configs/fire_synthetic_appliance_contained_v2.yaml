@@ -4,15 +4,15 @@
   "time_step_s": 0.1,
   "ambient_temperature_c": 22.0,
   "ventilation_mps": [-0.05, -0.02],
-  "diffusion_m2_per_s": {"temperature": 0.07, "smoke": 0.05, "co": 0.06},
-  "decay_per_s": {"smoke": 0.012, "co": 0.014},
-  "temperature_relaxation_per_s": 0.018,
+  "diffusion_m2_per_s": {"temperature": 0.072, "smoke": 0.06, "co": 0.065},
+  "decay_per_s": {"smoke": 0.009, "co": 0.010},
+  "temperature_relaxation_per_s": 0.016,
   "source": {
     "enabled": true, "source_type": "microwave_electrical_fault", "semantic_id": "microwave",
-    "fire_growth_rate_kw_per_s2": 0.004, "max_heat_release_rate_kw": 160.0,
-    "temperature_gain_c_per_kw_s": 0.055, "smoke_yield_per_kw_s": 0.009, "co_yield_per_kw_s": 0.0025
+    "fire_growth_rate_kw_per_s2": 0.0045, "max_heat_release_rate_kw": 220.0,
+    "temperature_gain_c_per_kw_s": 0.058, "smoke_yield_per_kw_s": 0.0095, "co_yield_per_kw_s": 0.0026
   },
   "visibility": {"clear_air_visibility_m": 30.0, "smoke_extinction_per_concentration": 3.0},
   "assumption_status": "simulation_assumed_synthetic_reference",
-  "notes": "Reduced-order test fixture for the appliance-contained synthetic branch; not FDS or real W1 truth."
+  "notes": "Enhanced but bounded appliance-contained synthetic reference; one microwave source, no secondary ignition; not FDS or real W1 truth."
 }

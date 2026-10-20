@@ -9,6 +9,12 @@
     "secondary_ignition_mode": "disabled",
     "fuel_chemistry_semantics": "synthetic_surrogate"
   },
+  "spread_severity_profile": {
+    "id": "enhanced_persistent_smoke_v1",
+    "semantics": "simulation_assumed_not_calibrated",
+    "mechanism": "higher sustained microwave-source HRR, increased smoke yield and diffusion, and slower pollutant decay; no secondary ignition",
+    "purpose": "stress-test posterior forecast and ingress decisions without changing risk thresholds or color normalization"
+  },
   "scene_config": "scene_w1_4f_registered_v1.yaml",
   "corridor_config": "evacuation_routes_w1_4f_registered_v1.yaml",
   "prior_config": "fire_prior_p8_v2.yaml",

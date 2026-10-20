@@ -120,9 +120,16 @@ routes, and `forecast_exposure_grid_diagnostic.svg` retains cell tooltips and
 component provenance. These maps are constructed from posterior candidate-
 ensemble forecasts; the synthetic reference is used only for observations and
 error evaluation. Colored cells indicate forecast risk, never burning or
-secondary ignition. Threshold-disconnected islands are retained only when
-the unthresholded transport signals remain inside the microwave-connected
-no-flux transport domain; signal components outside that domain fail validation.
+secondary ignition; every colored SVG cell explicitly carries
+`data-burning="false"`. Component diagnostics distinguish a meaningful
+transport band above 1% of the snapshot peak from a numerical support tail.
+Threshold-disconnected regions connected only through the numerical tail are
+reported as `weakly_supported_transport_region`, while regions with no
+continuous source connection fail validation. The
+`enhanced_persistent_smoke_v1` profile increases sustained HRR, smoke yield and
+diffusion and slows pollutant decay to provide a more severe simulation stress
+case. It does not change the risk thresholds or palette, add secondary ignition,
+or claim W1 calibration.
 
 ## Legacy P8 registered-map snapshot closed loop
 

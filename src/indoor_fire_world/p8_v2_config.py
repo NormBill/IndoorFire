@@ -77,6 +77,8 @@ class P8V2Parameters:
     assumption_status: str
     exposure_levels: tuple[ExposureLevel, ...]
     fire_source_semantics: FireSourceSemantics
+    spread_profile_id: str
+    spread_profile_semantics: str
 
     def __post_init__(self) -> None:
         if not self.experiment_id or self.assumption_status != "simulation_assumed":
@@ -127,6 +129,8 @@ class P8V2Parameters:
             or semantics.fuel_chemistry_semantics != "synthetic_surrogate"
         ):
             raise ValueError("P8 v2 requires explicit single-source synthetic fire semantics")
+        if not self.spread_profile_id or self.spread_profile_semantics != "simulation_assumed_not_calibrated":
+            raise ValueError("P8 v2 spread severity must remain explicit and simulation-assumed")
 
 
 def load_p8_v2_parameters(config_path: str | Path) -> P8V2Parameters:
@@ -202,4 +206,6 @@ def load_p8_v2_parameters(config_path: str | Path) -> P8V2Parameters:
             secondary_ignition_mode=str(source_semantics["secondary_ignition_mode"]),
             fuel_chemistry_semantics=str(source_semantics["fuel_chemistry_semantics"]),
         ),
+        spread_profile_id=str(data["spread_severity_profile"]["id"]),
+        spread_profile_semantics=str(data["spread_severity_profile"]["semantics"]),
     )
