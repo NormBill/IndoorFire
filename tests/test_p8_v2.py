@@ -9,13 +9,19 @@ import numpy as np
 from indoor_fire_world.fire import load_fire_parameters
 from indoor_fire_world.p8_v2_config import load_p8_v2_parameters
 from indoor_fire_world.planning import DirectedRoutePlanner, PlanningCostParameters
-from indoor_fire_world.simulation.p8_v2 import build_p8_v2_context, run_p8_v2_case
+from indoor_fire_world.simulation.p8_v2 import (
+    attach_dense_prediction_evaluation,
+    build_p8_v2_context,
+    run_p8_v2_case,
+)
 from indoor_fire_world.visualization.svg import (
     render_p8_v2_categorical_risk_svg,
+    render_p8_v2_dense_pre_entry_timeseries_svg,
     render_p8_v2_exposure_evolution_svg,
     render_p8_v2_grid_diagnostic_svg,
     render_p8_v2_planning_envelope_svg,
     render_p8_v2_posterior_reference_comparison_svg,
+    render_p8_v2_pre_entry_keyframes_svg,
     render_p8_v2_synthetic_reference_risk_svg,
 )
 
@@ -35,12 +41,39 @@ class P8V2Tests(unittest.TestCase):
             100.0,
             "geometry_route_high",
         )
+        cls.dense_case = run_p8_v2_case(
+            cls.context,
+            "enclosure_breakout",
+            100.0,
+            "geometry_route_high",
+        )
+        cls.dense_rows = attach_dense_prediction_evaluation(
+            cls.context,
+            {"primary": cls.dense_case},
+            "primary",
+        )
 
     def test_fixed_experiment_matrix_contract(self) -> None:
         self.assertEqual(len(self.parameters.scenarios), 3)
         self.assertEqual(len(self.parameters.observation_times_s), 4)
         self.assertEqual(len(self.parameters.observation_points), 4)
         self.assertEqual(self.parameters.forecast_times_s, (300.0, 360.0, 420.0, 480.0))
+        self.assertEqual(len(self.parameters.dense_prediction_times_s), 43)
+        self.assertEqual(self.parameters.dense_prediction_times_s[0], 60.0)
+        self.assertEqual(self.parameters.dense_prediction_times_s[-1], 480.0)
+        self.assertTrue(
+            all(
+                b - a == 10.0
+                for a, b in zip(
+                    self.parameters.dense_prediction_times_s,
+                    self.parameters.dense_prediction_times_s[1:],
+                )
+            )
+        )
+        self.assertEqual(
+            self.parameters.pre_entry_visualization_times_s,
+            (60.0, 100.0, 180.0, 300.0),
+        )
         self.assertEqual([item.id for item in self.parameters.exposure_levels], ["minimal", "elevated", "high", "critical", "extreme"])
         self.assertEqual(
             [item.id for item in self.parameters.scenarios],
@@ -210,6 +243,51 @@ class P8V2Tests(unittest.TestCase):
                 transitions["changed_cell_count"],
                 transitions["increased_risk_cell_count"] + transitions["decreased_risk_cell_count"],
             )
+
+    def test_dense_prediction_is_causal_and_does_not_backfill_posterior(self) -> None:
+        records = self.dense_case.summary["dense_prediction"]["records"]
+        self.assertEqual(len(records), 43)
+        self.assertEqual(len(self.dense_rows), 43)
+        self.assertEqual(sum(record["time_s"] <= 300.0 for record in records), 25)
+        self.assertTrue(all(not record["posterior_available"] for record in records[:4]))
+        self.assertTrue(all(record["posterior_available"] for record in records[4:]))
+        self.assertTrue(
+            all(record["posterior_reference_exposure_mae"] is None for record in records[:4])
+        )
+        self.assertTrue(
+            all(record["posterior_unavailable_reason"] == "observation_not_yet_available" for record in records[:4])
+        )
+        np.testing.assert_array_equal(
+            self.dense_case.arrays["dense_posterior_available"][:4],
+            np.zeros(4, dtype=np.bool_),
+        )
+        self.assertTrue(np.all(np.isnan(self.dense_case.arrays["dense_posterior_exposure"][:4])))
+        self.assertTrue(np.all(self.dense_case.arrays["dense_posterior_risk_level"][:4] == -3))
+        self.assertTrue(np.all(np.isfinite(self.dense_case.arrays["dense_posterior_exposure"][4:])))
+
+    def test_pre_entry_visuals_are_sparse_views_of_dense_predictions(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            keyframes = render_p8_v2_pre_entry_keyframes_svg(
+                CONFIG,
+                self.dense_case.summary,
+                self.dense_case.arrays,
+                root / "keyframes.svg",
+            )
+            time_series = render_p8_v2_dense_pre_entry_timeseries_svg(
+                CONFIG,
+                self.dense_case.summary,
+                self.dense_case.arrays,
+                root / "timeseries.svg",
+            )
+            keyframe_text = keyframes.read_text(encoding="utf-8")
+            time_series_text = time_series.read_text(encoding="utf-8")
+            self.assertEqual(keyframe_text.count('class="risk-level-cell"'), 11 * 50 * 160)
+            self.assertIn("Unavailable before observation at t=100 s", keyframe_text)
+            self.assertIn("underlying evaluation cadence is 10 s", keyframe_text)
+            self.assertIn('data-dense-interval-s="10"', time_series_text)
+            self.assertIn("UGV observation", time_series_text)
+            self.assertIn("Posterior (available only after observation)", time_series_text)
 
     def test_enhanced_spread_profile_has_material_temporal_growth(self) -> None:
         counts = self.case.summary["risk_grid"]["counts_by_forecast_time"]

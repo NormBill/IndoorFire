@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import base64
 from html import escape
+import math
 from pathlib import Path
 
 import numpy as np
@@ -576,6 +577,203 @@ def render_p8_v2_posterior_reference_comparison_svg(
         'font-weight="bold" fill="#9C2F21">Synthetic reference is a simulation comparison target, not measured W1 ground truth. Colored cells are exposure, not burning.</text>'
     )
     parts.append("</svg>")
+    output.write_text("\n".join(parts), encoding="utf-8")
+    return output.resolve()
+
+
+def render_p8_v2_pre_entry_keyframes_svg(
+    config_path: str | Path,
+    summary: dict,
+    arrays: dict,
+    output_path: str | Path,
+) -> Path:
+    """Render sparse pre-entry keyframes from the dense causal prediction record."""
+    parameters, scene, registration, _, encoded = _p8_v2_visual_context(config_path)
+    output = Path(output_path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    dense_times = np.asarray(arrays["dense_prediction_times_s"], dtype=np.float64)
+    availability = np.asarray(arrays["dense_posterior_available"], dtype=np.bool_)
+    panel_scale = 0.22
+    panel_width = registration.source_width_px * panel_scale
+    panel_height = registration.source_height_px * panel_scale
+    row_gap = 42
+    width = int(panel_width * 4)
+    height = int(panel_height * 3 + row_gap * 3 + 180)
+    parts = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+        f'viewBox="0 0 {width} {height}" data-time-semantics="pre_entry_sparse_keyframes_from_10s_dense_prediction">'
+    ]
+    parts.extend(_p8_v2_svg_defs(registration, encoded))
+    parts.append('<rect width="100%" height="100%" fill="white"/>')
+    rows = (
+        ("Synthetic reference", "dense_synthetic_reference_exposure", "dense_synthetic_reference_risk_level", "synthetic_reference_model"),
+        ("Physics prior", "dense_prior_exposure", "dense_prior_risk_level", "physics_prior"),
+        ("Observation-conditioned posterior", "dense_posterior_exposure", "dense_posterior_risk_level", "posterior_model_forecast"),
+    )
+    for row_index, (label, field_name, level_name, provenance) in enumerate(rows):
+        for column_index, time_s in enumerate(parameters.pre_entry_visualization_times_s):
+            matches = np.flatnonzero(np.isclose(dense_times, time_s))
+            if len(matches) != 1:
+                raise ValueError("Pre-entry keyframe is missing from dense prediction times")
+            dense_index = int(matches[0])
+            offset_x = column_index * panel_width
+            offset_y = row_gap + row_index * (panel_height + row_gap)
+            parts.append(
+                f'<text x="{offset_x+panel_width/2:.1f}" y="{offset_y-12:.1f}" '
+                'text-anchor="middle" font-family="sans-serif" font-size="15" '
+                f'font-weight="bold">{label} — t={time_s:g} s</text>'
+            )
+            parts.append(
+                f'<g transform="translate({offset_x:.2f},{offset_y:.2f}) scale({panel_scale})">'
+                '<use href="#p8v2-map" opacity="0.60"/>'
+            )
+            posterior_unavailable = row_index == 2 and not availability[dense_index]
+            if posterior_unavailable:
+                parts.append(
+                    f'<rect x="0" y="0" width="{registration.source_width_px}" '
+                    f'height="{registration.source_height_px}" fill="#F2F2F2" fill-opacity="0.78"/>'
+                )
+                parts.append(
+                    f'<text x="{registration.source_width_px/2:.1f}" '
+                    f'y="{registration.source_height_px/2:.1f}" text-anchor="middle" '
+                    'font-family="sans-serif" font-size="54" font-weight="bold" fill="#555">'
+                    f'Unavailable before observation at t={summary["observation_time_s"]:g} s</text>'
+                )
+            else:
+                field = np.asarray(arrays[field_name][dense_index], dtype=np.float64)
+                levels = np.asarray(arrays[level_name][dense_index], dtype=np.int8)
+                parts.extend(
+                    _p8_v2_categorical_cells(
+                        field,
+                        levels,
+                        parameters.exposure_levels,
+                        scene,
+                        registration,
+                        provenance=provenance,
+                    )
+                )
+                parts.append(_p8_v2_source_marker(scene, registration))
+            parts.append("</g>")
+    legend_y = panel_height * 3 + row_gap * 3 + 62
+    parts.append(
+        f'<text x="24" y="{legend_y}" font-family="sans-serif" font-size="16" '
+        'font-weight="bold">Sparse display only; underlying evaluation cadence is 10 s.</text>'
+    )
+    parts.append(
+        f'<text x="24" y="{legend_y+32}" font-family="sans-serif" font-size="15">'
+        'Posterior panels are never backfilled before the independent case observation. All available panels share the same risk thresholds and registered grid.</text>'
+    )
+    parts.append(
+        f'<text x="24" y="{legend_y+62}" font-family="sans-serif" font-size="15">'
+        'Colored cells represent forecast exposure-risk, not burning; the microwave marker is the only ignition source.</text>'
+    )
+    parts.append("</svg>")
+    output.write_text("\n".join(parts), encoding="utf-8")
+    return output.resolve()
+
+
+def render_p8_v2_dense_pre_entry_timeseries_svg(
+    config_path: str | Path,
+    summary: dict,
+    arrays: dict,
+    output_path: str | Path,
+) -> Path:
+    """Plot all 10 s pre-entry evaluations while keeping maps sparse."""
+    from indoor_fire_world.p8_v2_config import load_p8_v2_parameters
+
+    parameters = load_p8_v2_parameters(config_path)
+    output = Path(output_path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    records = [
+        record
+        for record in summary["dense_prediction"]["records"]
+        if record["time_s"] <= parameters.handoff_time_s
+    ]
+    width, height = 1280, 720
+    left, right = 92.0, 1215.0
+    top_a, bottom_a = 72.0, 315.0
+    top_b, bottom_b = 405.0, 620.0
+    times = np.asarray([record["time_s"] for record in records], dtype=np.float64)
+    x_for = lambda value: left + (value - times[0]) / (times[-1] - times[0]) * (right - left)
+
+    def nonminimal(counts: dict[str, int] | None) -> float:
+        return math.nan if counts is None else float(5800 - counts["minimal"])
+
+    reference_counts = np.asarray(
+        [nonminimal(record["synthetic_reference_risk_level_counts"]) for record in records]
+    )
+    prior_counts = np.asarray(
+        [nonminimal(record["prior_risk_level_counts"]) for record in records]
+    )
+    posterior_counts = np.asarray(
+        [nonminimal(record["posterior_risk_level_counts"]) for record in records]
+    )
+    prior_mae = np.asarray(
+        [record["prior_reference_exposure_mae"] for record in records], dtype=np.float64
+    )
+    posterior_mae = np.asarray(
+        [
+            math.nan
+            if record["posterior_reference_exposure_mae"] is None
+            else record["posterior_reference_exposure_mae"]
+            for record in records
+        ],
+        dtype=np.float64,
+    )
+    max_count = max(1.0, float(np.nanmax([reference_counts, prior_counts, posterior_counts])))
+    max_mae = max(1e-6, float(np.nanmax([prior_mae, posterior_mae])))
+
+    def polyline(values: np.ndarray, top: float, bottom: float, maximum: float) -> str:
+        return " ".join(
+            f"{x_for(time):.2f},{bottom-(value/maximum)*(bottom-top):.2f}"
+            for time, value in zip(times, values)
+            if np.isfinite(value)
+        )
+
+    parts = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+        f'viewBox="0 0 {width} {height}" data-dense-interval-s="10">',
+        '<rect width="100%" height="100%" fill="white"/>',
+        '<text x="640" y="34" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="bold">Dense pre-entry prediction record (10 s cadence)</text>',
+    ]
+    for top, bottom, title in (
+        (top_a, bottom_a, "Traversable cells above minimal exposure-risk"),
+        (top_b, bottom_b, "Exposure MAE against synthetic reference"),
+    ):
+        parts.append(f'<rect x="{left}" y="{top}" width="{right-left}" height="{bottom-top}" fill="#FAFAFA" stroke="#999"/>')
+        parts.append(f'<text x="{left}" y="{top-12}" font-family="sans-serif" font-size="16" font-weight="bold">{title}</text>')
+        for tick in (60, 100, 140, 180, 220, 260, 300):
+            x = x_for(float(tick))
+            parts.append(f'<line x1="{x:.2f}" y1="{top}" x2="{x:.2f}" y2="{bottom}" stroke="#E2E2E2"/>')
+            parts.append(f'<text x="{x:.2f}" y="{bottom+22}" text-anchor="middle" font-family="sans-serif" font-size="13">{tick}</text>')
+    for fraction in (0.0, 0.25, 0.5, 0.75, 1.0):
+        y = bottom_a - fraction * (bottom_a - top_a)
+        parts.append(f'<line x1="{left}" y1="{y:.2f}" x2="{right}" y2="{y:.2f}" stroke="#E2E2E2"/>')
+        parts.append(f'<text x="{left-12}" y="{y+4:.2f}" text-anchor="end" font-family="sans-serif" font-size="12">{int(round(fraction*max_count))}</text>')
+        y_mae = bottom_b - fraction * (bottom_b - top_b)
+        parts.append(f'<line x1="{left}" y1="{y_mae:.2f}" x2="{right}" y2="{y_mae:.2f}" stroke="#E2E2E2"/>')
+        parts.append(f'<text x="{left-12}" y="{y_mae+4:.2f}" text-anchor="end" font-family="sans-serif" font-size="12">{fraction*max_mae:.3f}</text>')
+    parts.extend(
+        [
+            f'<polyline points="{polyline(reference_counts, top_a, bottom_a, max_count)}" fill="none" stroke="#000000" stroke-width="4"/>',
+            f'<polyline points="{polyline(prior_counts, top_a, bottom_a, max_count)}" fill="none" stroke="#56B4E9" stroke-width="4" stroke-dasharray="10 7"/>',
+            f'<polyline points="{polyline(posterior_counts, top_a, bottom_a, max_count)}" fill="none" stroke="#CC79A7" stroke-width="4"/>',
+            f'<polyline points="{polyline(prior_mae, top_b, bottom_b, max_mae)}" fill="none" stroke="#56B4E9" stroke-width="4" stroke-dasharray="10 7"/>',
+            f'<polyline points="{polyline(posterior_mae, top_b, bottom_b, max_mae)}" fill="none" stroke="#CC79A7" stroke-width="4"/>',
+        ]
+    )
+    observation_x = x_for(float(summary["observation_time_s"]))
+    parts.append(f'<line x1="{observation_x:.2f}" y1="{top_a}" x2="{observation_x:.2f}" y2="{bottom_b}" stroke="#D55E00" stroke-width="3" stroke-dasharray="7 5"/>')
+    parts.append(f'<text x="{observation_x+8:.2f}" y="{top_a+20}" font-family="sans-serif" font-size="14" font-weight="bold" fill="#D55E00">UGV observation</text>')
+    parts.extend(
+        [
+            '<line x1="92" y1="675" x2="142" y2="675" stroke="#000" stroke-width="4"/><text x="152" y="680" font-family="sans-serif" font-size="14">Synthetic reference</text>',
+            '<line x1="340" y1="675" x2="390" y2="675" stroke="#56B4E9" stroke-width="4" stroke-dasharray="10 7"/><text x="400" y="680" font-family="sans-serif" font-size="14">Physics prior</text>',
+            '<line x1="570" y1="675" x2="620" y2="675" stroke="#CC79A7" stroke-width="4"/><text x="630" y="680" font-family="sans-serif" font-size="14">Posterior (available only after observation)</text>',
+            '<text x="1215" y="680" text-anchor="end" font-family="sans-serif" font-size="13">Simulation reference, not measured W1 ground truth</text>',
+            '</svg>',
+        ]
+    )
     output.write_text("\n".join(parts), encoding="utf-8")
     return output.resolve()
 

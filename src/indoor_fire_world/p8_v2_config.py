@@ -59,6 +59,9 @@ class P8V2Parameters:
     observation_times_s: tuple[float, ...]
     handoff_time_s: float
     forecast_times_s: tuple[float, ...]
+    dense_prediction_times_s: tuple[float, ...]
+    pre_entry_visualization_times_s: tuple[float, ...]
+    post_handoff_visualization_times_s: tuple[float, ...]
     observation_points: tuple[ObservationPointSpec, ...]
     primary_observation_id: str
     primary_scenario_id: str
@@ -95,6 +98,23 @@ class P8V2Parameters:
             raise ValueError("Unknown primary synthetic scenario")
         if self.forecast_times_s != (300.0, 360.0, 420.0, 480.0):
             raise ValueError("P8 v2 forecast times must be 300/360/420/480 s")
+        if (
+            not self.dense_prediction_times_s
+            or self.dense_prediction_times_s[0] != 60.0
+            or self.dense_prediction_times_s[-1] != 480.0
+            or any(
+                not math.isclose(b - a, 10.0, abs_tol=1e-9)
+                for a, b in zip(
+                    self.dense_prediction_times_s,
+                    self.dense_prediction_times_s[1:],
+                )
+            )
+        ):
+            raise ValueError("P8 v2 dense prediction must cover 60-480 s every 10 s")
+        if self.pre_entry_visualization_times_s != (60.0, 100.0, 180.0, 300.0):
+            raise ValueError("P8 v2 pre-entry keyframes must be 60/100/180/300 s")
+        if self.post_handoff_visualization_times_s != self.forecast_times_s:
+            raise ValueError("Post-handoff keyframes must match configured forecast times")
         if self.handoff_time_s != self.forecast_times_s[0]:
             raise ValueError("Handoff time must equal the first forecast time")
         if any(value > self.handoff_time_s for value in self.observation_times_s):
@@ -140,11 +160,21 @@ def load_p8_v2_parameters(config_path: str | Path) -> P8V2Parameters:
         raise ValueError("Unsupported P8 v2 schema_version")
     root = path.parent
     clocks = data["clocks"]
+    dense = data["dense_prediction"]
     sensor = data["sensor"]
     axes = data["candidate_ensemble"]
     planning = data["planning"]
     observations = data["observation_points"]
     source_semantics = data["fire_source_semantics"]
+    dense_start = float(dense["start_s"])
+    dense_end = float(dense["end_s"])
+    dense_interval = float(dense["interval_s"])
+    if dense_interval <= 0.0 or dense_end < dense_start:
+        raise ValueError("Invalid P8 v2 dense prediction interval")
+    dense_count = int(round((dense_end - dense_start) / dense_interval))
+    dense_times = tuple(dense_start + index * dense_interval for index in range(dense_count + 1))
+    if not math.isclose(dense_times[-1], dense_end, abs_tol=1e-9):
+        raise ValueError("Dense prediction interval must land exactly on end_s")
     return P8V2Parameters(
         config_path=path,
         experiment_id=str(data["experiment_id"]),
@@ -164,6 +194,13 @@ def load_p8_v2_parameters(config_path: str | Path) -> P8V2Parameters:
         observation_times_s=tuple(float(value) for value in clocks["observation_times_s"]),
         handoff_time_s=float(clocks["handoff_time_s"]),
         forecast_times_s=tuple(float(value) for value in clocks["forecast_times_s"]),
+        dense_prediction_times_s=dense_times,
+        pre_entry_visualization_times_s=tuple(
+            float(value) for value in dense["pre_entry_visualization_keyframes_s"]
+        ),
+        post_handoff_visualization_times_s=tuple(
+            float(value) for value in dense["post_handoff_visualization_keyframes_s"]
+        ),
         observation_points=tuple(
             ObservationPointSpec(str(item["id"]), (float(item["offset_m"][0]), float(item["offset_m"][1])))
             for item in observations["points"]

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import hashlib
 import json
 import math
@@ -19,7 +19,12 @@ from indoor_fire_world.fire import (
     load_fds_snapshots,
     load_fire_parameters,
 )
-from indoor_fire_world.hazard import PhysicalHazardModel, UncertaintyAggregationModel, load_hazard_parameters
+from indoor_fire_world.hazard import (
+    HazardResult,
+    PhysicalHazardModel,
+    UncertaintyAggregationModel,
+    load_hazard_parameters,
+)
 from indoor_fire_world.p8_v2_config import P8V2Parameters, load_p8_v2_parameters
 from indoor_fire_world.planning import (
     DirectedRoutePlanner,
@@ -116,7 +121,15 @@ def build_p8_v2_context(config_path: str | Path) -> P8V2Context:
     graph = load_directed_evacuation_graph(parameters.corridor_config, scene)
     # Causal guard: points and hashes are frozen before any reference simulator exists.
     points, point_hash = _freeze_points(scene, parameters, graph)
-    all_times = tuple(sorted(set(parameters.observation_times_s + parameters.forecast_times_s)))
+    all_times = tuple(
+        sorted(
+            set(
+                parameters.observation_times_s
+                + parameters.forecast_times_s
+                + parameters.dense_prediction_times_s
+            )
+        )
+    )
     base = load_fire_parameters(parameters.prior_config)
     candidates = build_candidates(base, parameters.ensemble.hrr_factors, parameters.ensemble.yield_factors, parameters.ensemble.ventilation_factors)
     candidate_bank = simulate_candidate_bank(scene, candidates, all_times)
@@ -561,7 +574,13 @@ def run_p8_v2_case(context: P8V2Context, scenario_id: str, observation_time_s: f
     reference = context.reference_banks[scenario_id]
     seed_payload = f"{parameters.random_seed}:{scenario_id}:{observation_time_s}:{observation_id}"
     seed = int(hashlib.sha256(seed_payload.encode()).hexdigest()[:8], 16)
-    observation = UGVSensor(context.scene, parameters.sensor, seed).observe(reference[observation_time_s], point.pose)
+    observation = UGVSensor(context.scene, parameters.sensor, seed).observe(
+        reference[observation_time_s], point.pose
+    )
+    # Snapshot-bank keys are configured evaluation times. Normalize harmless
+    # floating-point integration drift in the simulator's internal clock so
+    # posterior lookup remains exact and deterministic.
+    observation = replace(observation, timestamp=observation_time_s)
     prior_weights = np.full(len(context.candidates), 1.0 / len(context.candidates), dtype=np.float64)
     updated_weights = posterior_weights(context.candidates, context.candidate_bank, observation, point.cell, parameters.sensor)
     hrr_only_weights = posterior_weights(
@@ -824,3 +843,224 @@ def run_p8_v2_case(context: P8V2Context, scenario_id: str, observation_time_s: f
         else "failed_unexpected_disconnected_transport"
     )
     return P8V2CaseOutput(summary, arrays)
+
+
+def attach_dense_prediction_evaluation(
+    context: P8V2Context,
+    cases: dict[str, P8V2CaseOutput],
+    primary_run_id: str,
+) -> tuple[dict[str, Any], ...]:
+    """Batch-evaluate all independent cases every 10 s without causal backfill."""
+    if primary_run_id not in cases:
+        raise ValueError("Dense prediction primary run is missing")
+    case_items = tuple(cases.items())
+    candidate_ids = tuple(item.id for item in context.candidates)
+    weights = np.asarray(
+        [
+            [output.summary["posterior_weights"][candidate_id] for candidate_id in candidate_ids]
+            for _, output in case_items
+        ],
+        dtype=np.float64,
+    )
+    hazard_model = PhysicalHazardModel(
+        load_hazard_parameters(context.parameters.hazard_config)
+    )
+    primary = cases[primary_run_id]
+    primary_index = next(
+        index for index, (run_id, _) in enumerate(case_items) if run_id == primary_run_id
+    )
+    shape = (
+        context.scene.occupancy.geometry.rows,
+        context.scene.occupancy.geometry.cols,
+    )
+    dense_rows: list[dict[str, Any]] = []
+    primary_prior_exposure: list[NDArray[np.float64]] = []
+    primary_reference_exposure: list[NDArray[np.float64]] = []
+    primary_posterior_exposure: list[NDArray[np.float64]] = []
+    primary_prior_levels: list[NDArray[np.int8]] = []
+    primary_reference_levels: list[NDArray[np.int8]] = []
+    primary_posterior_levels: list[NDArray[np.int8]] = []
+    primary_availability: list[bool] = []
+
+    for _, output in case_items:
+        output.summary["dense_prediction"] = {
+            "start_s": context.parameters.dense_prediction_times_s[0],
+            "end_s": context.parameters.dense_prediction_times_s[-1],
+            "interval_s": 10.0,
+            "posterior_availability_rule": "time_s >= independent_case_observation_time_s",
+            "no_retrodictive_backfill": True,
+            "records": [],
+        }
+
+    uniform = np.full(len(context.candidates), 1.0 / len(context.candidates))
+    for time_s in context.parameters.dense_prediction_times_s:
+        modality_stacks = {
+            modality: np.stack(
+                [
+                    np.asarray(
+                        getattr(context.candidate_bank[candidate_id][time_s], modality),
+                        dtype=np.float64,
+                    )
+                    for candidate_id in candidate_ids
+                ]
+            )
+            for modality in MODALITIES
+        }
+        posterior_means = {
+            modality: np.tensordot(weights, stack, axes=(1, 0))
+            for modality, stack in modality_stacks.items()
+        }
+        prior_mean = BeliefMean(
+            **{
+                modality: np.tensordot(uniform, stack, axes=(0, 0))
+                for modality, stack in modality_stacks.items()
+            }
+        )
+        prior_hazard = hazard_model.compute(prior_mean)
+        prior_levels, prior_counts = _risk_level_grid(context, prior_hazard.field)
+        reference_cache: dict[str, tuple[HazardResult, NDArray[np.int8], dict[str, int]]] = {}
+
+        for case_index, (run_id, output) in enumerate(case_items):
+            summary = output.summary
+            scenario_id = str(summary["scenario_id"])
+            if scenario_id not in reference_cache:
+                reference_hazard = hazard_model.compute(
+                    context.reference_banks[scenario_id][time_s]
+                )
+                reference_levels, reference_counts = _risk_level_grid(
+                    context, reference_hazard.field
+                )
+                reference_cache[scenario_id] = (
+                    reference_hazard,
+                    reference_levels,
+                    reference_counts,
+                )
+            reference_hazard, reference_levels, reference_counts = reference_cache[
+                scenario_id
+            ]
+            observation_time_s = float(summary["observation_time_s"])
+            posterior_available = time_s >= observation_time_s - 1e-12
+            record: dict[str, Any] = {
+                "time_s": time_s,
+                "phase": "pre_entry" if time_s <= context.parameters.handoff_time_s else "post_handoff",
+                "posterior_available": posterior_available,
+                "posterior_unavailable_reason": None
+                if posterior_available
+                else "observation_not_yet_available",
+                "prior_reference_exposure_mae": float(
+                    np.mean(np.abs(prior_hazard.field - reference_hazard.field))
+                ),
+                "prior_risk_level_counts": prior_counts,
+                "synthetic_reference_risk_level_counts": reference_counts,
+                "posterior_reference_exposure_mae": None,
+                "posterior_reference_exact_level_agreement_cell_count": None,
+                "posterior_reference_higher_level_cell_count": None,
+                "posterior_reference_lower_level_cell_count": None,
+                "posterior_risk_level_counts": None,
+            }
+            posterior_hazard: HazardResult | None = None
+            posterior_levels: NDArray[np.int8] | None = None
+            if posterior_available:
+                posterior_mean = BeliefMean(
+                    **{
+                        modality: posterior_means[modality][case_index]
+                        for modality in MODALITIES
+                    }
+                )
+                posterior_hazard = hazard_model.compute(posterior_mean)
+                posterior_levels, posterior_counts = _risk_level_grid(
+                    context, posterior_hazard.field
+                )
+                comparable = (posterior_levels >= 0) & (reference_levels >= 0)
+                delta = (
+                    posterior_levels.astype(np.int16)
+                    - reference_levels.astype(np.int16)
+                )
+                record.update(
+                    {
+                        "posterior_reference_exposure_mae": float(
+                            np.mean(
+                                np.abs(
+                                    posterior_hazard.field
+                                    - reference_hazard.field
+                                )
+                            )
+                        ),
+                        "posterior_reference_exact_level_agreement_cell_count": int(
+                            np.count_nonzero(comparable & (delta == 0))
+                        ),
+                        "posterior_reference_higher_level_cell_count": int(
+                            np.count_nonzero(comparable & (delta > 0))
+                        ),
+                        "posterior_reference_lower_level_cell_count": int(
+                            np.count_nonzero(comparable & (delta < 0))
+                        ),
+                        "posterior_risk_level_counts": posterior_counts,
+                    }
+                )
+            summary["dense_prediction"]["records"].append(record)
+            dense_row = {
+                "run_id": run_id,
+                "scenario_id": scenario_id,
+                "observation_time_s": observation_time_s,
+                "observation_id": summary["observation_point"]["id"],
+                **{
+                    name: value
+                    for name, value in record.items()
+                    if not name.endswith("_risk_level_counts")
+                },
+            }
+            for source_name, counts_name in (
+                ("prior", "prior_risk_level_counts"),
+                ("reference", "synthetic_reference_risk_level_counts"),
+                ("posterior", "posterior_risk_level_counts"),
+            ):
+                counts = record[counts_name]
+                for level in context.parameters.exposure_levels:
+                    dense_row[f"{source_name}_{level.id}_cell_count"] = (
+                        None if counts is None else counts[level.id]
+                    )
+            dense_rows.append(dense_row)
+
+            if case_index == primary_index:
+                primary_prior_exposure.append(np.asarray(prior_hazard.field))
+                primary_reference_exposure.append(np.asarray(reference_hazard.field))
+                primary_prior_levels.append(np.asarray(prior_levels))
+                primary_reference_levels.append(np.asarray(reference_levels))
+                primary_availability.append(posterior_available)
+                if posterior_hazard is None or posterior_levels is None:
+                    primary_posterior_exposure.append(
+                        np.full(shape, np.nan, dtype=np.float64)
+                    )
+                    primary_posterior_levels.append(
+                        np.full(shape, -3, dtype=np.int8)
+                    )
+                else:
+                    primary_posterior_exposure.append(
+                        np.asarray(posterior_hazard.field)
+                    )
+                    primary_posterior_levels.append(
+                        np.asarray(posterior_levels)
+                    )
+
+    primary.arrays["dense_prediction_times_s"] = np.asarray(
+        context.parameters.dense_prediction_times_s, dtype=np.float64
+    )
+    primary.arrays["dense_posterior_available"] = np.asarray(
+        primary_availability, dtype=np.bool_
+    )
+    primary.arrays["dense_prior_exposure"] = np.stack(primary_prior_exposure)
+    primary.arrays["dense_synthetic_reference_exposure"] = np.stack(
+        primary_reference_exposure
+    )
+    primary.arrays["dense_posterior_exposure"] = np.stack(
+        primary_posterior_exposure
+    )
+    primary.arrays["dense_prior_risk_level"] = np.stack(primary_prior_levels)
+    primary.arrays["dense_synthetic_reference_risk_level"] = np.stack(
+        primary_reference_levels
+    )
+    primary.arrays["dense_posterior_risk_level"] = np.stack(
+        primary_posterior_levels
+    )
+    return tuple(dense_rows)

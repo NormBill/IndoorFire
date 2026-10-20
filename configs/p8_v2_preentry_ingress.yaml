@@ -31,6 +31,14 @@
     "forecast_times_s": [300.0, 360.0, 420.0, 480.0],
     "meaning": "Configurable simulation handoff and no-intervention forecast times; not measured response or deployment times."
   },
+  "dense_prediction": {
+    "start_s": 60.0,
+    "end_s": 480.0,
+    "interval_s": 10.0,
+    "pre_entry_visualization_keyframes_s": [60.0, 100.0, 180.0, 300.0],
+    "post_handoff_visualization_keyframes_s": [300.0, 360.0, 420.0, 480.0],
+    "posterior_availability": "available only at and after each independent case observation time"
+  },
   "observation_points": {
     "selection_provenance": "registered_geometry_only_frozen_before_reference",
     "primary_id": "geometry_route_high",
