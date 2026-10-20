@@ -236,6 +236,41 @@ def _p8_v2_panel_cells(
     return parts
 
 
+def _p8_v2_categorical_cells(
+    field: np.ndarray,
+    risk_grid: np.ndarray,
+    levels,
+    scene,
+    registration,
+) -> list[str]:
+    """Render one explicit model-predicted level for every registered cell."""
+    rows, cols = risk_grid.shape
+    parts = [
+        f'<g class="categorical-risk-grid" data-grid-cell-count="{rows*cols}" '
+        'data-risk-map-provenance="posterior_model_forecast" shape-rendering="crispEdges">'
+    ]
+    for row in range(rows):
+        for col in range(cols):
+            px, py, cell_width, cell_height = _p8_v2_cell_geometry(
+                scene, registration, row, col
+            )
+            level_index = int(risk_grid[row, col])
+            blocked = level_index < 0
+            level_id = "blocked" if blocked else levels[level_index].id
+            fill = "url(#p8v2-blocked)" if blocked else levels[level_index].color
+            opacity = "0.48" if blocked else "0.82"
+            parts.append(
+                f'<rect class="risk-level-cell" data-row="{row}" data-col="{col}" '
+                f'data-risk-level="{escape(level_id)}" x="{px:.2f}" y="{py:.2f}" '
+                f'width="{cell_width:.2f}" height="{cell_height:.2f}" fill="{fill}" '
+                f'fill-opacity="{opacity}" stroke="#FFFFFF" stroke-opacity="0.28" '
+                f'stroke-width="0.28"><title>row={row}, col={col}, model-predicted '
+                f'risk level={escape(level_id)}, exposure={float(field[row,col]):.6f}</title></rect>'
+            )
+    parts.append("</g>")
+    return parts
+
+
 def _p8_v2_routes(summary: dict, scene, registration) -> list[str]:
     parts: list[str] = []
     for name, color, dash in (("prior_ingress", "#56B4E9", "18 10"), ("updated_ingress", "#CC79A7", "")):
@@ -247,6 +282,103 @@ def _p8_v2_routes(summary: dict, scene, registration) -> list[str]:
         dash_attribute = f' stroke-dasharray="{dash}"' if dash else ""
         parts.append(f'<polyline class="{name}" points="{points}" fill="none" stroke="{color}" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"{dash_attribute}/>')
     return parts
+
+
+def _render_p8_v2_categorical_risk(
+    config_path: str | Path,
+    summary: dict,
+    arrays: dict,
+    output_path: str | Path,
+    *,
+    include_routes: bool,
+) -> Path:
+    parameters, scene, registration, _, encoded = _p8_v2_visual_context(config_path)
+    output = Path(output_path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    panel_scale = 0.42
+    panel_width = registration.source_width_px * panel_scale
+    panel_height = registration.source_height_px * panel_scale
+    width = int(panel_width * 2)
+    height = int(panel_height * 2 + 220)
+    parts = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+        f'viewBox="0 0 {width} {height}" data-risk-map-source="posterior_model_forecast">'
+    ]
+    parts.extend(_p8_v2_svg_defs(registration, encoded))
+    parts.append('<rect width="100%" height="100%" fill="white"/>')
+    for index, time_s in enumerate(parameters.forecast_times_s):
+        key = f"t{time_s:g}"
+        offset_x = (index % 2) * panel_width
+        offset_y = (index // 2) * panel_height + 48
+        field = np.asarray(arrays[f"posterior_exposure_{key}"], dtype=np.float64)
+        risk_grid = np.asarray(arrays[f"posterior_risk_level_{key}"], dtype=np.int8)
+        counts = summary["risk_grid"]["counts_by_forecast_time"][key]
+        nonminimal = sum(
+            int(counts[level.id]) for level in parameters.exposure_levels[1:]
+        )
+        parts.append(
+            f'<text x="{offset_x+panel_width/2:.1f}" y="{offset_y-24:.1f}" '
+            'text-anchor="middle" font-family="sans-serif" font-size="20" '
+            f'font-weight="bold">Posterior model-predicted risk levels — t={time_s:g} s</text>'
+        )
+        parts.append(
+            f'<text x="{offset_x+panel_width/2:.1f}" y="{offset_y-6:.1f}" '
+            'text-anchor="middle" font-family="sans-serif" font-size="14">'
+            f'{nonminimal} traversable cells above minimal risk; no ground-truth field used</text>'
+        )
+        parts.append(
+            f'<g transform="translate({offset_x:.2f},{offset_y:.2f}) scale({panel_scale})">'
+            '<use href="#p8v2-map" opacity="0.64"/>'
+        )
+        parts.extend(
+            _p8_v2_categorical_cells(
+                field, risk_grid, parameters.exposure_levels, scene, registration
+            )
+        )
+        parts.append(_p8_v2_source_marker(scene, registration))
+        if include_routes:
+            parts.extend(_p8_v2_routes(summary, scene, registration))
+        parts.append("</g>")
+    legend_y = panel_height * 2 + 108
+    parts.append(
+        f'<text x="24" y="{legend_y}" font-family="sans-serif" font-size="17" '
+        'font-weight="bold">Model-predicted risk level per 0.25 m grid cell:</text>'
+    )
+    x = 390
+    lower_bound = 0.0
+    for level_index, level in enumerate(parameters.exposure_levels):
+        upper_text = "1.00" if level.upper_bound is None else f"{level.upper_bound:.2f}"
+        range_text = (
+            f"[0.00, {upper_text}]"
+            if level_index == 0
+            else f"({lower_bound:.2f}, {upper_text}]"
+        )
+        parts.append(
+            f'<rect x="{x}" y="{legend_y-18}" width="24" height="24" fill="{level.color}" '
+            f'stroke="#222"/><text x="{x+31}" y="{legend_y}" font-family="sans-serif" '
+            f'font-size="14">{escape(level.id)} {range_text}</text>'
+        )
+        x += 185
+        if level.upper_bound is not None:
+            lower_bound = level.upper_bound
+    parts.append(
+        f'<text x="24" y="{legend_y+42}" font-family="sans-serif" font-size="16">'
+        'Each traversable cell is classified from the posterior ensemble forecast at that time. '
+        'Blocked cells are hatched and have no risk level.</text>'
+    )
+    parts.append(
+        f'<text x="24" y="{legend_y+76}" font-family="sans-serif" font-size="16">'
+        'Ground truth is used only to synthesize observations and evaluate forecast error; it is '
+        'not used to construct this risk map.</text>'
+    )
+    if include_routes:
+        parts.append(
+            f'<text x="24" y="{legend_y+108}" font-family="sans-serif" font-size="15">'
+            'Blue dashed: prior ingress; purple solid: posterior ingress; circle/flame: the only ignition source.</text>'
+        )
+    parts.append("</svg>")
+    output.write_text("\n".join(parts), encoding="utf-8")
+    return output.resolve()
 
 
 def _render_p8_v2_evolution(config_path: str | Path, summary: dict, arrays: dict, output_path: str | Path, *, include_routes: bool) -> Path:
@@ -279,7 +411,7 @@ def _render_p8_v2_evolution(config_path: str | Path, summary: dict, arrays: dict
     for index in range(101):
         parts.append(f'<rect x="{258+index*3}" y="{legend_y-17}" width="3" height="22" fill="{_continuous_exposure_color(index/100)}"/>')
     parts.append(f'<text x="568" y="{legend_y}" font-family="sans-serif" font-size="18" font-weight="bold">1</text>')
-    thresholds = ", ".join(f"{level.id} ≤ {level.upper_bound:g}" for level in parameters.exposure_levels if level.upper_bound is not None)
+    thresholds = ", ".join(f"{level.id} <= {level.upper_bound:g}" for level in parameters.exposure_levels if level.upper_bound is not None)
     parts.append(f'<text x="620" y="{legend_y}" font-family="sans-serif" font-size="16">Contour boundaries: {escape(thresholds)}; extreme &gt; 0.70</text>')
     parts.append(f'<text x="24" y="{legend_y+42}" font-family="sans-serif" font-size="16" font-weight="bold" fill="#D55E00">Circle/flame: microwave primary source (only ignition).</text>')
     parts.append(f'<text x="500" y="{legend_y+42}" font-family="sans-serif" font-size="16">Colored cells indicate forecast exposure, not burning or secondary ignition. Shared fixed scale [0,1].</text>')
@@ -291,8 +423,17 @@ def _render_p8_v2_evolution(config_path: str | Path, summary: dict, arrays: dict
 
 
 def render_p8_v2_forecast_svg(config_path: str | Path, summary: dict, arrays: dict, output_path: str | Path) -> Path:
-    """Backward-compatible combined exposure and route artifact."""
-    return _render_p8_v2_evolution(config_path, summary, arrays, output_path, include_routes=True)
+    """Backward-compatible full-grid categorical risk map with route context."""
+    return _render_p8_v2_categorical_risk(
+        config_path, summary, arrays, output_path, include_routes=True
+    )
+
+
+def render_p8_v2_categorical_risk_svg(config_path: str | Path, summary: dict, arrays: dict, output_path: str | Path) -> Path:
+    """Render one posterior model-predicted risk level in every registered cell."""
+    return _render_p8_v2_categorical_risk(
+        config_path, summary, arrays, output_path, include_routes=False
+    )
 
 
 def render_p8_v2_exposure_evolution_svg(config_path: str | Path, summary: dict, arrays: dict, output_path: str | Path) -> Path:

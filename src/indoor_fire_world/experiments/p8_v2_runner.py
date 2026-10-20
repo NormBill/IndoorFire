@@ -12,6 +12,7 @@ import numpy as np
 
 from indoor_fire_world.simulation.p8_v2 import P8V2CaseOutput, build_p8_v2_context, run_p8_v2_case
 from indoor_fire_world.visualization.svg import (
+    render_p8_v2_categorical_risk_svg,
     render_p8_v2_exposure_evolution_svg,
     render_p8_v2_forecast_svg,
     render_p8_v2_grid_diagnostic_svg,
@@ -133,6 +134,12 @@ def write_p8_v2_artifacts(output: P8V2SuiteOutput, config_path: str | Path, targ
     arrays_path = target / "arrays.npz"
     np.savez_compressed(arrays_path, **output.primary.arrays)
     figure_path = render_p8_v2_forecast_svg(config_path, output.primary.summary, output.primary.arrays, target / "forecast_exposure_and_ingress.svg")
+    categorical_risk_path = render_p8_v2_categorical_risk_svg(
+        config_path,
+        output.primary.summary,
+        output.primary.arrays,
+        target / "forecast_risk_level_grid.svg",
+    )
     evolution_path = render_p8_v2_exposure_evolution_svg(
         config_path,
         output.primary.summary,
@@ -164,6 +171,7 @@ def write_p8_v2_artifacts(output: P8V2SuiteOutput, config_path: str | Path, targ
         "matrix": matrix_path.resolve(),
         "arrays": arrays_path.resolve(),
         "visualization": figure_path,
+        "categorical_risk_map": categorical_risk_path,
         "exposure_evolution": evolution_path,
         "planning_envelope": planning_path,
         "grid_diagnostic": diagnostic_path,

@@ -8069,25 +8069,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -8098,6 +8098,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 166,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 166,
+          "unchanged_cell_count": 5634
+        },
+        "t420": {
+          "changed_cell_count": 112,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 112,
+          "unchanged_cell_count": 5688
+        },
+        "t480": {
+          "changed_cell_count": 53,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 53,
+          "unchanged_cell_count": 5747
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
@@ -18237,25 +18265,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -18266,6 +18294,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 126,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 126,
+          "unchanged_cell_count": 5674
+        },
+        "t420": {
+          "changed_cell_count": 99,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 99,
+          "unchanged_cell_count": 5701
+        },
+        "t480": {
+          "changed_cell_count": 40,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 40,
+          "unchanged_cell_count": 5760
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
@@ -28335,25 +28391,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -28364,6 +28420,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 123,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 123,
+          "unchanged_cell_count": 5677
+        },
+        "t420": {
+          "changed_cell_count": 71,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 71,
+          "unchanged_cell_count": 5729
+        },
+        "t480": {
+          "changed_cell_count": 36,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 36,
+          "unchanged_cell_count": 5764
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
@@ -38605,25 +38689,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -38634,6 +38718,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 96,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 96,
+          "unchanged_cell_count": 5704
+        },
+        "t420": {
+          "changed_cell_count": 67,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 67,
+          "unchanged_cell_count": 5733
+        },
+        "t480": {
+          "changed_cell_count": 35,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 35,
+          "unchanged_cell_count": 5765
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
@@ -48962,25 +49074,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -48991,6 +49103,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 171,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 171,
+          "unchanged_cell_count": 5629
+        },
+        "t420": {
+          "changed_cell_count": 107,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 107,
+          "unchanged_cell_count": 5693
+        },
+        "t480": {
+          "changed_cell_count": 54,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 54,
+          "unchanged_cell_count": 5746
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
@@ -59145,25 +59285,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -59174,6 +59314,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 77,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 77,
+          "unchanged_cell_count": 5723
+        },
+        "t420": {
+          "changed_cell_count": 53,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 53,
+          "unchanged_cell_count": 5747
+        },
+        "t480": {
+          "changed_cell_count": 26,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 26,
+          "unchanged_cell_count": 5774
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
@@ -68726,25 +68894,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -68755,6 +68923,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 31,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 31,
+          "unchanged_cell_count": 5769
+        },
+        "t420": {
+          "changed_cell_count": 8,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 8,
+          "unchanged_cell_count": 5792
+        },
+        "t480": {
+          "changed_cell_count": 4,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 4,
+          "unchanged_cell_count": 5796
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
@@ -78240,25 +78436,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -78269,6 +78465,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 30,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 30,
+          "unchanged_cell_count": 5770
+        },
+        "t420": {
+          "changed_cell_count": 9,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 9,
+          "unchanged_cell_count": 5791
+        },
+        "t480": {
+          "changed_cell_count": 4,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 4,
+          "unchanged_cell_count": 5796
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
@@ -88392,25 +88616,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -88421,6 +88645,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 327,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 327,
+          "unchanged_cell_count": 5473
+        },
+        "t420": {
+          "changed_cell_count": 179,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 179,
+          "unchanged_cell_count": 5621
+        },
+        "t480": {
+          "changed_cell_count": 58,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 58,
+          "unchanged_cell_count": 5742
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
@@ -98841,25 +99093,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -98870,6 +99122,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 111,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 111,
+          "unchanged_cell_count": 5689
+        },
+        "t420": {
+          "changed_cell_count": 79,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 79,
+          "unchanged_cell_count": 5721
+        },
+        "t480": {
+          "changed_cell_count": 49,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 49,
+          "unchanged_cell_count": 5751
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
@@ -109311,25 +109591,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -109340,6 +109620,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 161,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 161,
+          "unchanged_cell_count": 5639
+        },
+        "t420": {
+          "changed_cell_count": 95,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 95,
+          "unchanged_cell_count": 5705
+        },
+        "t480": {
+          "changed_cell_count": 45,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 45,
+          "unchanged_cell_count": 5755
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
@@ -119805,25 +120113,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -119834,6 +120142,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 161,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 161,
+          "unchanged_cell_count": 5639
+        },
+        "t420": {
+          "changed_cell_count": 95,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 95,
+          "unchanged_cell_count": 5705
+        },
+        "t480": {
+          "changed_cell_count": 45,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 45,
+          "unchanged_cell_count": 5755
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
@@ -130162,25 +130498,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -130191,6 +130527,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 190,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 190,
+          "unchanged_cell_count": 5610
+        },
+        "t420": {
+          "changed_cell_count": 138,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 138,
+          "unchanged_cell_count": 5662
+        },
+        "t480": {
+          "changed_cell_count": 68,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 68,
+          "unchanged_cell_count": 5732
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
@@ -140383,25 +140747,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -140412,6 +140776,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 126,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 126,
+          "unchanged_cell_count": 5674
+        },
+        "t420": {
+          "changed_cell_count": 96,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 96,
+          "unchanged_cell_count": 5704
+        },
+        "t480": {
+          "changed_cell_count": 49,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 49,
+          "unchanged_cell_count": 5751
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
@@ -150705,25 +151097,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -150734,6 +151126,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 193,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 193,
+          "unchanged_cell_count": 5607
+        },
+        "t420": {
+          "changed_cell_count": 119,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 119,
+          "unchanged_cell_count": 5681
+        },
+        "t480": {
+          "changed_cell_count": 61,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 61,
+          "unchanged_cell_count": 5739
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
@@ -160994,25 +161414,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -161023,6 +161443,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 100,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 100,
+          "unchanged_cell_count": 5700
+        },
+        "t420": {
+          "changed_cell_count": 78,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 78,
+          "unchanged_cell_count": 5722
+        },
+        "t480": {
+          "changed_cell_count": 41,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 41,
+          "unchanged_cell_count": 5759
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "appliance_contained",
@@ -171127,25 +171575,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -171156,6 +171604,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 172,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 172,
+          "unchanged_cell_count": 5628
+        },
+        "t420": {
+          "changed_cell_count": 90,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 90,
+          "unchanged_cell_count": 5710
+        },
+        "t480": {
+          "changed_cell_count": 73,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 73,
+          "unchanged_cell_count": 5727
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
@@ -181318,25 +181794,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -181347,6 +181823,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 209,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 209,
+          "unchanged_cell_count": 5591
+        },
+        "t420": {
+          "changed_cell_count": 132,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 132,
+          "unchanged_cell_count": 5668
+        },
+        "t480": {
+          "changed_cell_count": 66,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 66,
+          "unchanged_cell_count": 5734
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
@@ -191287,25 +191791,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -191316,6 +191820,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 452,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 452,
+          "unchanged_cell_count": 5348
+        },
+        "t420": {
+          "changed_cell_count": 237,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 237,
+          "unchanged_cell_count": 5563
+        },
+        "t480": {
+          "changed_cell_count": 101,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 101,
+          "unchanged_cell_count": 5699
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
@@ -201280,25 +201812,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -201309,6 +201841,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 143,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 143,
+          "unchanged_cell_count": 5657
+        },
+        "t420": {
+          "changed_cell_count": 95,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 95,
+          "unchanged_cell_count": 5705
+        },
+        "t480": {
+          "changed_cell_count": 51,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 51,
+          "unchanged_cell_count": 5749
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
@@ -210714,25 +211274,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -210743,6 +211303,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 62,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 62,
+          "unchanged_cell_count": 5738
+        },
+        "t420": {
+          "changed_cell_count": 34,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 34,
+          "unchanged_cell_count": 5766
+        },
+        "t480": {
+          "changed_cell_count": 16,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 16,
+          "unchanged_cell_count": 5784
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
@@ -220468,25 +221056,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -220497,6 +221085,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 513,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 513,
+          "unchanged_cell_count": 5287
+        },
+        "t420": {
+          "changed_cell_count": 209,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 209,
+          "unchanged_cell_count": 5591
+        },
+        "t480": {
+          "changed_cell_count": 68,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 68,
+          "unchanged_cell_count": 5732
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
@@ -229886,25 +230502,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -229915,6 +230531,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 68,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 68,
+          "unchanged_cell_count": 5732
+        },
+        "t420": {
+          "changed_cell_count": 30,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 30,
+          "unchanged_cell_count": 5770
+        },
+        "t480": {
+          "changed_cell_count": 19,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 19,
+          "unchanged_cell_count": 5781
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
@@ -239404,25 +240048,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -239433,6 +240077,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 76,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 76,
+          "unchanged_cell_count": 5724
+        },
+        "t420": {
+          "changed_cell_count": 46,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 46,
+          "unchanged_cell_count": 5754
+        },
+        "t480": {
+          "changed_cell_count": 24,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 24,
+          "unchanged_cell_count": 5776
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
@@ -248819,25 +249491,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -248848,6 +249520,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 47,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 47,
+          "unchanged_cell_count": 5753
+        },
+        "t420": {
+          "changed_cell_count": 23,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 23,
+          "unchanged_cell_count": 5777
+        },
+        "t480": {
+          "changed_cell_count": 6,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 6,
+          "unchanged_cell_count": 5794
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
@@ -258573,25 +259273,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -258602,6 +259302,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 513,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 513,
+          "unchanged_cell_count": 5287
+        },
+        "t420": {
+          "changed_cell_count": 209,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 209,
+          "unchanged_cell_count": 5591
+        },
+        "t480": {
+          "changed_cell_count": 68,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 68,
+          "unchanged_cell_count": 5732
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
@@ -268295,25 +269023,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -268324,6 +269052,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 513,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 513,
+          "unchanged_cell_count": 5287
+        },
+        "t420": {
+          "changed_cell_count": 209,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 209,
+          "unchanged_cell_count": 5591
+        },
+        "t480": {
+          "changed_cell_count": 68,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 68,
+          "unchanged_cell_count": 5732
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
@@ -277737,25 +278493,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -277766,6 +278522,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 68,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 68,
+          "unchanged_cell_count": 5732
+        },
+        "t420": {
+          "changed_cell_count": 30,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 30,
+          "unchanged_cell_count": 5770
+        },
+        "t480": {
+          "changed_cell_count": 19,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 19,
+          "unchanged_cell_count": 5781
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
@@ -288022,25 +288806,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -288051,6 +288835,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 153,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 153,
+          "unchanged_cell_count": 5647
+        },
+        "t420": {
+          "changed_cell_count": 111,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 111,
+          "unchanged_cell_count": 5689
+        },
+        "t480": {
+          "changed_cell_count": 44,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 44,
+          "unchanged_cell_count": 5756
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
@@ -298133,25 +298945,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -298162,6 +298974,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 254,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 254,
+          "unchanged_cell_count": 5546
+        },
+        "t420": {
+          "changed_cell_count": 178,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 178,
+          "unchanged_cell_count": 5622
+        },
+        "t480": {
+          "changed_cell_count": 115,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 115,
+          "unchanged_cell_count": 5685
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
@@ -308197,25 +309037,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -308226,6 +309066,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 246,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 246,
+          "unchanged_cell_count": 5554
+        },
+        "t420": {
+          "changed_cell_count": 199,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 199,
+          "unchanged_cell_count": 5601
+        },
+        "t480": {
+          "changed_cell_count": 111,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 111,
+          "unchanged_cell_count": 5689
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
@@ -318228,25 +319096,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -318257,6 +319125,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 225,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 225,
+          "unchanged_cell_count": 5575
+        },
+        "t420": {
+          "changed_cell_count": 161,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 161,
+          "unchanged_cell_count": 5639
+        },
+        "t480": {
+          "changed_cell_count": 98,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 98,
+          "unchanged_cell_count": 5702
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "unchanged",
       "scenario_id": "enclosure_breakout",
@@ -323284,25 +324180,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -323313,6 +324209,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 187,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 187,
+          "unchanged_cell_count": 5613
+        },
+        "t420": {
+          "changed_cell_count": 125,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 125,
+          "unchanged_cell_count": 5675
+        },
+        "t480": {
+          "changed_cell_count": 80,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 80,
+          "unchanged_cell_count": 5720
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "high_intensity_appliance_fire",
@@ -326657,25 +327581,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -326686,6 +327610,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 578,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 578,
+          "unchanged_cell_count": 5222
+        },
+        "t420": {
+          "changed_cell_count": 406,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 406,
+          "unchanged_cell_count": 5394
+        },
+        "t480": {
+          "changed_cell_count": 228,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 228,
+          "unchanged_cell_count": 5572
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "high_intensity_appliance_fire",
@@ -330017,25 +330969,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -330046,6 +330998,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 186,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 186,
+          "unchanged_cell_count": 5614
+        },
+        "t420": {
+          "changed_cell_count": 146,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 146,
+          "unchanged_cell_count": 5654
+        },
+        "t480": {
+          "changed_cell_count": 93,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 93,
+          "unchanged_cell_count": 5707
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "high_intensity_appliance_fire",
@@ -333420,25 +334400,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -333449,6 +334429,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 544,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 544,
+          "unchanged_cell_count": 5256
+        },
+        "t420": {
+          "changed_cell_count": 397,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 397,
+          "unchanged_cell_count": 5403
+        },
+        "t480": {
+          "changed_cell_count": 217,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 217,
+          "unchanged_cell_count": 5583
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "high_intensity_appliance_fire",
@@ -336758,25 +337766,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -336787,6 +337795,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 186,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 186,
+          "unchanged_cell_count": 5614
+        },
+        "t420": {
+          "changed_cell_count": 118,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 118,
+          "unchanged_cell_count": 5682
+        },
+        "t480": {
+          "changed_cell_count": 74,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 74,
+          "unchanged_cell_count": 5726
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "high_intensity_appliance_fire",
@@ -340131,25 +341167,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -340160,6 +341196,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 578,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 578,
+          "unchanged_cell_count": 5222
+        },
+        "t420": {
+          "changed_cell_count": 406,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 406,
+          "unchanged_cell_count": 5394
+        },
+        "t480": {
+          "changed_cell_count": 228,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 228,
+          "unchanged_cell_count": 5572
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "high_intensity_appliance_fire",
@@ -343491,25 +344555,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -343520,6 +344584,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 183,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 183,
+          "unchanged_cell_count": 5617
+        },
+        "t420": {
+          "changed_cell_count": 153,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 153,
+          "unchanged_cell_count": 5647
+        },
+        "t480": {
+          "changed_cell_count": 94,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 94,
+          "unchanged_cell_count": 5706
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "high_intensity_appliance_fire",
@@ -346875,25 +347967,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -346904,6 +347996,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 183,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 183,
+          "unchanged_cell_count": 5617
+        },
+        "t420": {
+          "changed_cell_count": 153,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 153,
+          "unchanged_cell_count": 5647
+        },
+        "t480": {
+          "changed_cell_count": 94,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 94,
+          "unchanged_cell_count": 5706
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "high_intensity_appliance_fire",
@@ -350213,25 +351333,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -350242,6 +351362,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 186,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 186,
+          "unchanged_cell_count": 5614
+        },
+        "t420": {
+          "changed_cell_count": 118,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 118,
+          "unchanged_cell_count": 5682
+        },
+        "t480": {
+          "changed_cell_count": 74,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 74,
+          "unchanged_cell_count": 5726
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "high_intensity_appliance_fire",
@@ -353605,25 +354753,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -353634,6 +354782,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 183,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 183,
+          "unchanged_cell_count": 5617
+        },
+        "t420": {
+          "changed_cell_count": 153,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 153,
+          "unchanged_cell_count": 5647
+        },
+        "t480": {
+          "changed_cell_count": 94,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 94,
+          "unchanged_cell_count": 5706
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "high_intensity_appliance_fire",
@@ -356927,25 +358103,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -356956,6 +358132,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 186,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 186,
+          "unchanged_cell_count": 5614
+        },
+        "t420": {
+          "changed_cell_count": 118,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 118,
+          "unchanged_cell_count": 5682
+        },
+        "t480": {
+          "changed_cell_count": 74,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 74,
+          "unchanged_cell_count": 5726
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "high_intensity_appliance_fire",
@@ -360273,25 +361477,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -360302,6 +361506,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 186,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 186,
+          "unchanged_cell_count": 5614
+        },
+        "t420": {
+          "changed_cell_count": 118,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 118,
+          "unchanged_cell_count": 5682
+        },
+        "t480": {
+          "changed_cell_count": 74,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 74,
+          "unchanged_cell_count": 5726
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "high_intensity_appliance_fire",
@@ -363630,25 +364862,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -363659,6 +364891,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 368,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 368,
+          "unchanged_cell_count": 5432
+        },
+        "t420": {
+          "changed_cell_count": 337,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 337,
+          "unchanged_cell_count": 5463
+        },
+        "t480": {
+          "changed_cell_count": 148,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 148,
+          "unchanged_cell_count": 5652
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "high_intensity_appliance_fire",
@@ -367459,25 +368719,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -367488,6 +368748,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 374,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 374,
+          "unchanged_cell_count": 5426
+        },
+        "t420": {
+          "changed_cell_count": 226,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 226,
+          "unchanged_cell_count": 5574
+        },
+        "t480": {
+          "changed_cell_count": 141,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 141,
+          "unchanged_cell_count": 5659
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "high_intensity_appliance_fire",
@@ -371085,25 +372373,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -371114,6 +372402,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 223,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 223,
+          "unchanged_cell_count": 5577
+        },
+        "t420": {
+          "changed_cell_count": 164,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 164,
+          "unchanged_cell_count": 5636
+        },
+        "t480": {
+          "changed_cell_count": 103,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 103,
+          "unchanged_cell_count": 5697
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "high_intensity_appliance_fire",
@@ -374488,25 +375804,25 @@
             "upper_bound": 0.05
           },
           {
-            "color": "#FFFFBF",
+            "color": "#ABD9E9",
             "id": "elevated",
             "index": 1,
             "upper_bound": 0.2
           },
           {
-            "color": "#FDAE61",
+            "color": "#FFFFBF",
             "id": "high",
             "index": 2,
             "upper_bound": 0.4
           },
           {
-            "color": "#D7191C",
+            "color": "#FDAE61",
             "id": "critical",
             "index": 3,
             "upper_bound": 0.7
           },
           {
-            "color": "#6A00A8",
+            "color": "#D7191C",
             "id": "extreme",
             "index": 4,
             "upper_bound": null
@@ -374517,6 +375833,34 @@
           50,
           160
         ]
+      },
+      "risk_level_change_from_previous_time": {
+        "t300": null,
+        "t360": {
+          "changed_cell_count": 519,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 519,
+          "unchanged_cell_count": 5281
+        },
+        "t420": {
+          "changed_cell_count": 357,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 357,
+          "unchanged_cell_count": 5443
+        },
+        "t480": {
+          "changed_cell_count": 205,
+          "decreased_risk_cell_count": 0,
+          "increased_risk_cell_count": 205,
+          "unchanged_cell_count": 5595
+        }
+      },
+      "risk_map_provenance": {
+        "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        "field_source": "posterior_weighted_candidate_ensemble_forecast",
+        "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+        "ground_truth_used_to_construct_map": false,
+        "temporal_semantics": "independent posterior forecast level grid at each configured forecast time"
       },
       "route_outcome": "posterior_no_feasible_ingress",
       "scenario_id": "high_intensity_appliance_fire",

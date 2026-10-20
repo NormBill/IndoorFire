@@ -623,6 +623,13 @@ def run_p8_v2_case(context: P8V2Context, scenario_id: str, observation_time_s: f
             "posterior_better": posterior_error < prior_error,
         },
         "forecast_exposure_semantics": "simulation planning index; not certified firefighter safety or physiological exposure",
+        "risk_map_provenance": {
+            "field_source": "posterior_weighted_candidate_ensemble_forecast",
+            "ground_truth_used_to_construct_map": False,
+            "ground_truth_role": "synthetic observation generation and forecast-error evaluation only",
+            "temporal_semantics": "independent posterior forecast level grid at each configured forecast time",
+            "aggregation": "maximum normalized severity across temperature, co, smoke, and visibility",
+        },
         "planning_field_semantics": {
             "aggregation": "cellwise_maximum_across_forecast_times",
             "definition": "planning_exposure_envelope = max(exposure_t300, exposure_t360, exposure_t420, exposure_t480)",
@@ -650,6 +657,7 @@ def run_p8_v2_case(context: P8V2Context, scenario_id: str, observation_time_s: f
         "transport_only_component_count": 0,
         "unexpected_disconnected_component_count": 0,
         "exposure_change_from_previous_time": {},
+        "risk_level_change_from_previous_time": {},
         "corridor_semantics": "bidirectional physical corridor; arrow orientation retained only as evacuation metadata",
         "ugv_approach": _route_dict(approach),
         "prior_ingress": _ingress_dict(prior_plan),
@@ -681,6 +689,7 @@ def run_p8_v2_case(context: P8V2Context, scenario_id: str, observation_time_s: f
     arrays["primary_source_mask"] = source_mask
     arrays["secondary_ignition_mask"] = np.zeros(shape, dtype=np.uint8)
     previous_exposure: NDArray[np.float64] | None = None
+    previous_risk_levels: NDArray[np.int8] | None = None
     for time_s in parameters.forecast_times_s:
         key = f"t{time_s:g}"
         arrays[f"truth_temperature_{key}"] = reference[time_s].temperature
@@ -722,14 +731,25 @@ def run_p8_v2_case(context: P8V2Context, scenario_id: str, observation_time_s: f
         ]
         if previous_exposure is None:
             summary["exposure_change_from_previous_time"][key] = None
+            summary["risk_level_change_from_previous_time"][key] = None
         else:
+            assert previous_risk_levels is not None
             difference = np.abs(exposure - previous_exposure)
             summary["exposure_change_from_previous_time"][key] = {
                 "mean_absolute_change": float(np.mean(difference)),
                 "max_absolute_change": float(np.max(difference)),
                 "changed_cell_count": int(np.count_nonzero(difference > 1e-12)),
             }
+            comparable = (risk_levels >= 0) & (previous_risk_levels >= 0)
+            level_delta = risk_levels.astype(np.int16) - previous_risk_levels.astype(np.int16)
+            summary["risk_level_change_from_previous_time"][key] = {
+                "changed_cell_count": int(np.count_nonzero(comparable & (level_delta != 0))),
+                "increased_risk_cell_count": int(np.count_nonzero(comparable & (level_delta > 0))),
+                "decreased_risk_cell_count": int(np.count_nonzero(comparable & (level_delta < 0))),
+                "unchanged_cell_count": int(np.count_nonzero(comparable & (level_delta == 0))),
+            }
         previous_exposure = np.array(exposure, copy=True)
+        previous_risk_levels = np.array(risk_levels, copy=True)
     summary["model_validation_status"] = (
         "passed"
         if summary["unexpected_disconnected_component_count"] == 0

@@ -57,10 +57,10 @@
   },
   "forecast_exposure_levels": [
     {"id": "minimal", "upper_bound": 0.05, "color": "#2C7BB6"},
-    {"id": "elevated", "upper_bound": 0.20, "color": "#FFFFBF"},
-    {"id": "high", "upper_bound": 0.40, "color": "#FDAE61"},
-    {"id": "critical", "upper_bound": 0.70, "color": "#D7191C"},
-    {"id": "extreme", "upper_bound": null, "color": "#6A00A8"}
+    {"id": "elevated", "upper_bound": 0.20, "color": "#ABD9E9"},
+    {"id": "high", "upper_bound": 0.40, "color": "#FFFFBF"},
+    {"id": "critical", "upper_bound": 0.70, "color": "#FDAE61"},
+    {"id": "extreme", "upper_bound": null, "color": "#D7191C"}
   ],
   "random_seed": 20261016
 }

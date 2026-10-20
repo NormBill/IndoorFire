@@ -110,13 +110,17 @@ evacuation, detailed robot dynamics, and operational deployment are out of
 scope.
 
 The P8 v2 figures separate the only ignition source from transported exposure.
-At each forecast time all 8,000 cells in the 50-by-160 grid are rendered on a
-shared continuous `[0,1]` scale, with configured risk boundaries as contours.
-`forecast_exposure_evolution.svg` shows temporal evolution,
+`forecast_risk_level_grid.svg` is the primary full-map risk product: at each
+forecast time all 8,000 cells in the 50-by-160 registered grid are rendered,
+with every traversable cell assigned one configured posterior forecast risk
+level and every blocked cell explicitly hatched. `forecast_exposure_evolution.svg`
+retains the underlying continuous `[0,1]` exposure field on one fixed scale,
 `planning_envelope_and_ingress.svg` shows the cellwise worst-case forecast and
 routes, and `forecast_exposure_grid_diagnostic.svg` retains cell tooltips and
-component provenance. Colored cells indicate forecast exposure, never burning
-or secondary ignition. Threshold-disconnected islands are retained only when
+component provenance. These maps are constructed from posterior candidate-
+ensemble forecasts; the synthetic reference is used only for observations and
+error evaluation. Colored cells indicate forecast risk, never burning or
+secondary ignition. Threshold-disconnected islands are retained only when
 the unthresholded transport signals remain inside the microwave-connected
 no-flux transport domain; signal components outside that domain fail validation.
 

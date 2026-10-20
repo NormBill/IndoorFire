@@ -11,6 +11,7 @@ from indoor_fire_world.p8_v2_config import load_p8_v2_parameters
 from indoor_fire_world.planning import DirectedRoutePlanner, PlanningCostParameters
 from indoor_fire_world.simulation.p8_v2 import build_p8_v2_context, run_p8_v2_case
 from indoor_fire_world.visualization.svg import (
+    render_p8_v2_categorical_risk_svg,
     render_p8_v2_exposure_evolution_svg,
     render_p8_v2_grid_diagnostic_svg,
     render_p8_v2_planning_envelope_svg,
@@ -102,6 +103,27 @@ class P8V2Tests(unittest.TestCase):
             counts = self.case.summary["risk_grid"]["counts_by_forecast_time"][key]
             self.assertEqual(sum(counts.values()), expected_shape[0] * expected_shape[1])
 
+    def test_risk_levels_are_derived_from_posterior_forecast_only(self) -> None:
+        provenance = self.case.summary["risk_map_provenance"]
+        self.assertEqual(
+            provenance["field_source"],
+            "posterior_weighted_candidate_ensemble_forecast",
+        )
+        self.assertFalse(provenance["ground_truth_used_to_construct_map"])
+        bounds = [level.upper_bound for level in self.parameters.exposure_levels]
+        for time_s in self.parameters.forecast_times_s:
+            key = f"t{time_s:g}"
+            exposure = self.case.arrays[f"posterior_exposure_{key}"]
+            levels = self.case.arrays[f"posterior_risk_level_{key}"]
+            traversable = levels >= 0
+            expected = np.full(levels.shape, -1, dtype=np.int8)
+            remaining = traversable.copy()
+            for index, upper_bound in enumerate(bounds):
+                selected = remaining if upper_bound is None else remaining & (exposure <= upper_bound + 1e-12)
+                expected[selected] = index
+                remaining[selected] = False
+            np.testing.assert_array_equal(levels, expected)
+
     def test_continuous_fields_and_component_provenance_are_auditable(self) -> None:
         allowed = {"source_connected_exposure", "threshold_disconnected_transport_region"}
         self.assertEqual(self.case.summary["model_validation_status"], "passed")
@@ -138,17 +160,28 @@ class P8V2Tests(unittest.TestCase):
         for key in ("t360", "t420", "t480"):
             self.assertGreater(changes[key]["changed_cell_count"], 0)
             self.assertGreater(changes[key]["max_absolute_change"], 0.0)
+            transitions = self.case.summary["risk_level_change_from_previous_time"][key]
+            self.assertGreater(transitions["changed_cell_count"], 0)
+            self.assertEqual(
+                transitions["changed_cell_count"],
+                transitions["increased_risk_cell_count"] + transitions["decreased_risk_cell_count"],
+            )
 
     def test_visualizations_use_fixed_scale_and_render_every_cell(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
+            categorical = render_p8_v2_categorical_risk_svg(CONFIG, self.case.summary, self.case.arrays, root / "categorical.svg")
             evolution = render_p8_v2_exposure_evolution_svg(CONFIG, self.case.summary, self.case.arrays, root / "evolution.svg")
             planning = render_p8_v2_planning_envelope_svg(CONFIG, self.case.summary, self.case.arrays, root / "planning.svg")
             diagnostic = render_p8_v2_grid_diagnostic_svg(CONFIG, self.case.summary, self.case.arrays, root / "diagnostic.svg")
+            categorical_text = categorical.read_text(encoding="utf-8")
             evolution_text = evolution.read_text(encoding="utf-8")
             planning_text = planning.read_text(encoding="utf-8")
             diagnostic_text = diagnostic.read_text(encoding="utf-8")
             self.assertIn('data-fixed-color-scale="0:1"', evolution_text)
+            self.assertEqual(categorical_text.count('class="risk-level-cell"'), 4 * 50 * 160)
+            self.assertIn('data-risk-map-source="posterior_model_forecast"', categorical_text)
+            self.assertIn("not used to construct this risk map", categorical_text)
             self.assertEqual(evolution_text.count('class="registered-cell"'), 4 * 50 * 160)
             self.assertEqual(planning_text.count('class="registered-cell"'), 50 * 160)
             self.assertEqual(diagnostic_text.count('class="registered-cell"'), 50 * 160)
