@@ -62,6 +62,9 @@ class P8V2Parameters:
     dense_prediction_times_s: tuple[float, ...]
     pre_entry_visualization_times_s: tuple[float, ...]
     post_handoff_visualization_times_s: tuple[float, ...]
+    online_update_times_s: tuple[float, ...]
+    online_evaluation_times_s: tuple[float, ...]
+    online_visualization_times_s: tuple[float, ...]
     observation_points: tuple[ObservationPointSpec, ...]
     primary_observation_id: str
     primary_scenario_id: str
@@ -115,6 +118,29 @@ class P8V2Parameters:
             raise ValueError("P8 v2 pre-entry keyframes must be 60/100/180/300 s")
         if self.post_handoff_visualization_times_s != self.forecast_times_s:
             raise ValueError("Post-handoff keyframes must match configured forecast times")
+        if (
+            self.online_update_times_s[0] != 5.0
+            or self.online_update_times_s[-1] != 300.0
+            or any(
+                not math.isclose(b - a, 5.0, abs_tol=1e-9)
+                for a, b in zip(self.online_update_times_s, self.online_update_times_s[1:])
+            )
+        ):
+            raise ValueError("Online posterior updates must cover 5-300 s every 5 s")
+        if (
+            self.online_evaluation_times_s[0] != 0.0
+            or self.online_evaluation_times_s[-1] != 480.0
+            or any(
+                not math.isclose(b - a, 5.0, abs_tol=1e-9)
+                for a, b in zip(
+                    self.online_evaluation_times_s,
+                    self.online_evaluation_times_s[1:],
+                )
+            )
+        ):
+            raise ValueError("Online evaluation must cover 0-480 s every 5 s")
+        if self.online_visualization_times_s != (0.0, 30.0, 60.0, 100.0):
+            raise ValueError("Online visualization keyframes must be 0/30/60/100 s")
         if self.handoff_time_s != self.forecast_times_s[0]:
             raise ValueError("Handoff time must equal the first forecast time")
         if any(value > self.handoff_time_s for value in self.observation_times_s):
@@ -161,6 +187,7 @@ def load_p8_v2_parameters(config_path: str | Path) -> P8V2Parameters:
     root = path.parent
     clocks = data["clocks"]
     dense = data["dense_prediction"]
+    online = data["online_sequential_update"]
     sensor = data["sensor"]
     axes = data["candidate_ensemble"]
     planning = data["planning"]
@@ -175,6 +202,18 @@ def load_p8_v2_parameters(config_path: str | Path) -> P8V2Parameters:
     dense_times = tuple(dense_start + index * dense_interval for index in range(dense_count + 1))
     if not math.isclose(dense_times[-1], dense_end, abs_tol=1e-9):
         raise ValueError("Dense prediction interval must land exactly on end_s")
+    online_interval = float(online["update_interval_s"])
+    first_update = float(online["first_update_s"])
+    online_handoff = float(online["handoff_s"])
+    online_end = float(online["evaluation_end_s"])
+    if online_interval <= 0.0 or first_update <= 0.0 or online_handoff > online_end:
+        raise ValueError("Invalid online sequential update interval")
+    update_count = int(round((online_handoff - first_update) / online_interval))
+    online_update_times = tuple(
+        first_update + index * online_interval for index in range(update_count + 1)
+    )
+    evaluation_count = int(round(online_end / online_interval))
+    online_evaluation_times = tuple(index * online_interval for index in range(evaluation_count + 1))
     return P8V2Parameters(
         config_path=path,
         experiment_id=str(data["experiment_id"]),
@@ -200,6 +239,11 @@ def load_p8_v2_parameters(config_path: str | Path) -> P8V2Parameters:
         ),
         post_handoff_visualization_times_s=tuple(
             float(value) for value in dense["post_handoff_visualization_keyframes_s"]
+        ),
+        online_update_times_s=online_update_times,
+        online_evaluation_times_s=online_evaluation_times,
+        online_visualization_times_s=tuple(
+            float(value) for value in online["visualization_keyframes_s"]
         ),
         observation_points=tuple(
             ObservationPointSpec(str(item["id"]), (float(item["offset_m"][0]), float(item["offset_m"][1])))

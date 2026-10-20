@@ -587,12 +587,12 @@ def render_p8_v2_pre_entry_keyframes_svg(
     arrays: dict,
     output_path: str | Path,
 ) -> Path:
-    """Render sparse pre-entry keyframes from the dense causal prediction record."""
+    """Render 0/30/60/100 s keyframes from the online sequential record."""
     parameters, scene, registration, _, encoded = _p8_v2_visual_context(config_path)
     output = Path(output_path)
     output.parent.mkdir(parents=True, exist_ok=True)
-    dense_times = np.asarray(arrays["dense_prediction_times_s"], dtype=np.float64)
-    availability = np.asarray(arrays["dense_posterior_available"], dtype=np.bool_)
+    dense_times = np.asarray(arrays["online_evaluation_times_s"], dtype=np.float64)
+    availability = np.asarray(arrays["online_posterior_available"], dtype=np.bool_)
     panel_scale = 0.22
     panel_width = registration.source_width_px * panel_scale
     panel_height = registration.source_height_px * panel_scale
@@ -601,17 +601,17 @@ def render_p8_v2_pre_entry_keyframes_svg(
     height = int(panel_height * 3 + row_gap * 3 + 180)
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
-        f'viewBox="0 0 {width} {height}" data-time-semantics="pre_entry_sparse_keyframes_from_10s_dense_prediction">'
+        f'viewBox="0 0 {width} {height}" data-time-semantics="pre_entry_sparse_keyframes_from_5s_online_sequential_update">'
     ]
     parts.extend(_p8_v2_svg_defs(registration, encoded))
     parts.append('<rect width="100%" height="100%" fill="white"/>')
     rows = (
-        ("Synthetic reference", "dense_synthetic_reference_exposure", "dense_synthetic_reference_risk_level", "synthetic_reference_model"),
-        ("Physics prior", "dense_prior_exposure", "dense_prior_risk_level", "physics_prior"),
-        ("Observation-conditioned posterior", "dense_posterior_exposure", "dense_posterior_risk_level", "posterior_model_forecast"),
+        ("Synthetic reference", "online_synthetic_reference_exposure", "online_synthetic_reference_risk_level", "synthetic_reference_model"),
+        ("Physics prior", "online_prior_exposure", "online_prior_risk_level", "physics_prior"),
+        ("Sequential observation posterior", "online_posterior_exposure", "online_posterior_risk_level", "posterior_model_forecast"),
     )
     for row_index, (label, field_name, level_name, provenance) in enumerate(rows):
-        for column_index, time_s in enumerate(parameters.pre_entry_visualization_times_s):
+        for column_index, time_s in enumerate(parameters.online_visualization_times_s):
             matches = np.flatnonzero(np.isclose(dense_times, time_s))
             if len(matches) != 1:
                 raise ValueError("Pre-entry keyframe is missing from dense prediction times")
@@ -637,7 +637,7 @@ def render_p8_v2_pre_entry_keyframes_svg(
                     f'<text x="{registration.source_width_px/2:.1f}" '
                     f'y="{registration.source_height_px/2:.1f}" text-anchor="middle" '
                     'font-family="sans-serif" font-size="54" font-weight="bold" fill="#555">'
-                    f'Unavailable before observation at t={summary["observation_time_s"]:g} s</text>'
+                    'Unavailable at t=0 (no UGV observation yet)</text>'
                 )
             else:
                 field = np.asarray(arrays[field_name][dense_index], dtype=np.float64)
@@ -657,11 +657,11 @@ def render_p8_v2_pre_entry_keyframes_svg(
     legend_y = panel_height * 3 + row_gap * 3 + 62
     parts.append(
         f'<text x="24" y="{legend_y}" font-family="sans-serif" font-size="16" '
-        'font-weight="bold">Sparse display only; underlying evaluation cadence is 10 s.</text>'
+        'font-weight="bold">Sparse display only; the UGV updates posterior weights every 5 s from t=5 s.</text>'
     )
     parts.append(
         f'<text x="24" y="{legend_y+32}" font-family="sans-serif" font-size="15">'
-        'Posterior panels are never backfilled before the independent case observation. All available panels share the same risk thresholds and registered grid.</text>'
+        'Only t=0 lacks a posterior. The 30/60/100 s panels accumulate all causal 5 s observations available by that time.</text>'
     )
     parts.append(
         f'<text x="24" y="{legend_y+62}" font-family="sans-serif" font-size="15">'
@@ -672,13 +672,13 @@ def render_p8_v2_pre_entry_keyframes_svg(
     return output.resolve()
 
 
-def render_p8_v2_dense_pre_entry_timeseries_svg(
+def render_p8_v2_online_pre_entry_timeseries_svg(
     config_path: str | Path,
     summary: dict,
     arrays: dict,
     output_path: str | Path,
 ) -> Path:
-    """Plot all 10 s pre-entry evaluations while keeping maps sparse."""
+    """Plot all 5 s online pre-entry updates while keeping maps sparse."""
     from indoor_fire_world.p8_v2_config import load_p8_v2_parameters
 
     parameters = load_p8_v2_parameters(config_path)
@@ -686,10 +686,10 @@ def render_p8_v2_dense_pre_entry_timeseries_svg(
     output.parent.mkdir(parents=True, exist_ok=True)
     records = [
         record
-        for record in summary["dense_prediction"]["records"]
+        for record in summary["online_sequential_prediction"]["records"]
         if record["time_s"] <= parameters.handoff_time_s
     ]
-    width, height = 1280, 720
+    width, height = 1280, 750
     left, right = 92.0, 1215.0
     top_a, bottom_a = 72.0, 315.0
     top_b, bottom_b = 405.0, 620.0
@@ -732,9 +732,9 @@ def render_p8_v2_dense_pre_entry_timeseries_svg(
 
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
-        f'viewBox="0 0 {width} {height}" data-dense-interval-s="10">',
+        f'viewBox="0 0 {width} {height}" data-online-update-interval-s="5">',
         '<rect width="100%" height="100%" fill="white"/>',
-        '<text x="640" y="34" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="bold">Dense pre-entry prediction record (10 s cadence)</text>',
+        '<text x="640" y="34" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="bold">Online pre-entry posterior updates (5 s cadence)</text>',
     ]
     for top, bottom, title in (
         (top_a, bottom_a, "Traversable cells above minimal exposure-risk"),
@@ -742,7 +742,7 @@ def render_p8_v2_dense_pre_entry_timeseries_svg(
     ):
         parts.append(f'<rect x="{left}" y="{top}" width="{right-left}" height="{bottom-top}" fill="#FAFAFA" stroke="#999"/>')
         parts.append(f'<text x="{left}" y="{top-12}" font-family="sans-serif" font-size="16" font-weight="bold">{title}</text>')
-        for tick in (60, 100, 140, 180, 220, 260, 300):
+        for tick in (0, 30, 60, 100, 140, 180, 240, 300):
             x = x_for(float(tick))
             parts.append(f'<line x1="{x:.2f}" y1="{top}" x2="{x:.2f}" y2="{bottom}" stroke="#E2E2E2"/>')
             parts.append(f'<text x="{x:.2f}" y="{bottom+22}" text-anchor="middle" font-family="sans-serif" font-size="13">{tick}</text>')
@@ -762,15 +762,15 @@ def render_p8_v2_dense_pre_entry_timeseries_svg(
             f'<polyline points="{polyline(posterior_mae, top_b, bottom_b, max_mae)}" fill="none" stroke="#CC79A7" stroke-width="4"/>',
         ]
     )
-    observation_x = x_for(float(summary["observation_time_s"]))
+    observation_x = x_for(5.0)
     parts.append(f'<line x1="{observation_x:.2f}" y1="{top_a}" x2="{observation_x:.2f}" y2="{bottom_b}" stroke="#D55E00" stroke-width="3" stroke-dasharray="7 5"/>')
-    parts.append(f'<text x="{observation_x+8:.2f}" y="{top_a+20}" font-family="sans-serif" font-size="14" font-weight="bold" fill="#D55E00">UGV observation</text>')
+    parts.append(f'<text x="{observation_x+8:.2f}" y="{top_a+20}" font-family="sans-serif" font-size="14" font-weight="bold" fill="#D55E00">First UGV update; then every 5 s</text>')
     parts.extend(
         [
             '<line x1="92" y1="675" x2="142" y2="675" stroke="#000" stroke-width="4"/><text x="152" y="680" font-family="sans-serif" font-size="14">Synthetic reference</text>',
             '<line x1="340" y1="675" x2="390" y2="675" stroke="#56B4E9" stroke-width="4" stroke-dasharray="10 7"/><text x="400" y="680" font-family="sans-serif" font-size="14">Physics prior</text>',
-            '<line x1="570" y1="675" x2="620" y2="675" stroke="#CC79A7" stroke-width="4"/><text x="630" y="680" font-family="sans-serif" font-size="14">Posterior (available only after observation)</text>',
-            '<text x="1215" y="680" text-anchor="end" font-family="sans-serif" font-size="13">Simulation reference, not measured W1 ground truth</text>',
+            '<line x1="570" y1="675" x2="620" y2="675" stroke="#CC79A7" stroke-width="4"/><text x="630" y="680" font-family="sans-serif" font-size="14">Sequential posterior (available from t=5 s)</text>',
+            '<text x="92" y="720" font-family="sans-serif" font-size="13">Simulation reference, not measured W1 ground truth. Lines use the same fixed risk thresholds at every time.</text>',
             '</svg>',
         ]
     )

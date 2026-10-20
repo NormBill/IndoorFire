@@ -127,6 +127,7 @@ def build_p8_v2_context(config_path: str | Path) -> P8V2Context:
                 parameters.observation_times_s
                 + parameters.forecast_times_s
                 + parameters.dense_prediction_times_s
+                + parameters.online_evaluation_times_s
             )
         )
     )
@@ -1064,3 +1065,179 @@ def attach_dense_prediction_evaluation(
         primary_posterior_levels
     )
     return tuple(dense_rows)
+
+
+def attach_online_sequential_evaluation(
+    context: P8V2Context,
+    primary: P8V2CaseOutput,
+) -> tuple[dict[str, Any], ...]:
+    """Run the primary pre-entry track with a new Bayesian update every 5 s."""
+    scenario_id = str(primary.summary["scenario_id"])
+    point_id = str(primary.summary["observation_point"]["id"])
+    point = next(item for item in context.points if item.id == point_id)
+    reference = context.reference_banks[scenario_id]
+    candidate_ids = tuple(item.id for item in context.candidates)
+    weights = np.full(len(candidate_ids), 1.0 / len(candidate_ids), dtype=np.float64)
+    uniform = np.array(weights, copy=True)
+    update_times = set(context.parameters.online_update_times_s)
+    seed_payload = f"{context.parameters.random_seed}:online:{scenario_id}:{point_id}"
+    seed = int(hashlib.sha256(seed_payload.encode()).hexdigest()[:8], 16)
+    sensor = UGVSensor(context.scene, context.parameters.sensor, seed)
+    hazard_model = PhysicalHazardModel(
+        load_hazard_parameters(context.parameters.hazard_config)
+    )
+    shape = (
+        context.scene.occupancy.geometry.rows,
+        context.scene.occupancy.geometry.cols,
+    )
+    rows: list[dict[str, Any]] = []
+    records: list[dict[str, Any]] = []
+    prior_fields: list[NDArray[np.float64]] = []
+    reference_fields: list[NDArray[np.float64]] = []
+    posterior_fields: list[NDArray[np.float64]] = []
+    prior_levels_all: list[NDArray[np.int8]] = []
+    reference_levels_all: list[NDArray[np.int8]] = []
+    posterior_levels_all: list[NDArray[np.int8]] = []
+    availability: list[bool] = []
+    update_applied: list[bool] = []
+
+    for time_s in context.parameters.online_evaluation_times_s:
+        prior_forecast = weighted_forecast(
+            context.candidates, context.candidate_bank, time_s, uniform
+        )
+        prior_hazard = hazard_model.compute(prior_forecast.mean)
+        prior_levels, prior_counts = _risk_level_grid(context, prior_hazard.field)
+        reference_hazard = hazard_model.compute(
+            BeliefMean.from_fire_field(reference[time_s])
+        )
+        reference_levels, reference_counts = _risk_level_grid(
+            context, reference_hazard.field
+        )
+        applied = time_s in update_times
+        if applied:
+            observation = sensor.observe(reference[time_s], point.pose)
+            observation = replace(observation, timestamp=time_s)
+            likelihood = posterior_weights(
+                context.candidates,
+                context.candidate_bank,
+                observation,
+                point.cell,
+                context.parameters.sensor,
+            )
+            weights = weights * np.maximum(likelihood, np.finfo(np.float64).tiny)
+            weights /= float(np.sum(weights))
+
+        posterior_available = time_s > 0.0
+        posterior_hazard: HazardResult | None = None
+        posterior_levels: NDArray[np.int8] | None = None
+        posterior_counts: dict[str, int] | None = None
+        if posterior_available:
+            posterior_forecast = weighted_forecast(
+                context.candidates, context.candidate_bank, time_s, weights
+            )
+            posterior_hazard = hazard_model.compute(posterior_forecast.mean)
+            posterior_levels, posterior_counts = _risk_level_grid(
+                context, posterior_hazard.field
+            )
+
+        posterior_mae = None
+        if posterior_hazard is not None:
+            posterior_mae = float(
+                np.mean(np.abs(posterior_hazard.field - reference_hazard.field))
+            )
+        record = {
+            "time_s": time_s,
+            "phase": "pre_entry"
+            if time_s <= context.parameters.handoff_time_s
+            else "post_handoff_forecast",
+            "posterior_available": posterior_available,
+            "posterior_unavailable_reason": None
+            if posterior_available
+            else "no_observation_at_initial_state",
+            "sequential_update_applied": applied,
+            "cumulative_observation_count": int(
+                min(
+                    len(context.parameters.online_update_times_s),
+                    math.floor(time_s / 5.0 + 1e-12),
+                )
+            ),
+            "posterior_weight_hash": None
+            if not posterior_available
+            else hashlib.sha256(weights.tobytes()).hexdigest(),
+            "posterior_effective_sample_size": None
+            if not posterior_available
+            else float(1.0 / np.sum(weights**2)),
+            "prior_reference_exposure_mae": float(
+                np.mean(np.abs(prior_hazard.field - reference_hazard.field))
+            ),
+            "posterior_reference_exposure_mae": posterior_mae,
+            "prior_risk_level_counts": prior_counts,
+            "synthetic_reference_risk_level_counts": reference_counts,
+            "posterior_risk_level_counts": posterior_counts,
+        }
+        records.append(record)
+        flat = {
+            name: value
+            for name, value in record.items()
+            if not name.endswith("_risk_level_counts")
+        }
+        flat.update({"scenario_id": scenario_id, "observation_id": point_id})
+        for source_name, counts_name in (
+            ("prior", "prior_risk_level_counts"),
+            ("reference", "synthetic_reference_risk_level_counts"),
+            ("posterior", "posterior_risk_level_counts"),
+        ):
+            counts = record[counts_name]
+            for level in context.parameters.exposure_levels:
+                flat[f"{source_name}_{level.id}_cell_count"] = (
+                    None if counts is None else counts[level.id]
+                )
+        rows.append(flat)
+        prior_fields.append(np.asarray(prior_hazard.field))
+        reference_fields.append(np.asarray(reference_hazard.field))
+        prior_levels_all.append(np.asarray(prior_levels))
+        reference_levels_all.append(np.asarray(reference_levels))
+        availability.append(posterior_available)
+        update_applied.append(applied)
+        if posterior_hazard is None or posterior_levels is None:
+            posterior_fields.append(np.full(shape, np.nan, dtype=np.float64))
+            posterior_levels_all.append(np.full(shape, -3, dtype=np.int8))
+        else:
+            posterior_fields.append(np.asarray(posterior_hazard.field))
+            posterior_levels_all.append(np.asarray(posterior_levels))
+
+    primary.summary["online_sequential_prediction"] = {
+        "update_interval_s": 5.0,
+        "first_update_s": 5.0,
+        "last_pre_entry_update_s": context.parameters.handoff_time_s,
+        "posterior_availability_rule": "unavailable only at t=0; first observation and posterior update occur at t=5 s",
+        "post_handoff_semantics": "hold the t=300 s posterior weights fixed for no-intervention forecasting",
+        "observation_point_id": point_id,
+        "observation_point_provenance": "registered_geometry_only",
+        "visualization_keyframes_s": list(
+            context.parameters.online_visualization_times_s
+        ),
+        "records": records,
+    }
+    primary.arrays["online_evaluation_times_s"] = np.asarray(
+        context.parameters.online_evaluation_times_s, dtype=np.float64
+    )
+    primary.arrays["online_posterior_available"] = np.asarray(
+        availability, dtype=np.bool_
+    )
+    primary.arrays["online_update_applied"] = np.asarray(
+        update_applied, dtype=np.bool_
+    )
+    primary.arrays["online_prior_exposure"] = np.stack(prior_fields)
+    primary.arrays["online_synthetic_reference_exposure"] = np.stack(
+        reference_fields
+    )
+    primary.arrays["online_posterior_exposure"] = np.stack(posterior_fields)
+    primary.arrays["online_prior_risk_level"] = np.stack(prior_levels_all)
+    primary.arrays["online_synthetic_reference_risk_level"] = np.stack(
+        reference_levels_all
+    )
+    primary.arrays["online_posterior_risk_level"] = np.stack(
+        posterior_levels_all
+    )
+    return tuple(rows)

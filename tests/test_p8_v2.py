@@ -11,12 +11,13 @@ from indoor_fire_world.p8_v2_config import load_p8_v2_parameters
 from indoor_fire_world.planning import DirectedRoutePlanner, PlanningCostParameters
 from indoor_fire_world.simulation.p8_v2 import (
     attach_dense_prediction_evaluation,
+    attach_online_sequential_evaluation,
     build_p8_v2_context,
     run_p8_v2_case,
 )
 from indoor_fire_world.visualization.svg import (
     render_p8_v2_categorical_risk_svg,
-    render_p8_v2_dense_pre_entry_timeseries_svg,
+    render_p8_v2_online_pre_entry_timeseries_svg,
     render_p8_v2_exposure_evolution_svg,
     render_p8_v2_grid_diagnostic_svg,
     render_p8_v2_planning_envelope_svg,
@@ -52,6 +53,10 @@ class P8V2Tests(unittest.TestCase):
             {"primary": cls.dense_case},
             "primary",
         )
+        cls.online_rows = attach_online_sequential_evaluation(
+            cls.context,
+            cls.dense_case,
+        )
 
     def test_fixed_experiment_matrix_contract(self) -> None:
         self.assertEqual(len(self.parameters.scenarios), 3)
@@ -73,6 +78,14 @@ class P8V2Tests(unittest.TestCase):
         self.assertEqual(
             self.parameters.pre_entry_visualization_times_s,
             (60.0, 100.0, 180.0, 300.0),
+        )
+        self.assertEqual(len(self.parameters.online_update_times_s), 60)
+        self.assertEqual(self.parameters.online_update_times_s[:2], (5.0, 10.0))
+        self.assertEqual(self.parameters.online_update_times_s[-1], 300.0)
+        self.assertEqual(len(self.parameters.online_evaluation_times_s), 97)
+        self.assertEqual(
+            self.parameters.online_visualization_times_s,
+            (0.0, 30.0, 60.0, 100.0),
         )
         self.assertEqual([item.id for item in self.parameters.exposure_levels], ["minimal", "elevated", "high", "critical", "extreme"])
         self.assertEqual(
@@ -274,7 +287,7 @@ class P8V2Tests(unittest.TestCase):
                 self.dense_case.arrays,
                 root / "keyframes.svg",
             )
-            time_series = render_p8_v2_dense_pre_entry_timeseries_svg(
+            time_series = render_p8_v2_online_pre_entry_timeseries_svg(
                 CONFIG,
                 self.dense_case.summary,
                 self.dense_case.arrays,
@@ -283,11 +296,31 @@ class P8V2Tests(unittest.TestCase):
             keyframe_text = keyframes.read_text(encoding="utf-8")
             time_series_text = time_series.read_text(encoding="utf-8")
             self.assertEqual(keyframe_text.count('class="risk-level-cell"'), 11 * 50 * 160)
-            self.assertIn("Unavailable before observation at t=100 s", keyframe_text)
-            self.assertIn("underlying evaluation cadence is 10 s", keyframe_text)
-            self.assertIn('data-dense-interval-s="10"', time_series_text)
-            self.assertIn("UGV observation", time_series_text)
-            self.assertIn("Posterior (available only after observation)", time_series_text)
+            self.assertIn("Unavailable at t=0", keyframe_text)
+            self.assertIn("updates posterior weights every 5 s", keyframe_text)
+            self.assertIn('data-online-update-interval-s="5"', time_series_text)
+            self.assertIn("First UGV update; then every 5 s", time_series_text)
+            self.assertIn("Sequential posterior (available from t=5 s)", time_series_text)
+
+    def test_online_track_updates_every_five_seconds_after_prior_only_t0(self) -> None:
+        records = self.dense_case.summary["online_sequential_prediction"]["records"]
+        self.assertEqual(len(records), 97)
+        self.assertEqual(len(self.online_rows), 97)
+        self.assertFalse(records[0]["posterior_available"])
+        self.assertFalse(records[0]["sequential_update_applied"])
+        self.assertIsNone(records[0]["posterior_weight_hash"])
+        self.assertTrue(all(record["posterior_available"] for record in records[1:]))
+        self.assertTrue(all(record["sequential_update_applied"] for record in records[1:61]))
+        self.assertTrue(all(not record["sequential_update_applied"] for record in records[61:]))
+        self.assertEqual(records[6]["time_s"], 30.0)
+        self.assertEqual(records[6]["cumulative_observation_count"], 6)
+        self.assertEqual(records[12]["time_s"], 60.0)
+        self.assertEqual(records[12]["cumulative_observation_count"], 12)
+        self.assertEqual(records[20]["time_s"], 100.0)
+        self.assertEqual(records[20]["cumulative_observation_count"], 20)
+        self.assertTrue(np.all(np.isnan(self.dense_case.arrays["online_posterior_exposure"][0])))
+        self.assertTrue(np.all(np.isfinite(self.dense_case.arrays["online_posterior_exposure"][1:])))
+        self.assertTrue(np.all(self.dense_case.arrays["online_posterior_risk_level"][0] == -3))
 
     def test_enhanced_spread_profile_has_material_temporal_growth(self) -> None:
         counts = self.case.summary["risk_grid"]["counts_by_forecast_time"]

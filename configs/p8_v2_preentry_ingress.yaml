@@ -39,6 +39,14 @@
     "post_handoff_visualization_keyframes_s": [300.0, 360.0, 420.0, 480.0],
     "posterior_availability": "available only at and after each independent case observation time"
   },
+  "online_sequential_update": {
+    "first_update_s": 5.0,
+    "handoff_s": 300.0,
+    "update_interval_s": 5.0,
+    "evaluation_end_s": 480.0,
+    "visualization_keyframes_s": [0.0, 30.0, 60.0, 100.0],
+    "semantics": "t=0 is prior-only; each 5 s pre-entry observation recursively updates posterior weights; post-handoff forecasts hold the t=300 posterior fixed"
+  },
   "observation_points": {
     "selection_provenance": "registered_geometry_only_frozen_before_reference",
     "primary_id": "geometry_route_high",

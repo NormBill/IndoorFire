@@ -13,12 +13,13 @@ import numpy as np
 from indoor_fire_world.simulation.p8_v2 import (
     P8V2CaseOutput,
     attach_dense_prediction_evaluation,
+    attach_online_sequential_evaluation,
     build_p8_v2_context,
     run_p8_v2_case,
 )
 from indoor_fire_world.visualization.svg import (
     render_p8_v2_categorical_risk_svg,
-    render_p8_v2_dense_pre_entry_timeseries_svg,
+    render_p8_v2_online_pre_entry_timeseries_svg,
     render_p8_v2_exposure_evolution_svg,
     render_p8_v2_forecast_svg,
     render_p8_v2_grid_diagnostic_svg,
@@ -35,6 +36,7 @@ class P8V2SuiteOutput:
     rows: tuple[dict[str, Any], ...]
     primary: P8V2CaseOutput
     dense_rows: tuple[dict[str, Any], ...]
+    online_rows: tuple[dict[str, Any], ...]
 
 
 def _row(run_id: str, output: P8V2CaseOutput) -> dict[str, Any]:
@@ -86,6 +88,7 @@ def run_p8_v2_suite(config_path: str | Path) -> P8V2SuiteOutput:
     primary_id = f"{context.parameters.primary_scenario_id}-t100-{context.parameters.primary_observation_id}"
     dense_rows = attach_dense_prediction_evaluation(context, cases, primary_id)
     primary = cases[primary_id]
+    online_rows = attach_online_sequential_evaluation(context, primary)
     rows = tuple(_row(run_id, output) for run_id, output in cases.items())
     valid_rows = [row for row in rows if row["case_status"] == "valid"]
     improved_forecasts = sum(bool(row["posterior_forecast_better"]) for row in valid_rows)
@@ -144,9 +147,22 @@ def run_p8_v2_suite(config_path: str | Path) -> P8V2SuiteOutput:
             "posterior_availability_rule": "time_s >= independent_case_observation_time_s",
             "no_retrodictive_backfill": True,
         },
+        "online_sequential_update": {
+            "first_update_s": context.parameters.online_update_times_s[0],
+            "last_pre_entry_update_s": context.parameters.online_update_times_s[-1],
+            "update_interval_s": 5.0,
+            "evaluation_time_count": len(
+                context.parameters.online_evaluation_times_s
+            ),
+            "visualization_keyframes_s": list(
+                context.parameters.online_visualization_times_s
+            ),
+            "posterior_availability_rule": "unavailable only at t=0; recursively updated every 5 s from t=5 through t=300",
+            "post_handoff_semantics": "t=300 posterior held fixed for forecasts through t=480",
+        },
         "cases": {run_id: output.summary for run_id, output in cases.items()},
     }
-    return P8V2SuiteOutput(summary, rows, primary, dense_rows)
+    return P8V2SuiteOutput(summary, rows, primary, dense_rows, online_rows)
 
 
 def write_p8_v2_artifacts(output: P8V2SuiteOutput, config_path: str | Path, target_directory: str | Path) -> dict[str, Path]:
@@ -164,6 +180,11 @@ def write_p8_v2_artifacts(output: P8V2SuiteOutput, config_path: str | Path, targ
         writer = csv.DictWriter(stream, fieldnames=list(output.dense_rows[0]))
         writer.writeheader()
         writer.writerows(output.dense_rows)
+    online_matrix_path = target / "online_sequential_timeseries.csv"
+    with online_matrix_path.open("w", newline="", encoding="utf-8") as stream:
+        writer = csv.DictWriter(stream, fieldnames=list(output.online_rows[0]))
+        writer.writeheader()
+        writer.writerows(output.online_rows)
     arrays_path = target / "arrays.npz"
     np.savez_compressed(arrays_path, **output.primary.arrays)
     figure_path = render_p8_v2_forecast_svg(config_path, output.primary.summary, output.primary.arrays, target / "forecast_exposure_and_ingress.svg")
@@ -209,11 +230,11 @@ def write_p8_v2_artifacts(output: P8V2SuiteOutput, config_path: str | Path, targ
         output.primary.arrays,
         target / "pre_entry_risk_keyframes.svg",
     )
-    dense_pre_entry_timeseries_path = render_p8_v2_dense_pre_entry_timeseries_svg(
+    online_pre_entry_timeseries_path = render_p8_v2_online_pre_entry_timeseries_svg(
         config_path,
         output.primary.summary,
         output.primary.arrays,
-        target / "dense_pre_entry_risk_timeseries.svg",
+        target / "online_pre_entry_risk_timeseries.svg",
     )
     manifest_path = target / "fds_manifest.json"
     manifest_path.write_text(json.dumps({
@@ -227,6 +248,7 @@ def write_p8_v2_artifacts(output: P8V2SuiteOutput, config_path: str | Path, targ
         "summary": summary_path.resolve(),
         "matrix": matrix_path.resolve(),
         "dense_prediction_timeseries": dense_matrix_path.resolve(),
+        "online_sequential_timeseries": online_matrix_path.resolve(),
         "arrays": arrays_path.resolve(),
         "visualization": figure_path,
         "categorical_risk_map": categorical_risk_path,
@@ -236,6 +258,6 @@ def write_p8_v2_artifacts(output: P8V2SuiteOutput, config_path: str | Path, targ
         "synthetic_reference_risk_map": reference_risk_path,
         "posterior_reference_comparison": comparison_path,
         "pre_entry_risk_keyframes": pre_entry_keyframes_path,
-        "dense_pre_entry_risk_timeseries": dense_pre_entry_timeseries_path,
+        "online_pre_entry_risk_timeseries": online_pre_entry_timeseries_path,
         "fds_manifest": manifest_path.resolve(),
     }

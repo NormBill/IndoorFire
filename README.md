@@ -51,8 +51,9 @@ CSV results under `artifacts/p7/`.
 P8 writes its 4-by-4 registered-map snapshot matrix, primary-case arrays, a
 three-panel registered overlay, and separate prior, posterior, and delta risk
 maps under `artifacts/p8_registered_closed_loop/`.
-P8 v2 writes its 3-by-4-by-4 synthetic-reference matrix, 10 s dense prediction
-records, fixed-scale exposure maps, and firefighter ingress comparison under
+P8 v2 writes its 3-by-4-by-4 synthetic-reference matrix, a 5 s online update
+track, supplementary 10 s independent-case records, fixed-scale exposure maps,
+and firefighter ingress comparison under
 `artifacts/p8_v2_preentry_ingress/`.
 
 ## Current scope
@@ -78,15 +79,15 @@ three configurable synthetic fire branches, four geometry-frozen observation
 points, four observation times, and forecasts at 300/360/420/480 s. The 300 s
 handoff is a simulation boundary, not a W1 response-time claim.
 
-Prediction evaluation is intentionally more frequent than map presentation.
-Every independent case is evaluated every 10 s from 60 through 480 s (43
-timestamps, including 25 through the 300 s pre-entry handoff). Prior and
-synthetic-reference fields exist throughout that range. The posterior for a
-case starts only at its own observation time; no later UGV observation is
-backfilled into earlier timestamps. These are independent one-observation
-experiments, not sequential multi-observation fusion or a time-coupled robot-
-fire simulation. The underlying fire solver still uses its much smaller
-configured integration timestep; 10 s is an output/evaluation cadence.
+Prediction and posterior updating are intentionally more frequent than map
+presentation. The primary online track starts with a prior-only state at t=0,
+then assimilates a new synthetic UGV observation every 5 s from t=5 through
+the 300 s pre-entry handoff. The t=300 posterior weights are held fixed for
+no-intervention forecasts through 480 s. The four displayed maps at
+0/30/60/100 s are sparse views of this 5 s sequence: only t=0 lacks a
+posterior. This remains snapshot sensing at a frozen registered observation
+point, not a time-coupled robot-motion model. The original 3-by-4-by-4
+single-observation matrix is retained as an isolated causal comparison.
 
 All three branches retain one microwave-origin primary source. They vary only
 synthetic HRR, yield, and ventilation assumptions; cable propagation and
@@ -120,12 +121,12 @@ evacuation, detailed robot dynamics, and operational deployment are out of
 scope.
 
 The P8 v2 figures separate the only ignition source from transported exposure.
-`pre_entry_risk_keyframes.svg` presents only 60/100/180/300 s reference, prior,
-and causally available posterior maps, while
-`dense_pre_entry_risk_timeseries.svg` shows every 10 s pre-entry evaluation as
+`pre_entry_risk_keyframes.svg` presents only 0/30/60/100 s reference, prior,
+and causally available sequential-posterior maps, while
+`online_pre_entry_risk_timeseries.svg` shows every 5 s pre-entry update as
 risk-area and forecast-error curves. Thus the paper-facing visualization stays
 readable without discarding the denser machine-readable evidence in
-`dense_prediction_timeseries.csv` and `arrays.npz`.
+`online_sequential_timeseries.csv` and `arrays.npz`.
 `forecast_risk_level_grid.svg` is the primary full-map risk product: at each
 forecast time all 8,000 cells in the 50-by-160 registered grid are rendered,
 with every traversable cell assigned one configured posterior forecast risk
