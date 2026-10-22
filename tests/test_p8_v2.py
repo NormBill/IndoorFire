@@ -18,12 +18,14 @@ from indoor_fire_world.simulation.p8_v2 import (
 from indoor_fire_world.visualization.svg import (
     render_p8_v2_categorical_risk_svg,
     render_p8_v2_online_pre_entry_timeseries_svg,
+    render_p8_v2_online_risk_map_svg,
     render_p8_v2_exposure_evolution_svg,
     render_p8_v2_grid_diagnostic_svg,
     render_p8_v2_planning_envelope_svg,
     render_p8_v2_posterior_reference_comparison_svg,
     render_p8_v2_pre_entry_keyframes_svg,
     render_p8_v2_synthetic_reference_risk_svg,
+    render_p8_v2_t300_three_entrance_ingress_svg,
 )
 
 
@@ -321,6 +323,70 @@ class P8V2Tests(unittest.TestCase):
         self.assertTrue(np.all(np.isnan(self.dense_case.arrays["online_posterior_exposure"][0])))
         self.assertTrue(np.all(np.isfinite(self.dense_case.arrays["online_posterior_exposure"][1:])))
         self.assertTrue(np.all(self.dense_case.arrays["online_posterior_risk_level"][0] == -3))
+
+    def test_t300_compares_all_entrances_on_one_posterior_snapshot(self) -> None:
+        result = self.dense_case.summary["online_ingress_at_t300"]
+        self.assertEqual(result["field_time_s"], 300.0)
+        self.assertIn("not the 300/360/420/480", result["field_semantics"])
+        self.assertEqual(result["target_node"], self.parameters.source_approach_target_node)
+        self.assertEqual(
+            result["strict_operational_status"],
+            "no_route_meets_configured_exposure_threshold",
+        )
+        self.assertFalse(result["strict_operational_plan"]["feasible"])
+        candidates = result["comparative_routes"]["candidates"]
+        self.assertEqual(set(candidates), set(self.parameters.entrances))
+        feasible = {key: value for key, value in candidates.items() if value["feasible"]}
+        self.assertTrue(feasible)
+        for route in feasible.values():
+            path = tuple((item["row"], item["col"]) for item in route["path"])
+            self.assertTrue(self.context.graph.path_is_corridor_conformant(path))
+        expected_fastest = min(
+            feasible,
+            key=lambda key: (
+                feasible[key]["geometric_length_m"],
+                feasible[key]["total_cost"],
+                key,
+            ),
+        )
+        expected_safest = min(
+            feasible,
+            key=lambda key: (
+                feasible[key]["integrated_exposure"],
+                feasible[key]["max_exposure"],
+                feasible[key]["total_cost"],
+                key,
+            ),
+        )
+        self.assertEqual(result["fastest_entrance"], expected_fastest)
+        self.assertEqual(result["safest_entrance"], expected_safest)
+
+    def test_online_risk_map_and_t300_ingress_render_complete_grid(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            risk_map = render_p8_v2_online_risk_map_svg(
+                CONFIG,
+                self.dense_case.summary,
+                self.dense_case.arrays,
+                root / "risk.svg",
+            )
+            ingress = render_p8_v2_t300_three_entrance_ingress_svg(
+                CONFIG,
+                self.dense_case.summary,
+                self.dense_case.arrays,
+                root / "ingress.svg",
+            )
+            risk_text = risk_map.read_text(encoding="utf-8")
+            ingress_text = ingress.read_text(encoding="utf-8")
+            self.assertEqual(risk_text.count('class="risk-level-cell"'), 9 * 50 * 160)
+            self.assertIn('data-fixed-risk-thresholds="true"', risk_text)
+            self.assertIn('data-planning-time-s="300"', ingress_text)
+            self.assertEqual(ingress_text.count('class="risk-level-cell"'), 50 * 160)
+            feasible_count = sum(
+                route["feasible"]
+                for route in self.dense_case.summary["online_ingress_at_t300"]["comparative_routes"]["candidates"].values()
+            )
+            self.assertEqual(ingress_text.count('class="t300-ingress-route"'), feasible_count)
 
     def test_enhanced_spread_profile_has_material_temporal_growth(self) -> None:
         counts = self.case.summary["risk_grid"]["counts_by_forecast_time"]

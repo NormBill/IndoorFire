@@ -778,6 +778,241 @@ def render_p8_v2_online_pre_entry_timeseries_svg(
     return output.resolve()
 
 
+def render_p8_v2_online_risk_map_svg(
+    config_path: str | Path,
+    summary: dict,
+    arrays: dict,
+    output_path: str | Path,
+) -> Path:
+    """Render the complete 0-480 s story at nine sparse fixed-scale keyframes."""
+    parameters, scene, registration, _, encoded = _p8_v2_visual_context(config_path)
+    output = Path(output_path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    times = (0.0, 30.0, 60.0, 100.0, 180.0, 300.0, 360.0, 420.0, 480.0)
+    evaluation_times = np.asarray(arrays["online_evaluation_times_s"], dtype=np.float64)
+    scale = 0.245
+    panel_width = registration.source_width_px * scale
+    panel_height = registration.source_height_px * scale
+    title_gap = 36
+    width = int(panel_width * 3)
+    height = int((panel_height + title_gap) * 3 + 195)
+    parts = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+        f'viewBox="0 0 {width} {height}" data-risk-map-source="online_sequential_posterior" '
+        'data-fixed-risk-thresholds="true">'
+    ]
+    parts.extend(_p8_v2_svg_defs(registration, encoded))
+    parts.append('<rect width="100%" height="100%" fill="white"/>')
+    for panel_index, time_s in enumerate(times):
+        matches = np.flatnonzero(np.isclose(evaluation_times, time_s))
+        if len(matches) != 1:
+            raise ValueError(f"Online risk-map keyframe t={time_s:g} s is missing")
+        index = int(matches[0])
+        row, col = divmod(panel_index, 3)
+        offset_x = col * panel_width
+        offset_y = title_gap + row * (panel_height + title_gap)
+        if time_s == 0.0:
+            field = np.asarray(arrays["online_prior_exposure"][index], dtype=np.float64)
+            levels = np.asarray(arrays["online_prior_risk_level"][index], dtype=np.int8)
+            label = "t=0 s — physics prior only"
+            provenance = "physics_prior"
+        else:
+            field = np.asarray(arrays["online_posterior_exposure"][index], dtype=np.float64)
+            levels = np.asarray(arrays["online_posterior_risk_level"][index], dtype=np.int8)
+            label = f"t={time_s:g} s — sequential posterior"
+            provenance = "online_sequential_posterior"
+        parts.append(
+            f'<text x="{offset_x+panel_width/2:.1f}" y="{offset_y-10:.1f}" '
+            'text-anchor="middle" font-family="sans-serif" font-size="15" '
+            f'font-weight="bold">{label}</text>'
+        )
+        parts.append(
+            f'<g transform="translate({offset_x:.2f},{offset_y:.2f}) scale({scale})">'
+            '<use href="#p8v2-map" opacity="0.60"/>'
+        )
+        parts.extend(
+            _p8_v2_categorical_cells(
+                field,
+                levels,
+                parameters.exposure_levels,
+                scene,
+                registration,
+                provenance=provenance,
+            )
+        )
+        parts.append(_p8_v2_source_marker(scene, registration))
+        parts.append("</g>")
+    note_y = (panel_height + title_gap) * 3 + 35
+    parts.append(
+        f'<text x="24" y="{note_y:.1f}" font-family="sans-serif" font-size="16" font-weight="bold">'
+        'Primary decision horizon: 0–300 s. The 360/420/480 s panels are forecast margin only.</text>'
+    )
+    parts.append(
+        f'<text x="24" y="{note_y+30:.1f}" font-family="sans-serif" font-size="15">'
+        'Only t=0 lacks a posterior; updates occur every 5 s from t=5 through t=300. All panels use identical configured risk bands.</text>'
+    )
+    parts.append(
+        f'<text x="24" y="{note_y+60:.1f}" font-family="sans-serif" font-size="15">'
+        'Colored cells are model-predicted planning risk, not burning cells or certified firefighter-safety levels.</text>'
+    )
+    legend_y = note_y + 100
+    parts.append(
+        f'<text x="24" y="{legend_y+16:.1f}" font-family="sans-serif" font-size="14" font-weight="bold">Risk levels:</text>'
+    )
+    lower = 0.0
+    for level_index, level in enumerate(parameters.exposure_levels):
+        x = 125 + level_index * 210
+        if level.upper_bound is None:
+            band = f"> {lower:.2f}"
+        elif lower == 0.0:
+            band = f"0-{level.upper_bound:.2f}"
+        else:
+            band = f"{lower:.2f}-{level.upper_bound:.2f}"
+        parts.append(
+            f'<rect x="{x}" y="{legend_y:.1f}" width="24" height="20" fill="{level.color}" stroke="#333"/>'
+            f'<text x="{x+31}" y="{legend_y+16:.1f}" font-family="sans-serif" font-size="13">{escape(level.id)} ({band})</text>'
+        )
+        if level.upper_bound is not None:
+            lower = level.upper_bound
+    parts.append("</svg>")
+    output.write_text("\n".join(parts), encoding="utf-8")
+    return output.resolve()
+
+
+def render_p8_v2_t300_three_entrance_ingress_svg(
+    config_path: str | Path,
+    summary: dict,
+    arrays: dict,
+    output_path: str | Path,
+) -> Path:
+    """Compare all three green-corridor ingress routes on the t=300 posterior field."""
+    parameters, scene, registration, graph, encoded = _p8_v2_visual_context(config_path)
+    output = Path(output_path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    times = np.asarray(arrays["online_evaluation_times_s"], dtype=np.float64)
+    matches = np.flatnonzero(np.isclose(times, 300.0))
+    if len(matches) != 1:
+        raise ValueError("t=300 online posterior field is missing")
+    index = int(matches[0])
+    field = np.asarray(arrays["online_posterior_exposure"][index], dtype=np.float64)
+    levels = np.asarray(arrays["online_posterior_risk_level"][index], dtype=np.int8)
+    result = summary["online_ingress_at_t300"]
+    comparative = result["comparative_routes"]
+    selected = comparative["selected_entrance"]
+    routes = comparative["candidates"]
+    colors = {
+        "exit_west": "#0072B2",
+        "exit_center_stair": "#CC79A7",
+        "exit_southeast": "#E69F00",
+    }
+    dash = {
+        "exit_west": "18 9",
+        "exit_center_stair": "",
+        "exit_southeast": "5 8",
+    }
+    scale = 0.72
+    width = int(registration.source_width_px * scale)
+    map_height = registration.source_height_px * scale
+    height = int(map_height + 300)
+    parts = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+        f'viewBox="0 0 {width} {height}" data-planning-time-s="300" '
+        'data-planning-field="online_sequential_posterior">'
+    ]
+    parts.extend(_p8_v2_svg_defs(registration, encoded))
+    parts.extend(
+        [
+            '<rect width="100%" height="100%" fill="white"/>',
+            '<text x="24" y="28" font-family="sans-serif" font-size="21" font-weight="bold">t=300 s posterior risk and three-exit firefighter ingress comparison</text>',
+            f'<g transform="translate(0,42) scale({scale})"><use href="#p8v2-map" opacity="0.62"/>',
+        ]
+    )
+    parts.extend(
+        _p8_v2_categorical_cells(
+            field,
+            levels,
+            parameters.exposure_levels,
+            scene,
+            registration,
+            provenance="online_sequential_posterior_t300",
+        )
+    )
+    parts.append('<g fill="none" stroke="#009E73" stroke-opacity="0.42" stroke-width="8" stroke-linecap="round">')
+    for edge in graph.edges:
+        route = {"path": [{"row": row, "col": col} for row, col in edge.path]}
+        parts.append(f'<polyline points="{_p8_v2_route_points(scene, registration, route)}"/>')
+    parts.append("</g>")
+    for entrance_id in parameters.entrances:
+        route = routes[entrance_id]
+        if not route["feasible"]:
+            continue
+        points = _p8_v2_route_points(scene, registration, route)
+        stroke_width = 12 if entrance_id == selected else 8
+        dash_value = dash[entrance_id]
+        dash_attr = "" if not dash_value else f' stroke-dasharray="{dash_value}"'
+        parts.append(
+            f'<polyline points="{points}" fill="none" stroke="white" stroke-opacity="0.88" '
+            f'stroke-width="{stroke_width+6}" stroke-linecap="round" stroke-linejoin="round"{dash_attr}/>'
+        )
+        parts.append(
+            f'<polyline class="t300-ingress-route" data-entrance="{entrance_id}" points="{points}" '
+            f'fill="none" stroke="{colors[entrance_id]}" stroke-width="{stroke_width}" '
+            f'stroke-linecap="round" stroke-linejoin="round"{dash_attr}/>'
+        )
+    target_cell = graph.nodes[parameters.source_approach_target_node].cell
+    tx, ty = registration.metric_to_pixel(*scene.navigation.grid_to_metric(*target_cell))
+    parts.append(
+        f'<circle cx="{tx:.2f}" cy="{ty:.2f}" r="17" fill="white" stroke="#111" stroke-width="6"/>'
+        f'<text x="{tx+24:.2f}" y="{ty+7:.2f}" font-family="sans-serif" font-size="24" font-weight="bold">source-near staging</text>'
+    )
+    parts.append(_p8_v2_source_marker(scene, registration))
+    parts.append("</g>")
+    table_y = map_height + 82
+    headings = ("Entrance", "Feasible", "Length (m)", "Integrated risk", "Max risk", "Planning cost", "Role")
+    columns = (24, 255, 365, 505, 675, 810, 980)
+    for x, heading in zip(columns, headings):
+        parts.append(f'<text x="{x}" y="{table_y:.1f}" font-family="sans-serif" font-size="14" font-weight="bold">{heading}</text>')
+    for row_index, entrance_id in enumerate(parameters.entrances):
+        route = routes[entrance_id]
+        y = table_y + 32 + row_index * 31
+        roles = []
+        if entrance_id == selected:
+            roles.append("min cost")
+        if entrance_id == result["fastest_entrance"]:
+            roles.append("shortest")
+        if entrance_id == result["safest_entrance"]:
+            roles.append("lowest exposure")
+        values = (
+            entrance_id,
+            "yes" if route["feasible"] else "no",
+            "—" if route["geometric_length_m"] is None else f'{route["geometric_length_m"]:.2f}',
+            "—" if route["integrated_exposure"] is None else f'{route["integrated_exposure"]:.4f}',
+            "—" if route["max_exposure"] is None else f'{route["max_exposure"]:.4f}',
+            "—" if route["total_cost"] is None else f'{route["total_cost"]:.3f}',
+            ", ".join(roles) if roles else "alternative",
+        )
+        parts.append(f'<line x1="24" y1="{y-20:.1f}" x2="{width-24}" y2="{y-20:.1f}" stroke="#DDD"/>')
+        for x, value in zip(columns, values):
+            parts.append(f'<text x="{x}" y="{y:.1f}" font-family="sans-serif" font-size="14" fill="{colors.get(entrance_id, "#111")}">{escape(str(value))}</text>')
+    note_y = table_y + 145
+    parts.append(
+        f'<text x="24" y="{note_y:.1f}" font-family="sans-serif" font-size="14" font-weight="bold" fill="#B2182B">'
+        f'Operational threshold result: {escape(result["strict_operational_status"].replace("_", " "))} '
+        f'(limit &lt; {result["configured_exposure_threshold"]:.2f}).</text>'
+    )
+    parts.append(
+        f'<text x="24" y="{note_y+27:.1f}" font-family="sans-serif" font-size="14">'
+        'Routes are constrained to registered green corridors and terminate at a source-near staging node, not inside the burning microwave cell.</text>'
+    )
+    parts.append(
+        f'<text x="24" y="{note_y+54:.1f}" font-family="sans-serif" font-size="14">'
+        'Displayed paths are diagnostic comparisons with the hard exposure gate disabled. Fastest means shortest distance; lowest exposure is relative, not certified safe.</text>'
+    )
+    parts.append("</svg>")
+    output.write_text("\n".join(parts), encoding="utf-8")
+    return output.resolve()
+
+
 def render_p8_v2_exposure_evolution_svg(config_path: str | Path, summary: dict, arrays: dict, output_path: str | Path) -> Path:
     """Render four fixed-scale exposure snapshots without route clutter."""
     return _render_p8_v2_evolution(config_path, summary, arrays, output_path, include_routes=False)

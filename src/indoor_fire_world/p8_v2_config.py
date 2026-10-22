@@ -73,6 +73,7 @@ class P8V2Parameters:
     ensemble: EnsembleAxes
     entrances: tuple[str, ...]
     target_node: str
+    source_approach_target_node: str
     base_cost: float
     exposure_weight: float
     uncertainty_weight: float
@@ -152,8 +153,8 @@ class P8V2Parameters:
                 raise ValueError("Ensemble factors must be finite and positive")
         if len(self.entrances) != 3 or len(set(self.entrances)) != 3:
             raise ValueError("P8 v2 requires three unique candidate entrances")
-        if not self.target_node:
-            raise ValueError("P8 v2 requires a configured task target")
+        if not self.target_node or not self.source_approach_target_node:
+            raise ValueError("P8 v2 requires configured task and source-approach targets")
         for value in (self.base_cost, self.exposure_weight, self.uncertainty_weight):
             if not math.isfinite(value) or value < 0.0:
                 raise ValueError("Planning weights must be finite and non-negative")
@@ -265,6 +266,7 @@ def load_p8_v2_parameters(config_path: str | Path) -> P8V2Parameters:
         ),
         entrances=tuple(str(value) for value in planning["entrance_ids"]),
         target_node=str(planning["target_node"]),
+        source_approach_target_node=str(planning["source_approach_target_node"]),
         base_cost=float(planning["base_cost"]),
         exposure_weight=float(planning["exposure_weight"]),
         uncertainty_weight=float(planning["uncertainty_weight"]),

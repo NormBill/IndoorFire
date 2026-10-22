@@ -119,6 +119,8 @@ def build_p8_v2_context(config_path: str | Path) -> P8V2Context:
     parameters = load_p8_v2_parameters(config_path)
     scene = load_scene(parameters.scene_config)
     graph = load_directed_evacuation_graph(parameters.corridor_config, scene)
+    if parameters.source_approach_target_node not in graph.nodes:
+        raise ValueError("Configured source-approach target is not on the green corridor graph")
     # Causal guard: points and hashes are frozen before any reference simulator exists.
     points, point_hash = _freeze_points(scene, parameters, graph)
     all_times = tuple(
@@ -207,15 +209,31 @@ def _forecast_fields(context: P8V2Context, weights: NDArray[np.floating]) -> tup
     return forecasts, exposure, uncertainty
 
 
-def _plan_ingress(context: P8V2Context, exposure: NDArray[np.floating], uncertainty: NDArray[np.floating], *, uncertainty_weight: float | None = None) -> FirefighterIngressPlan:
+def _plan_ingress(
+    context: P8V2Context,
+    exposure: NDArray[np.floating],
+    uncertainty: NDArray[np.floating],
+    *,
+    uncertainty_weight: float | None = None,
+    target_node: str | None = None,
+    disable_exposure_gate: bool = False,
+) -> FirefighterIngressPlan:
+    threshold = 1.0 if disable_exposure_gate else context.parameters.ingress_exposure_threshold
     parameters = PlanningCostParameters(
         context.parameters.base_cost,
         context.parameters.exposure_weight,
         context.parameters.uncertainty_weight if uncertainty_weight is None else uncertainty_weight,
-        context.parameters.ingress_exposure_threshold,
+        threshold,
         notes="P8 v2 simulation-only forecast exposure index",
     )
-    cost = PlanningCostModel(parameters).compute(exposure, uncertainty, context.scene.navigation)
+    cost_exposure = (
+        np.minimum(np.asarray(exposure), np.nextafter(1.0, 0.0))
+        if disable_exposure_gate
+        else exposure
+    )
+    cost = PlanningCostModel(parameters).compute(
+        cost_exposure, uncertainty, context.scene.navigation
+    )
     return DirectedRoutePlanner(parameters, context.graph).plan_ingress(
         cost.field,
         cost.forbidden,
@@ -223,7 +241,7 @@ def _plan_ingress(context: P8V2Context, exposure: NDArray[np.floating], uncertai
         uncertainty,
         context.scene.navigation,
         context.parameters.entrances,
-        context.parameters.target_node,
+        context.parameters.target_node if target_node is None else target_node,
     )
 
 
@@ -1086,6 +1104,9 @@ def attach_online_sequential_evaluation(
     hazard_model = PhysicalHazardModel(
         load_hazard_parameters(context.parameters.hazard_config)
     )
+    uncertainty_model = UncertaintyAggregationModel(
+        load_hazard_parameters(context.parameters.hazard_config)
+    )
     shape = (
         context.scene.occupancy.geometry.rows,
         context.scene.occupancy.geometry.cols,
@@ -1095,6 +1116,7 @@ def attach_online_sequential_evaluation(
     prior_fields: list[NDArray[np.float64]] = []
     reference_fields: list[NDArray[np.float64]] = []
     posterior_fields: list[NDArray[np.float64]] = []
+    posterior_uncertainties: list[NDArray[np.float64]] = []
     prior_levels_all: list[NDArray[np.int8]] = []
     reference_levels_all: list[NDArray[np.int8]] = []
     posterior_levels_all: list[NDArray[np.int8]] = []
@@ -1201,9 +1223,13 @@ def attach_online_sequential_evaluation(
         update_applied.append(applied)
         if posterior_hazard is None or posterior_levels is None:
             posterior_fields.append(np.full(shape, np.nan, dtype=np.float64))
+            posterior_uncertainties.append(np.full(shape, np.nan, dtype=np.float64))
             posterior_levels_all.append(np.full(shape, -3, dtype=np.int8))
         else:
             posterior_fields.append(np.asarray(posterior_hazard.field))
+            posterior_uncertainties.append(
+                uncertainty_model.compute(posterior_forecast.uncertainty).field
+            )
             posterior_levels_all.append(np.asarray(posterior_levels))
 
     primary.summary["online_sequential_prediction"] = {
@@ -1233,6 +1259,9 @@ def attach_online_sequential_evaluation(
         reference_fields
     )
     primary.arrays["online_posterior_exposure"] = np.stack(posterior_fields)
+    primary.arrays["online_posterior_uncertainty"] = np.stack(
+        posterior_uncertainties
+    )
     primary.arrays["online_prior_risk_level"] = np.stack(prior_levels_all)
     primary.arrays["online_synthetic_reference_risk_level"] = np.stack(
         reference_levels_all
@@ -1240,4 +1269,65 @@ def attach_online_sequential_evaluation(
     primary.arrays["online_posterior_risk_level"] = np.stack(
         posterior_levels_all
     )
+    t300_index = context.parameters.online_evaluation_times_s.index(300.0)
+    t300_exposure = primary.arrays["online_posterior_exposure"][t300_index]
+    t300_uncertainty = primary.arrays["online_posterior_uncertainty"][t300_index]
+    strict_ingress = _plan_ingress(
+        context,
+        t300_exposure,
+        t300_uncertainty,
+        target_node=context.parameters.source_approach_target_node,
+    )
+    # Always retain corridor-constrained comparison paths for diagnosis.  The
+    # exposure field is clipped infinitesimally below one for cost construction,
+    # so threshold=1 removes only the safety gate; route costs and topology are
+    # otherwise unchanged, while reported exposure metrics use the original field.
+    comparative_ingress = _plan_ingress(
+        context,
+        t300_exposure,
+        t300_uncertainty,
+        target_node=context.parameters.source_approach_target_node,
+        disable_exposure_gate=True,
+    )
+    feasible = [
+        item for item in comparative_ingress.candidates if item.route.feasible
+    ]
+    fastest = min(
+        feasible,
+        key=lambda item: (
+            item.route.geometric_length_m,
+            item.route.total_cost,
+            item.entrance_id,
+        ),
+        default=None,
+    )
+    safest = min(
+        feasible,
+        key=lambda item: (
+            item.route.integrated_hazard,
+            item.route.max_hazard,
+            item.route.total_cost,
+            item.entrance_id,
+        ),
+        default=None,
+    )
+    primary.summary["online_ingress_at_t300"] = {
+        "field_time_s": 300.0,
+        "field_semantics": "single t=300 s online sequential posterior planning_risk; not the 300/360/420/480 worst-case envelope",
+        "target_node": context.parameters.source_approach_target_node,
+        "target_semantics": "green-corridor staging node near the microwave; route does not enter the burning source cell",
+        "configured_exposure_threshold": context.parameters.ingress_exposure_threshold,
+        "strict_operational_plan": _ingress_dict(strict_ingress),
+        "strict_operational_status": (
+            "feasible_route_available"
+            if strict_ingress.feasible
+            else "no_route_meets_configured_exposure_threshold"
+        ),
+        "comparative_route_semantics": "corridor-constrained diagnostic paths with the hard exposure gate disabled; relative comparisons do not certify safety",
+        "selection_objective": "minimum configured planning cost with deterministic entrance-id and path-hash tie-break",
+        "comparative_routes": _ingress_dict(comparative_ingress),
+        "fastest_entrance": None if fastest is None else fastest.entrance_id,
+        "safest_entrance": None if safest is None else safest.entrance_id,
+        "safest_label_semantics": "lowest integrated exposure among comparative paths; not necessarily below the configured exposure threshold",
+    }
     return tuple(rows)

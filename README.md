@@ -127,6 +127,17 @@ and causally available sequential-posterior maps, while
 risk-area and forecast-error curves. Thus the paper-facing visualization stays
 readable without discarding the denser machine-readable evidence in
 `online_sequential_timeseries.csv` and `arrays.npz`.
+`online_risk_map_0_480.svg` extends that sparse, fixed-threshold view to
+0/30/60/100/180/300/360/420/480 s: 0--300 s is the primary decision horizon
+and the final three panels are forecast margin. `t300_three_entrance_ingress.svg`
+places the three registered entrances and their corridor-constrained routes on
+the exact t=300 online posterior field. The routes terminate at a configured
+source-near green-corridor staging node, not inside the burning microwave cell.
+Its fastest label means shortest geometric path, while lowest exposure means
+minimum integrated planning-risk index. The figure separately reports whether
+any route satisfies the configured hard exposure threshold; when none does,
+the three paths remain diagnostic comparisons and are not recommendations to
+enter. No unconfigured walking-time or certified-safety claim is introduced.
 `forecast_risk_level_grid.svg` is the primary full-map risk product: at each
 forecast time all 8,000 cells in the 50-by-160 registered grid are rendered,
 with every traversable cell assigned one configured posterior forecast risk

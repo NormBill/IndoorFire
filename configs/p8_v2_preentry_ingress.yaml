@@ -70,6 +70,8 @@
     "entrance_ids": ["exit_west", "exit_center_stair", "exit_southeast"],
     "target_node": "center_lower_left",
     "target_semantics": "simulation_assumed_suppression_staging_anchor",
+    "source_approach_target_node": "geometry_route_high",
+    "source_approach_target_semantics": "nearest configured green-corridor staging node to the microwave; not the burning source cell",
     "corridor_direction_policy": "bidirectional_physical_corridor_with_evacuation_arrow_metadata",
     "base_cost": 1.0,
     "exposure_weight": 50.0,
