@@ -1,5 +1,7 @@
 """Scene-only visualization helpers."""
 
+from .dynamic import render_p8_v2_dynamic_risk_html
+
 from .svg import (
     render_p8_v2_categorical_risk_svg,
     render_p8_v2_online_pre_entry_timeseries_svg,
@@ -18,6 +20,7 @@ from .svg import (
 )
 
 __all__ = [
+    "render_p8_v2_dynamic_risk_html",
     "render_p8_v2_categorical_risk_svg",
     "render_p8_v2_online_pre_entry_timeseries_svg",
     "render_p8_v2_online_risk_map_svg",

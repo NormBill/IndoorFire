@@ -17,6 +17,7 @@ from indoor_fire_world.simulation.p8_v2 import (
     build_p8_v2_context,
     run_p8_v2_case,
 )
+from indoor_fire_world.visualization.dynamic import render_p8_v2_dynamic_risk_html
 from indoor_fire_world.visualization.svg import (
     render_p8_v2_categorical_risk_svg,
     render_p8_v2_online_pre_entry_timeseries_svg,
@@ -250,6 +251,25 @@ def write_p8_v2_artifacts(output: P8V2SuiteOutput, config_path: str | Path, targ
         output.primary.arrays,
         target / "t300_three_entrance_ingress.svg",
     )
+    online_risk_map_small_path = render_p8_v2_online_risk_map_svg(
+        config_path,
+        output.primary.summary,
+        output.primary.arrays,
+        target / "online_risk_map_0_480_small.svg",
+        compact=True,
+    )
+    t300_ingress_small_path = render_p8_v2_t300_three_entrance_ingress_svg(
+        config_path,
+        output.primary.summary,
+        output.primary.arrays,
+        target / "t300_three_entrance_ingress_small.svg",
+        compact=True,
+    )
+    dynamic_risk_path = render_p8_v2_dynamic_risk_html(
+        config_path,
+        output.primary.arrays,
+        target / "online_risk_map_0_480_dynamic.html",
+    )
     manifest_path = target / "fds_manifest.json"
     manifest_path.write_text(json.dumps({
         "schema_version": 1,
@@ -275,5 +295,8 @@ def write_p8_v2_artifacts(output: P8V2SuiteOutput, config_path: str | Path, targ
         "online_pre_entry_risk_timeseries": online_pre_entry_timeseries_path,
         "online_risk_map_0_480": online_risk_map_path,
         "t300_three_entrance_ingress": t300_ingress_path,
+        "online_risk_map_0_480_small": online_risk_map_small_path,
+        "t300_three_entrance_ingress_small": t300_ingress_small_path,
+        "online_risk_map_0_480_dynamic": dynamic_risk_path,
         "fds_manifest": manifest_path.resolve(),
     }

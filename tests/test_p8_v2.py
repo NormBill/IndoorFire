@@ -15,6 +15,7 @@ from indoor_fire_world.simulation.p8_v2 import (
     build_p8_v2_context,
     run_p8_v2_case,
 )
+from indoor_fire_world.visualization.dynamic import render_p8_v2_dynamic_risk_html
 from indoor_fire_world.visualization.svg import (
     render_p8_v2_categorical_risk_svg,
     render_p8_v2_online_pre_entry_timeseries_svg,
@@ -324,6 +325,22 @@ class P8V2Tests(unittest.TestCase):
         self.assertTrue(np.all(np.isfinite(self.dense_case.arrays["online_posterior_exposure"][1:])))
         self.assertTrue(np.all(self.dense_case.arrays["online_posterior_risk_level"][0] == -3))
 
+    def test_dynamic_risk_player_uses_all_online_frames_without_reference_leakage(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            output = render_p8_v2_dynamic_risk_html(
+                CONFIG,
+                self.dense_case.arrays,
+                Path(directory) / "dynamic.html",
+            )
+            html = output.read_text(encoding="utf-8")
+            self.assertIn('data-frame-count="97"', html)
+            self.assertIn('data-interval-s="5"', html)
+            self.assertIn('data-source="online-sequential-posterior"', html)
+            self.assertIn('"times":[0,5,10', html)
+            self.assertIn(',470,475,480]', html)
+            self.assertNotIn("online_synthetic_reference", html)
+            self.assertLess(output.stat().st_size, 2_000_000)
+
     def test_t300_compares_all_entrances_on_one_posterior_snapshot(self) -> None:
         result = self.dense_case.summary["online_ingress_at_t300"]
         self.assertEqual(result["field_time_s"], 300.0)
@@ -376,8 +393,24 @@ class P8V2Tests(unittest.TestCase):
                 self.dense_case.arrays,
                 root / "ingress.svg",
             )
+            compact_risk = render_p8_v2_online_risk_map_svg(
+                CONFIG,
+                self.dense_case.summary,
+                self.dense_case.arrays,
+                root / "risk-small.svg",
+                compact=True,
+            )
+            compact_ingress = render_p8_v2_t300_three_entrance_ingress_svg(
+                CONFIG,
+                self.dense_case.summary,
+                self.dense_case.arrays,
+                root / "ingress-small.svg",
+                compact=True,
+            )
             risk_text = risk_map.read_text(encoding="utf-8")
             ingress_text = ingress.read_text(encoding="utf-8")
+            compact_risk_text = compact_risk.read_text(encoding="utf-8")
+            compact_ingress_text = compact_ingress.read_text(encoding="utf-8")
             self.assertEqual(risk_text.count('class="risk-level-cell"'), 9 * 50 * 160)
             self.assertIn('data-fixed-risk-thresholds="true"', risk_text)
             self.assertIn('data-planning-time-s="300"', ingress_text)
@@ -387,6 +420,12 @@ class P8V2Tests(unittest.TestCase):
                 for route in self.dense_case.summary["online_ingress_at_t300"]["comparative_routes"]["candidates"].values()
             )
             self.assertEqual(ingress_text.count('class="t300-ingress-route"'), feasible_count)
+            self.assertEqual(compact_risk_text.count('data-grid-cell-count="8000"'), 9)
+            self.assertEqual(compact_ingress_text.count('data-grid-cell-count="8000"'), 1)
+            self.assertIn('data-encoding="row-run-length"', compact_risk_text)
+            self.assertIn('data-encoding="row-run-length"', compact_ingress_text)
+            self.assertLess(compact_risk.stat().st_size, risk_map.stat().st_size / 4)
+            self.assertLess(compact_ingress.stat().st_size, ingress.stat().st_size / 2)
 
     def test_enhanced_spread_profile_has_material_temporal_growth(self) -> None:
         counts = self.case.summary["risk_grid"]["counts_by_forecast_time"]

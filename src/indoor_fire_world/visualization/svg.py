@@ -276,6 +276,51 @@ def _p8_v2_categorical_cells(
     return parts
 
 
+def _p8_v2_compact_categorical_cells(
+    risk_grid: np.ndarray,
+    levels,
+    scene,
+    registration,
+    *,
+    provenance: str = "posterior_model_forecast",
+) -> list[str]:
+    """Run-length encode equal adjacent levels for presentation-size SVGs."""
+    rows, cols = risk_grid.shape
+    rectangles: list[str] = []
+    for row in range(rows):
+        start_col = 0
+        while start_col < cols:
+            level_index = int(risk_grid[row, start_col])
+            end_col = start_col + 1
+            while end_col < cols and int(risk_grid[row, end_col]) == level_index:
+                end_col += 1
+            px, py, _, cell_height = _p8_v2_cell_geometry(
+                scene, registration, row, start_col
+            )
+            end_px, _, end_width, _ = _p8_v2_cell_geometry(
+                scene, registration, row, end_col - 1
+            )
+            blocked = level_index < 0
+            level_id = "blocked" if blocked else levels[level_index].id
+            fill = "url(#p8v2-blocked)" if blocked else levels[level_index].color
+            opacity = "0.48" if blocked else "0.82"
+            rectangles.append(
+                f'<rect class="compact-risk-run" data-risk-level="{escape(level_id)}" '
+                f'data-run-cell-count="{end_col-start_col}" data-burning="false" '
+                f'x="{px:.2f}" y="{py:.2f}" width="{end_px+end_width-px:.2f}" '
+                f'height="{cell_height:.2f}" fill="{fill}" fill-opacity="{opacity}"/>'
+            )
+            start_col = end_col
+    return [
+        f'<g class="compact-categorical-risk-grid" data-grid-cell-count="{rows*cols}" '
+        f'data-rendered-run-count="{len(rectangles)}" '
+        f'data-risk-map-provenance="{escape(provenance)}" '
+        'data-encoding="row-run-length" shape-rendering="crispEdges">',
+        *rectangles,
+        "</g>",
+    ]
+
+
 def _p8_v2_routes(summary: dict, scene, registration) -> list[str]:
     parts: list[str] = []
     for name, color, dash in (("prior_ingress", "#56B4E9", "18 10"), ("updated_ingress", "#CC79A7", "")):
@@ -783,6 +828,8 @@ def render_p8_v2_online_risk_map_svg(
     summary: dict,
     arrays: dict,
     output_path: str | Path,
+    *,
+    compact: bool = False,
 ) -> Path:
     """Render the complete 0-480 s story at nine sparse fixed-scale keyframes."""
     parameters, scene, registration, _, encoded = _p8_v2_visual_context(config_path)
@@ -830,16 +877,27 @@ def render_p8_v2_online_risk_map_svg(
             f'<g transform="translate({offset_x:.2f},{offset_y:.2f}) scale({scale})">'
             '<use href="#p8v2-map" opacity="0.60"/>'
         )
-        parts.extend(
-            _p8_v2_categorical_cells(
-                field,
-                levels,
-                parameters.exposure_levels,
-                scene,
-                registration,
-                provenance=provenance,
+        if compact:
+            parts.extend(
+                _p8_v2_compact_categorical_cells(
+                    levels,
+                    parameters.exposure_levels,
+                    scene,
+                    registration,
+                    provenance=provenance,
+                )
             )
-        )
+        else:
+            parts.extend(
+                _p8_v2_categorical_cells(
+                    field,
+                    levels,
+                    parameters.exposure_levels,
+                    scene,
+                    registration,
+                    provenance=provenance,
+                )
+            )
         parts.append(_p8_v2_source_marker(scene, registration))
         parts.append("</g>")
     note_y = (panel_height + title_gap) * 3 + 35
@@ -884,6 +942,8 @@ def render_p8_v2_t300_three_entrance_ingress_svg(
     summary: dict,
     arrays: dict,
     output_path: str | Path,
+    *,
+    compact: bool = False,
 ) -> Path:
     """Compare all three green-corridor ingress routes on the t=300 posterior field."""
     parameters, scene, registration, graph, encoded = _p8_v2_visual_context(config_path)
@@ -927,16 +987,27 @@ def render_p8_v2_t300_three_entrance_ingress_svg(
             f'<g transform="translate(0,42) scale({scale})"><use href="#p8v2-map" opacity="0.62"/>',
         ]
     )
-    parts.extend(
-        _p8_v2_categorical_cells(
-            field,
-            levels,
-            parameters.exposure_levels,
-            scene,
-            registration,
-            provenance="online_sequential_posterior_t300",
+    if compact:
+        parts.extend(
+            _p8_v2_compact_categorical_cells(
+                levels,
+                parameters.exposure_levels,
+                scene,
+                registration,
+                provenance="online_sequential_posterior_t300",
+            )
         )
-    )
+    else:
+        parts.extend(
+            _p8_v2_categorical_cells(
+                field,
+                levels,
+                parameters.exposure_levels,
+                scene,
+                registration,
+                provenance="online_sequential_posterior_t300",
+            )
+        )
     parts.append('<g fill="none" stroke="#009E73" stroke-opacity="0.42" stroke-width="8" stroke-linecap="round">')
     for edge in graph.edges:
         route = {"path": [{"row": row, "col": col} for row, col in edge.path]}
