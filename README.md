@@ -146,6 +146,11 @@ retain the full SVGs when individual-cell provenance is required.
 play/pause, speed, keyboard, and time-slider controls. It uses the prior only
 at t=0, sequential posterior fields every 5 s through t=300, and forecasts
 with the t=300 posterior held fixed through t=480.
+The online display products color every registered grid cell. Cells outside
+the simulated air domain receive a conservative nearest-air categorical color
+and a planning-blocked hatch. This is display-only completion: stored exposure
+arrays, forecast-error metrics, transport barriers, and route feasibility are
+unchanged.
 `forecast_risk_level_grid.svg` is the primary full-map risk product: at each
 forecast time all 8,000 cells in the 50-by-160 registered grid are rendered,
 with every traversable cell assigned one configured posterior forecast risk

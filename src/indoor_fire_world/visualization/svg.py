@@ -10,6 +10,7 @@ from pathlib import Path
 import numpy as np
 
 from indoor_fire_world.scene.models import Polygon, Scene
+from indoor_fire_world.visualization.risk_surface import complete_blocked_risk_levels
 
 
 def _render_p8_v2_forecast_svg_legacy(
@@ -142,6 +143,7 @@ def _p8_v2_svg_defs(registration, encoded: str) -> list[str]:
         "<defs>",
         f'<image id="p8v2-map" href="data:image/png;base64,{encoded}" width="{registration.source_width_px}" height="{registration.source_height_px}"/>',
         '<pattern id="p8v2-blocked" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="#B8BDC6"/><line x1="0" y1="0" x2="0" y2="8" stroke="#737984" stroke-width="2"/></pattern>',
+        '<pattern id="p8v2-blocked-overlay" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="12" stroke="#374151" stroke-opacity="0.22" stroke-width="0.8"/></pattern>',
         "</defs>",
     ]
 
@@ -246,6 +248,7 @@ def _p8_v2_categorical_cells(
     registration,
     *,
     provenance: str = "posterior_model_forecast",
+    planning_blocked_mask: np.ndarray | None = None,
 ) -> list[str]:
     """Render one explicit model-predicted level for every registered cell."""
     rows, cols = risk_grid.shape
@@ -259,17 +262,27 @@ def _p8_v2_categorical_cells(
                 scene, registration, row, col
             )
             level_index = int(risk_grid[row, col])
-            blocked = level_index < 0
-            level_id = "blocked" if blocked else levels[level_index].id
-            fill = "url(#p8v2-blocked)" if blocked else levels[level_index].color
-            opacity = "0.48" if blocked else "0.82"
+            unclassified = level_index < 0
+            planning_blocked = (
+                unclassified
+                if planning_blocked_mask is None
+                else bool(planning_blocked_mask[row, col])
+            )
+            level_id = "blocked" if unclassified else levels[level_index].id
+            fill = "url(#p8v2-blocked)" if unclassified else levels[level_index].color
+            opacity = "0.48" if unclassified else "0.82"
+            stroke = "#374151" if planning_blocked and not unclassified else "#FFFFFF"
+            stroke_opacity = "0.32" if planning_blocked and not unclassified else "0.28"
             parts.append(
                 f'<rect class="risk-level-cell" data-row="{row}" data-col="{col}" '
-                f'data-risk-level="{escape(level_id)}" data-burning="false" x="{px:.2f}" y="{py:.2f}" '
+                f'data-risk-level="{escape(level_id)}" data-planning-blocked="{str(planning_blocked).lower()}" '
+                f'data-burning="false" x="{px:.2f}" y="{py:.2f}" '
                 f'width="{cell_width:.2f}" height="{cell_height:.2f}" fill="{fill}" '
-                f'fill-opacity="{opacity}" stroke="#FFFFFF" stroke-opacity="0.28" '
+                f'fill-opacity="{opacity}" stroke="{stroke}" stroke-opacity="{stroke_opacity}" '
                 f'stroke-width="0.28"><title>row={row}, col={col}, model-predicted '
                 f'exposure-risk level={escape(level_id)}, exposure={float(field[row,col]):.6f}, '
+                f'planning-blocked={str(planning_blocked).lower()}, '
+                f'display-completion={"conservative-nearest-air" if planning_blocked and not unclassified else "none"}, '
                 f'burning=false</title></rect>'
             )
     parts.append("</g>")
@@ -283,6 +296,7 @@ def _p8_v2_compact_categorical_cells(
     registration,
     *,
     provenance: str = "posterior_model_forecast",
+    planning_blocked_mask: np.ndarray | None = None,
 ) -> list[str]:
     """Run-length encode equal adjacent levels for presentation-size SVGs."""
     rows, cols = risk_grid.shape
@@ -311,12 +325,37 @@ def _p8_v2_compact_categorical_cells(
                 f'height="{cell_height:.2f}" fill="{fill}" fill-opacity="{opacity}"/>'
             )
             start_col = end_col
+    overlays: list[str] = []
+    if planning_blocked_mask is not None:
+        blocked = np.asarray(planning_blocked_mask, dtype=np.bool_)
+        for row in range(rows):
+            start_col = 0
+            while start_col < cols:
+                if not blocked[row, start_col]:
+                    start_col += 1
+                    continue
+                end_col = start_col + 1
+                while end_col < cols and blocked[row, end_col]:
+                    end_col += 1
+                px, py, _, cell_height = _p8_v2_cell_geometry(
+                    scene, registration, row, start_col
+                )
+                end_px, _, end_width, _ = _p8_v2_cell_geometry(
+                    scene, registration, row, end_col - 1
+                )
+                overlays.append(
+                    f'<rect class="planning-blocked-overlay" x="{px:.2f}" y="{py:.2f}" '
+                    f'width="{end_px+end_width-px:.2f}" height="{cell_height:.2f}" '
+                    'fill="url(#p8v2-blocked-overlay)"/>'
+                )
+                start_col = end_col
     return [
         f'<g class="compact-categorical-risk-grid" data-grid-cell-count="{rows*cols}" '
         f'data-rendered-run-count="{len(rectangles)}" '
         f'data-risk-map-provenance="{escape(provenance)}" '
         'data-encoding="row-run-length" shape-rendering="crispEdges">',
         *rectangles,
+        *overlays,
         "</g>",
     ]
 
@@ -846,7 +885,7 @@ def render_p8_v2_online_risk_map_svg(
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
         f'viewBox="0 0 {width} {height}" data-risk-map-source="online_sequential_posterior" '
-        'data-fixed-risk-thresholds="true">'
+        'data-fixed-risk-thresholds="true" data-display-completion="conservative-nearest-air">'
     ]
     parts.extend(_p8_v2_svg_defs(registration, encoded))
     parts.append('<rect width="100%" height="100%" fill="white"/>')
@@ -860,14 +899,16 @@ def render_p8_v2_online_risk_map_svg(
         offset_y = title_gap + row * (panel_height + title_gap)
         if time_s == 0.0:
             field = np.asarray(arrays["online_prior_exposure"][index], dtype=np.float64)
-            levels = np.asarray(arrays["online_prior_risk_level"][index], dtype=np.int8)
+            raw_levels = np.asarray(arrays["online_prior_risk_level"][index], dtype=np.int8)
             label = "t=0 s — physics prior only"
             provenance = "physics_prior"
         else:
             field = np.asarray(arrays["online_posterior_exposure"][index], dtype=np.float64)
-            levels = np.asarray(arrays["online_posterior_risk_level"][index], dtype=np.int8)
+            raw_levels = np.asarray(arrays["online_posterior_risk_level"][index], dtype=np.int8)
             label = f"t={time_s:g} s — sequential posterior"
             provenance = "online_sequential_posterior"
+        planning_blocked = raw_levels < 0
+        levels = complete_blocked_risk_levels(raw_levels)
         parts.append(
             f'<text x="{offset_x+panel_width/2:.1f}" y="{offset_y-10:.1f}" '
             'text-anchor="middle" font-family="sans-serif" font-size="15" '
@@ -885,6 +926,7 @@ def render_p8_v2_online_risk_map_svg(
                     scene,
                     registration,
                     provenance=provenance,
+                    planning_blocked_mask=planning_blocked,
                 )
             )
         else:
@@ -896,6 +938,7 @@ def render_p8_v2_online_risk_map_svg(
                     scene,
                     registration,
                     provenance=provenance,
+                    planning_blocked_mask=planning_blocked,
                 )
             )
         parts.append(_p8_v2_source_marker(scene, registration))
@@ -955,7 +998,9 @@ def render_p8_v2_t300_three_entrance_ingress_svg(
         raise ValueError("t=300 online posterior field is missing")
     index = int(matches[0])
     field = np.asarray(arrays["online_posterior_exposure"][index], dtype=np.float64)
-    levels = np.asarray(arrays["online_posterior_risk_level"][index], dtype=np.int8)
+    raw_levels = np.asarray(arrays["online_posterior_risk_level"][index], dtype=np.int8)
+    planning_blocked = raw_levels < 0
+    levels = complete_blocked_risk_levels(raw_levels)
     result = summary["online_ingress_at_t300"]
     comparative = result["comparative_routes"]
     selected = comparative["selected_entrance"]
@@ -977,7 +1022,8 @@ def render_p8_v2_t300_three_entrance_ingress_svg(
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
         f'viewBox="0 0 {width} {height}" data-planning-time-s="300" '
-        'data-planning-field="online_sequential_posterior">'
+        'data-planning-field="online_sequential_posterior" '
+        'data-display-completion="conservative-nearest-air">'
     ]
     parts.extend(_p8_v2_svg_defs(registration, encoded))
     parts.extend(
@@ -995,6 +1041,7 @@ def render_p8_v2_t300_three_entrance_ingress_svg(
                 scene,
                 registration,
                 provenance="online_sequential_posterior_t300",
+                planning_blocked_mask=planning_blocked,
             )
         )
     else:
@@ -1006,6 +1053,7 @@ def render_p8_v2_t300_three_entrance_ingress_svg(
                 scene,
                 registration,
                 provenance="online_sequential_posterior_t300",
+                planning_blocked_mask=planning_blocked,
             )
         )
     parts.append('<g fill="none" stroke="#009E73" stroke-opacity="0.42" stroke-width="8" stroke-linecap="round">')

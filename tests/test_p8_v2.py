@@ -16,6 +16,7 @@ from indoor_fire_world.simulation.p8_v2 import (
     run_p8_v2_case,
 )
 from indoor_fire_world.visualization.dynamic import render_p8_v2_dynamic_risk_html
+from indoor_fire_world.visualization.risk_surface import complete_blocked_risk_levels
 from indoor_fire_world.visualization.svg import (
     render_p8_v2_categorical_risk_svg,
     render_p8_v2_online_pre_entry_timeseries_svg,
@@ -336,10 +337,19 @@ class P8V2Tests(unittest.TestCase):
             self.assertIn('data-frame-count="97"', html)
             self.assertIn('data-interval-s="5"', html)
             self.assertIn('data-source="online-sequential-posterior"', html)
+            self.assertIn('data-display-completion="conservative-nearest-air"', html)
             self.assertIn('"times":[0,5,10', html)
             self.assertIn(',470,475,480]', html)
+            self.assertIn('"planningBlocked"', html)
             self.assertNotIn("online_synthetic_reference", html)
             self.assertLess(output.stat().st_size, 2_000_000)
+
+    def test_display_completion_fills_holes_without_changing_air_cells(self) -> None:
+        raw = np.asarray([[0, -1, 4], [0, -1, 2]], dtype=np.int8)
+        completed = complete_blocked_risk_levels(raw)
+        self.assertTrue(np.all(completed >= 0))
+        np.testing.assert_array_equal(completed[raw >= 0], raw[raw >= 0])
+        self.assertEqual(int(completed[0, 1]), 4)
 
     def test_t300_compares_all_entrances_on_one_posterior_snapshot(self) -> None:
         result = self.dense_case.summary["online_ingress_at_t300"]
@@ -413,6 +423,8 @@ class P8V2Tests(unittest.TestCase):
             compact_ingress_text = compact_ingress.read_text(encoding="utf-8")
             self.assertEqual(risk_text.count('class="risk-level-cell"'), 9 * 50 * 160)
             self.assertIn('data-fixed-risk-thresholds="true"', risk_text)
+            self.assertNotIn('data-risk-level="blocked"', risk_text)
+            self.assertIn('data-planning-blocked="true"', risk_text)
             self.assertIn('data-planning-time-s="300"', ingress_text)
             self.assertEqual(ingress_text.count('class="risk-level-cell"'), 50 * 160)
             feasible_count = sum(
@@ -424,6 +436,8 @@ class P8V2Tests(unittest.TestCase):
             self.assertEqual(compact_ingress_text.count('data-grid-cell-count="8000"'), 1)
             self.assertIn('data-encoding="row-run-length"', compact_risk_text)
             self.assertIn('data-encoding="row-run-length"', compact_ingress_text)
+            self.assertIn('class="planning-blocked-overlay"', compact_risk_text)
+            self.assertIn('class="planning-blocked-overlay"', compact_ingress_text)
             self.assertLess(compact_risk.stat().st_size, risk_map.stat().st_size / 4)
             self.assertLess(compact_ingress.stat().st_size, ingress.stat().st_size / 2)
 
