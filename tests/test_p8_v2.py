@@ -360,9 +360,11 @@ class P8V2Tests(unittest.TestCase):
             self.assertIn('data-source="online-sequential-posterior"', html)
             self.assertIn('data-display-completion="smooth-nearest-layer-mean"', html)
             self.assertIn(
-                'data-visual-encoding="continuous-exposure-with-risk-contours"',
+                'data-visual-encoding="categorical-risk-level-per-grid-cell"',
                 html,
             )
+            for label in ("minimal", "elevated", "high", "critical", "extreme"):
+                self.assertIn(f'"id":"{label}"', html)
             self.assertIn('"times":[0,5,10', html)
             self.assertIn(',470,475,480]', html)
             self.assertIn('"planningBlocked"', html)
@@ -453,10 +455,11 @@ class P8V2Tests(unittest.TestCase):
             self.assertEqual(risk_text.count('class="risk-level-cell"'), 9 * 50 * 160)
             self.assertIn('data-fixed-risk-thresholds="true"', risk_text)
             self.assertIn(
-                'data-visual-encoding="continuous-exposure-with-risk-contours"',
+                'data-visual-encoding="categorical-risk-level-per-grid-cell"',
                 risk_text,
             )
-            self.assertIn('class="risk-level-contours"', risk_text)
+            for label in ("minimal", "elevated", "high", "critical", "extreme"):
+                self.assertIn(f'data-risk-level="{label}"', risk_text)
             self.assertNotIn('data-risk-level="blocked"', risk_text)
             self.assertIn('data-planning-blocked="true"', risk_text)
             self.assertIn('data-planning-time-s="300"', ingress_text)

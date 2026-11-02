@@ -138,8 +138,8 @@ minimum integrated planning-risk index. The figure separately reports whether
 any route satisfies the configured hard exposure threshold; when none does,
 the three paths remain diagnostic comparisons and are not recommendations to
 enter. No unconfigured walking-time or certified-safety claim is introduced.
-The matching `*_small.svg` files preserve the same exposure surface and route
-topology but quantize and run-length encode adjacent cells and omit
+The matching `*_small.svg` files preserve the same risk-level grid and route
+topology but run-length encode adjacent equal-level cells and omit
 per-cell audit tooltips. Use them for quick viewing and document insertion;
 retain the full SVGs when individual-cell provenance is required.
 `online_risk_map_0_480_dynamic.html` is a self-contained 97-frame player with
@@ -149,10 +149,10 @@ with the t=300 posterior held fixed through t=480.
 Each online update uses the configured tempered likelihood and the minimum
 uniform mixing required to retain the ensemble ESS floor; the applied mixing
 fraction and effective sample size are serialized for every frame.
-The online display products color every registered grid cell with a continuous
-exposure surface. Cells outside the simulated air domain receive a smooth local
-nearest-layer mean and a planning-blocked hatch; fixed risk bands are shown as
-contours rather than blockwise color jumps. This is display-only completion: stored exposure
+The online display products color every registered grid cell with one of the
+five configured risk labels. Cells outside the simulated air domain receive a
+smooth local exposure estimate before the same fixed risk-level classification,
+plus a planning-blocked hatch. This is display-only completion: stored exposure
 arrays, forecast-error metrics, transport barriers, and route feasibility are
 unchanged.
 `forecast_risk_level_grid.svg` is the primary full-map risk product: at each
