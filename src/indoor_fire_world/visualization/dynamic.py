@@ -10,11 +10,11 @@ import numpy as np
 
 from indoor_fire_world.p8_v2_config import load_p8_v2_parameters
 from indoor_fire_world.scene import load_scene
-from indoor_fire_world.visualization.risk_surface import complete_blocked_risk_levels
+from indoor_fire_world.visualization.risk_surface import complete_blocked_exposure
 
 
 def _run_length_encode(values: np.ndarray) -> list[list[int]]:
-    flattened = np.asarray(values, dtype=np.int8).reshape(-1)
+    flattened = np.asarray(values).reshape(-1)
     if flattened.size == 0:
         return []
     runs: list[list[int]] = []
@@ -46,21 +46,34 @@ def render_p8_v2_dynamic_risk_html(
     times = np.asarray(arrays["online_evaluation_times_s"], dtype=np.float64)
     prior = np.asarray(arrays["online_prior_risk_level"], dtype=np.int8)
     posterior = np.asarray(arrays["online_posterior_risk_level"], dtype=np.int8)
+    prior_exposure = np.asarray(arrays["online_prior_exposure"], dtype=np.float64)
+    posterior_exposure = np.asarray(
+        arrays["online_posterior_exposure"], dtype=np.float64
+    )
     expected_times = np.arange(0.0, 480.0 + 5.0, 5.0)
     if not np.array_equal(times, expected_times):
         raise ValueError("Dynamic risk visualization requires 0--480 s at 5 s intervals")
     if prior.shape != posterior.shape or prior.shape[0] != len(times):
         raise ValueError("Online prior and posterior grids must align with evaluation times")
-    frames = posterior.copy()
-    frames[0] = prior[0]
-    if np.any(frames[0] == -3) or np.any(frames[1:] == -3):
+    level_frames = posterior.copy()
+    level_frames[0] = prior[0]
+    exposure_frames = posterior_exposure.copy()
+    exposure_frames[0] = prior_exposure[0]
+    if np.any(level_frames[0] == -3) or np.any(level_frames[1:] == -3):
         raise ValueError("Dynamic risk frames contain unavailable cells")
-    planning_blocked = frames[0] < 0
-    if any(not np.array_equal(frame < 0, planning_blocked) for frame in frames[1:]):
+    planning_blocked = level_frames[0] < 0
+    if any(
+        not np.array_equal(frame < 0, planning_blocked)
+        for frame in level_frames[1:]
+    ):
         raise ValueError("Online risk frames must share one planning-blocked mask")
     display_frames = np.stack(
-        [complete_blocked_risk_levels(frame) for frame in frames]
+        [
+            complete_blocked_exposure(frame, planning_blocked)
+            for frame in exposure_frames
+        ]
     )
+    encoded_frames = np.rint(display_frames * 255.0).astype(np.uint8)
     rows, cols = display_frames.shape[1:]
     microwave = scene.semantic.by_id("microwave")
     if microwave.position is None:
@@ -68,7 +81,7 @@ def render_p8_v2_dynamic_risk_html(
     source_x, source_y = registration.metric_to_pixel(*microwave.position)
     payload = {
         "times": [int(value) for value in times],
-        "frames": [_run_length_encode(frame) for frame in display_frames],
+        "frames": [_run_length_encode(frame) for frame in encoded_frames],
         "planningBlocked": _run_length_encode(planning_blocked.astype(np.int8)),
         "rows": rows,
         "cols": cols,
@@ -104,13 +117,13 @@ h1{font-size:clamp(20px,2.2vw,32px);line-height:1.1;margin:0 0 4px}.subtitle{mar
 button,select{border:1px solid #aeb8ca;background:#fff;color:var(--ink);border-radius:7px;padding:7px 12px;font:inherit;font-weight:700}
 button{min-width:92px;cursor:pointer}input[type=range]{width:100%;accent-color:var(--accent)}
 .ticks{grid-column:2;display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-top:-9px}.ticks .handoff{color:#8f3b20;font-weight:700}
-.legend{display:flex;align-items:center;flex-wrap:wrap;gap:13px 18px;margin-top:10px;font-size:13px}.legend strong{font-size:13px}.key{display:inline-flex;align-items:center;gap:6px}.swatch{width:19px;height:13px;border:1px solid #596273}
+.legend{display:flex;align-items:center;flex-wrap:wrap;gap:13px 18px;margin-top:10px;font-size:13px}.legend strong{font-size:13px}.key{display:inline-flex;align-items:center;gap:6px}.swatch{width:19px;height:13px;border:1px solid #596273}.gradient{width:150px;height:14px;border:1px solid #596273;background:linear-gradient(90deg,#00204c,#414d6b,#7d7c78,#bcae6c,#fee838)}
 .note{margin:8px 0 0;color:var(--muted);font-size:12px}
 @media(max-width:720px){.top{align-items:flex-start}.time{font-size:24px}.controls{grid-template-columns:auto 1fr}.controls select{grid-column:1}.ticks{grid-column:2}.legend{gap:9px}}
 </style>
 </head>
 <body>
-<main class="player" data-frame-count="97" data-interval-s="5" data-source="online-sequential-posterior" data-display-completion="conservative-nearest-air">
+<main class="player" data-frame-count="97" data-interval-s="5" data-source="online-sequential-posterior" data-display-completion="smooth-nearest-layer-mean" data-visual-encoding="continuous-exposure-with-risk-contours">
   <header class="top">
     <div><h1>0-480 s online fire-risk evolution</h1><p class="subtitle">Model-predicted planning risk on the registered W1 4F grid</p></div>
     <div class="readout"><span class="time" id="timeLabel">t = 0 s</span><span class="phase" id="phaseLabel">Physics prior only</span></div>
@@ -122,8 +135,8 @@ button{min-width:92px;cursor:pointer}input[type=range]{width:100%;accent-color:v
     <select id="speedSelect" aria-label="Playback speed"><option value="320">0.5x</option><option value="180" selected>1x</option><option value="90">2x</option></select>
     <div class="ticks"><span>0 s</span><span class="handoff">300 s handoff</span><span>480 s</span></div>
   </section>
-  <section class="legend" id="legend"><strong>Planning-risk level</strong></section>
-  <p class="note">t=0 uses the physics prior; t=5-300 s uses sequential posterior updates every 5 s; after 300 s, posterior weights are held fixed. Hatched cells are planning-blocked and use conservative nearest-air color completion for display only. Simulation-only, not certified firefighter safety.</p>
+  <section class="legend" id="legend"><strong>Forecast exposure</strong><span class="key"><span class="gradient"></span>0 → 1</span></section>
+  <p class="note">t=0 uses the physics prior; t=5-300 s uses ESS-regularized sequential posterior updates every 5 s; after 300 s, posterior weights are held fixed. Thin contours mark configured risk-band transitions. Hatched cells remain planning-blocked and use smooth local display completion only; they never enter simulation, metrics, or routing. Simulation-only, not certified firefighter safety.</p>
 </main>
 <img id="mapImage" hidden alt="" src="data:image/png;base64,__MAP_IMAGE__">
 <script id="riskData" type="application/json">__RISK_DATA__</script>
@@ -137,18 +150,21 @@ const params=new URLSearchParams(window.location.search);
 let frameIndex=Math.max(0,Math.min(data.frames.length-1,Number(params.get('frame')||0))),timer=null;
 const autoplay=params.get('autoplay')!=='0';
 const rgba=(hex,a)=>{const n=parseInt(hex.slice(1),16);return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`};
-const decode=runs=>{const cells=new Int8Array(data.rows*data.cols);let p=0;for(const [value,count] of runs){cells.fill(value,p,p+count);p+=count}return cells};
+const decode=runs=>{const cells=new Uint8Array(data.rows*data.cols);let p=0;for(const [value,count] of runs){cells.fill(value,p,p+count);p+=count}return cells};
 const decoded=data.frames.map(decode);
 const planningBlocked=decode(data.planningBlocked);
 const hatchCanvas=document.createElement('canvas');hatchCanvas.width=14;hatchCanvas.height=14;const hatchContext=hatchCanvas.getContext('2d');hatchContext.strokeStyle='rgba(30,41,59,.18)';hatchContext.lineWidth=.8;hatchContext.beginPath();hatchContext.moveTo(-2,14);hatchContext.lineTo(14,-2);hatchContext.moveTo(5,16);hatchContext.lineTo(16,5);hatchContext.stroke();const blockedPattern=ctx.createPattern(hatchCanvas,'repeat');
 function phaseFor(t){if(t===0)return ['Physics prior only','#315f9b'];if(t<=data.handoffTime)return ['Sequential posterior update','#6f4bd8'];return ['Forecast with t=300 posterior fixed','#9a4d13']}
+const colorStops=[[0,[0,32,76]],[.25,[65,77,107]],[.5,[125,124,120]],[.75,[188,174,108]],[1,[254,232,56]]];
+function exposureColor(value){for(let i=1;i<colorStops.length;i++){const [rv,rr]=colorStops[i], [lv,lr]=colorStops[i-1];if(value<=rv){const f=(value-lv)/(rv-lv);return `rgb(${lr.map((x,j)=>Math.round(x+f*(rr[j]-x))).join(',')})`}}return 'rgb(254,232,56)'}
+function riskLevel(value){for(let i=0;i<data.levels.length-1;i++){if(value<=Number(data.levels[i].upper))return i}return data.levels.length-1}
 function drawSource(){const [x,y]=data.sourcePixel;ctx.save();ctx.lineWidth=7;ctx.strokeStyle='#fff';ctx.fillStyle='#d7191c';ctx.beginPath();ctx.arc(x,y,17,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.fillStyle='#111827';ctx.font='700 19px Segoe UI,Arial';ctx.fillText('Microwave source',x+25,y+7);ctx.restore()}
-function draw(index){frameIndex=index;const t=data.times[index],cells=decoded[index];ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(image,0,0,data.mapSize[0],data.mapSize[1]);const [left,top,width,height]=data.floorRoi,cw=width/data.cols,ch=height/data.rows;for(let row=0;row<data.rows;row++){const y=top+height-(row+1)*ch;for(let col=0;col<data.cols;col++){const cellIndex=row*data.cols+col,level=cells[cellIndex],x=left+col*cw;ctx.fillStyle=rgba(data.levels[level].color,.82);ctx.fillRect(x,y,cw+.25,ch+.25);if(planningBlocked[cellIndex]){ctx.fillStyle=blockedPattern;ctx.fillRect(x,y,cw+.25,ch+.25)}}}drawSource();slider.value=String(index);timeLabel.textContent=`t = ${t} s`;const [label,color]=phaseFor(t);phaseLabel.textContent=label;phaseLabel.style.color=color}
+function draw(index){frameIndex=index;const t=data.times[index],cells=decoded[index];ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(image,0,0,data.mapSize[0],data.mapSize[1]);const [left,top,width,height]=data.floorRoi,cw=width/data.cols,ch=height/data.rows;for(let row=0;row<data.rows;row++){const y=top+height-(row+1)*ch;for(let col=0;col<data.cols;col++){const cellIndex=row*data.cols+col,value=cells[cellIndex]/255,x=left+col*cw;ctx.fillStyle=exposureColor(value);ctx.globalAlpha=.82;ctx.fillRect(x,y,cw+.25,ch+.25);ctx.globalAlpha=1;if(planningBlocked[cellIndex]){ctx.fillStyle=blockedPattern;ctx.fillRect(x,y,cw+.25,ch+.25)}}}ctx.save();ctx.strokeStyle='rgba(17,24,39,.78)';ctx.lineWidth=1.15;ctx.beginPath();for(let row=0;row<data.rows;row++){const y=top+height-(row+1)*ch;for(let col=0;col<data.cols;col++){const k=row*data.cols+col,level=riskLevel(cells[k]/255),x=left+col*cw;if(col+1<data.cols&&riskLevel(cells[k+1]/255)!==level){ctx.moveTo(x+cw,y);ctx.lineTo(x+cw,y+ch)}if(row+1<data.rows&&riskLevel(cells[k+data.cols]/255)!==level){ctx.moveTo(x,y);ctx.lineTo(x+cw,y)}}}ctx.stroke();ctx.restore();drawSource();slider.value=String(index);timeLabel.textContent=`t = ${t} s`;const [label,color]=phaseFor(t);phaseLabel.textContent=label;phaseLabel.style.color=color}
 function stop(){if(timer!==null){clearInterval(timer);timer=null}playButton.textContent='Play';playButton.setAttribute('aria-label','Play animation')}
 function start(){stop();playButton.textContent='Pause';playButton.setAttribute('aria-label','Pause animation');timer=setInterval(()=>draw((frameIndex+1)%data.frames.length),Number(speedSelect.value))}
 playButton.addEventListener('click',()=>timer===null?start():stop());slider.addEventListener('input',()=>{stop();draw(Number(slider.value))});speedSelect.addEventListener('change',()=>{if(timer!==null)start()});
 document.addEventListener('keydown',event=>{if(event.code==='Space'){event.preventDefault();timer===null?start():stop()}else if(event.code==='ArrowRight'){stop();draw(Math.min(frameIndex+1,data.frames.length-1))}else if(event.code==='ArrowLeft'){stop();draw(Math.max(frameIndex-1,0))}});
-let lower=0;for(const level of data.levels){const item=document.createElement('span');item.className='key';const upper=level.upper===null?`> ${lower.toFixed(2)}`:`${lower.toFixed(2)}-${Number(level.upper).toFixed(2)}`;item.innerHTML=`<span class="swatch" style="background:${level.color}"></span>${level.id} (${upper})`;document.getElementById('legend').appendChild(item);if(level.upper!==null)lower=Number(level.upper)}const blockedKey=document.createElement('span');blockedKey.className='key';blockedKey.innerHTML='<span class="swatch" style="background:repeating-linear-gradient(135deg,transparent 0 4px,#475569 4px 5px)"></span>planning-blocked';document.getElementById('legend').appendChild(blockedKey);
+let lower=0;for(const level of data.levels){const item=document.createElement('span');item.className='key';const upper=level.upper===null?`> ${lower.toFixed(2)}`:`${lower.toFixed(2)}-${Number(level.upper).toFixed(2)}`;item.textContent=`${level.id} (${upper})`;document.getElementById('legend').appendChild(item);if(level.upper!==null)lower=Number(level.upper)}const blockedKey=document.createElement('span');blockedKey.className='key';blockedKey.innerHTML='<span class="swatch" style="background:repeating-linear-gradient(135deg,transparent 0 4px,#475569 4px 5px)"></span>planning-blocked';document.getElementById('legend').appendChild(blockedKey);
 const initialize=()=>{draw(frameIndex);if(autoplay)setTimeout(start,500);else stop()};image.addEventListener('load',initialize);if(image.complete)initialize()
 </script>
 </body>

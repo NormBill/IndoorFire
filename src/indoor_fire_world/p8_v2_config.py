@@ -65,6 +65,9 @@ class P8V2Parameters:
     online_update_times_s: tuple[float, ...]
     online_evaluation_times_s: tuple[float, ...]
     online_visualization_times_s: tuple[float, ...]
+    online_likelihood_power: float
+    online_minimum_effective_sample_size: float
+    online_regularization: str
     observation_points: tuple[ObservationPointSpec, ...]
     primary_observation_id: str
     primary_scenario_id: str
@@ -142,6 +145,17 @@ class P8V2Parameters:
             raise ValueError("Online evaluation must cover 0-480 s every 5 s")
         if self.online_visualization_times_s != (0.0, 30.0, 60.0, 100.0):
             raise ValueError("Online visualization keyframes must be 0/30/60/100 s")
+        if not 0.0 < self.online_likelihood_power <= 1.0:
+            raise ValueError("Online likelihood power must be in (0, 1]")
+        candidate_count = (
+            len(self.ensemble.hrr_factors)
+            * len(self.ensemble.yield_factors)
+            * len(self.ensemble.ventilation_factors)
+        )
+        if not 1.0 <= self.online_minimum_effective_sample_size <= candidate_count:
+            raise ValueError("Online minimum ESS must be within the candidate ensemble")
+        if self.online_regularization != "minimum_uniform_mixture_to_ess_floor":
+            raise ValueError("Unsupported online posterior regularization")
         if self.handoff_time_s != self.forecast_times_s[0]:
             raise ValueError("Handoff time must equal the first forecast time")
         if any(value > self.handoff_time_s for value in self.observation_times_s):
@@ -246,6 +260,11 @@ def load_p8_v2_parameters(config_path: str | Path) -> P8V2Parameters:
         online_visualization_times_s=tuple(
             float(value) for value in online["visualization_keyframes_s"]
         ),
+        online_likelihood_power=float(online["likelihood_power"]),
+        online_minimum_effective_sample_size=float(
+            online["minimum_effective_sample_size"]
+        ),
+        online_regularization=str(online["regularization"]),
         observation_points=tuple(
             ObservationPointSpec(str(item["id"]), (float(item["offset_m"][0]), float(item["offset_m"][1])))
             for item in observations["points"]

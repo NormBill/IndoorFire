@@ -16,7 +16,10 @@ from indoor_fire_world.simulation.p8_v2 import (
     run_p8_v2_case,
 )
 from indoor_fire_world.visualization.dynamic import render_p8_v2_dynamic_risk_html
-from indoor_fire_world.visualization.risk_surface import complete_blocked_risk_levels
+from indoor_fire_world.visualization.risk_surface import (
+    complete_blocked_exposure,
+    exposure_risk_levels,
+)
 from indoor_fire_world.visualization.svg import (
     render_p8_v2_categorical_risk_svg,
     render_p8_v2_online_pre_entry_timeseries_svg,
@@ -91,6 +94,8 @@ class P8V2Tests(unittest.TestCase):
             self.parameters.online_visualization_times_s,
             (0.0, 30.0, 60.0, 100.0),
         )
+        self.assertEqual(self.parameters.online_likelihood_power, 0.05)
+        self.assertEqual(self.parameters.online_minimum_effective_sample_size, 8.0)
         self.assertEqual([item.id for item in self.parameters.exposure_levels], ["minimal", "elevated", "high", "critical", "extreme"])
         self.assertEqual(
             [item.id for item in self.parameters.scenarios],
@@ -325,6 +330,22 @@ class P8V2Tests(unittest.TestCase):
         self.assertTrue(np.all(np.isnan(self.dense_case.arrays["online_posterior_exposure"][0])))
         self.assertTrue(np.all(np.isfinite(self.dense_case.arrays["online_posterior_exposure"][1:])))
         self.assertTrue(np.all(self.dense_case.arrays["online_posterior_risk_level"][0] == -3))
+        ess = self.dense_case.arrays["online_posterior_effective_sample_size"]
+        self.assertTrue(np.isnan(ess[0]))
+        self.assertTrue(np.all(ess[1:] >= 8.0 - 1e-9))
+        fractions = self.dense_case.arrays[
+            "online_posterior_regularization_fraction"
+        ]
+        self.assertTrue(np.all((fractions >= 0.0) & (fractions <= 1.0)))
+        self.assertGreater(float(np.max(fractions)), 0.0)
+        metadata = self.dense_case.summary["online_sequential_prediction"]
+        self.assertEqual(metadata["likelihood_power"], 0.05)
+        self.assertEqual(metadata["minimum_effective_sample_size"], 8.0)
+        frame_delta = np.abs(
+            self.dense_case.arrays["online_posterior_exposure"][2:]
+            - self.dense_case.arrays["online_posterior_exposure"][1:-1]
+        )
+        self.assertLess(float(np.nanmax(frame_delta)), 0.25)
 
     def test_dynamic_risk_player_uses_all_online_frames_without_reference_leakage(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -337,19 +358,27 @@ class P8V2Tests(unittest.TestCase):
             self.assertIn('data-frame-count="97"', html)
             self.assertIn('data-interval-s="5"', html)
             self.assertIn('data-source="online-sequential-posterior"', html)
-            self.assertIn('data-display-completion="conservative-nearest-air"', html)
+            self.assertIn('data-display-completion="smooth-nearest-layer-mean"', html)
+            self.assertIn(
+                'data-visual-encoding="continuous-exposure-with-risk-contours"',
+                html,
+            )
             self.assertIn('"times":[0,5,10', html)
             self.assertIn(',470,475,480]', html)
             self.assertIn('"planningBlocked"', html)
             self.assertNotIn("online_synthetic_reference", html)
             self.assertLess(output.stat().st_size, 2_000_000)
 
-    def test_display_completion_fills_holes_without_changing_air_cells(self) -> None:
-        raw = np.asarray([[0, -1, 4], [0, -1, 2]], dtype=np.int8)
-        completed = complete_blocked_risk_levels(raw)
-        self.assertTrue(np.all(completed >= 0))
-        np.testing.assert_array_equal(completed[raw >= 0], raw[raw >= 0])
-        self.assertEqual(int(completed[0, 1]), 4)
+    def test_display_completion_is_smooth_and_does_not_change_air_cells(self) -> None:
+        exposure = np.asarray([[0.0, 0.0, 1.0], [0.0, 0.0, 0.4]])
+        blocked = np.asarray([[False, True, False], [False, True, False]])
+        completed = complete_blocked_exposure(exposure, blocked)
+        self.assertTrue(np.all(np.isfinite(completed)))
+        np.testing.assert_array_equal(completed[~blocked], exposure[~blocked])
+        self.assertGreater(float(completed[0, 1]), 0.0)
+        self.assertLess(float(completed[0, 1]), 1.0)
+        levels = exposure_risk_levels(completed, (0.05, 0.20, 0.40, 0.70))
+        self.assertTrue(np.all((levels >= 0) & (levels <= 4)))
 
     def test_t300_compares_all_entrances_on_one_posterior_snapshot(self) -> None:
         result = self.dense_case.summary["online_ingress_at_t300"]
@@ -423,6 +452,11 @@ class P8V2Tests(unittest.TestCase):
             compact_ingress_text = compact_ingress.read_text(encoding="utf-8")
             self.assertEqual(risk_text.count('class="risk-level-cell"'), 9 * 50 * 160)
             self.assertIn('data-fixed-risk-thresholds="true"', risk_text)
+            self.assertIn(
+                'data-visual-encoding="continuous-exposure-with-risk-contours"',
+                risk_text,
+            )
+            self.assertIn('class="risk-level-contours"', risk_text)
             self.assertNotIn('data-risk-level="blocked"', risk_text)
             self.assertIn('data-planning-blocked="true"', risk_text)
             self.assertIn('data-planning-time-s="300"', ingress_text)

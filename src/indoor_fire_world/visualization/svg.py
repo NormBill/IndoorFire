@@ -10,7 +10,10 @@ from pathlib import Path
 import numpy as np
 
 from indoor_fire_world.scene.models import Polygon, Scene
-from indoor_fire_world.visualization.risk_surface import complete_blocked_risk_levels
+from indoor_fire_world.visualization.risk_surface import (
+    complete_blocked_exposure,
+    exposure_risk_levels,
+)
 
 
 def _render_p8_v2_forecast_svg_legacy(
@@ -249,6 +252,7 @@ def _p8_v2_categorical_cells(
     *,
     provenance: str = "posterior_model_forecast",
     planning_blocked_mask: np.ndarray | None = None,
+    continuous: bool = False,
 ) -> list[str]:
     """Render one explicit model-predicted level for every registered cell."""
     rows, cols = risk_grid.shape
@@ -269,8 +273,12 @@ def _p8_v2_categorical_cells(
                 else bool(planning_blocked_mask[row, col])
             )
             level_id = "blocked" if unclassified else levels[level_index].id
-            fill = "url(#p8v2-blocked)" if unclassified else levels[level_index].color
-            opacity = "0.48" if unclassified else "0.82"
+            fill = (
+                _continuous_exposure_color(float(field[row, col]))
+                if continuous
+                else ("url(#p8v2-blocked)" if unclassified else levels[level_index].color)
+            )
+            opacity = "0.82" if continuous else ("0.48" if unclassified else "0.82")
             stroke = "#374151" if planning_blocked and not unclassified else "#FFFFFF"
             stroke_opacity = "0.32" if planning_blocked and not unclassified else "0.28"
             parts.append(
@@ -282,7 +290,7 @@ def _p8_v2_categorical_cells(
                 f'stroke-width="0.28"><title>row={row}, col={col}, model-predicted '
                 f'exposure-risk level={escape(level_id)}, exposure={float(field[row,col]):.6f}, '
                 f'planning-blocked={str(planning_blocked).lower()}, '
-                f'display-completion={"conservative-nearest-air" if planning_blocked and not unclassified else "none"}, '
+                f'display-completion={"smooth-nearest-layer-mean" if planning_blocked and not unclassified else "none"}, '
                 f'burning=false</title></rect>'
             )
     parts.append("</g>")
@@ -297,6 +305,8 @@ def _p8_v2_compact_categorical_cells(
     *,
     provenance: str = "posterior_model_forecast",
     planning_blocked_mask: np.ndarray | None = None,
+    field: np.ndarray | None = None,
+    continuous: bool = False,
 ) -> list[str]:
     """Run-length encode equal adjacent levels for presentation-size SVGs."""
     rows, cols = risk_grid.shape
@@ -305,8 +315,17 @@ def _p8_v2_compact_categorical_cells(
         start_col = 0
         while start_col < cols:
             level_index = int(risk_grid[row, start_col])
+            exposure_bin = (
+                int(round(float(field[row, start_col]) * 31.0))
+                if continuous and field is not None
+                else -1
+            )
             end_col = start_col + 1
-            while end_col < cols and int(risk_grid[row, end_col]) == level_index:
+            while end_col < cols and (
+                int(round(float(field[row, end_col]) * 31.0)) == exposure_bin
+                if continuous and field is not None
+                else int(risk_grid[row, end_col]) == level_index
+            ):
                 end_col += 1
             px, py, _, cell_height = _p8_v2_cell_geometry(
                 scene, registration, row, start_col
@@ -316,10 +335,15 @@ def _p8_v2_compact_categorical_cells(
             )
             blocked = level_index < 0
             level_id = "blocked" if blocked else levels[level_index].id
-            fill = "url(#p8v2-blocked)" if blocked else levels[level_index].color
-            opacity = "0.48" if blocked else "0.82"
+            fill = (
+                _continuous_exposure_color(exposure_bin / 31.0)
+                if continuous and field is not None
+                else ("url(#p8v2-blocked)" if blocked else levels[level_index].color)
+            )
+            opacity = "0.82" if continuous else ("0.48" if blocked else "0.82")
             rectangles.append(
                 f'<rect class="compact-risk-run" data-risk-level="{escape(level_id)}" '
+                f'data-exposure-bin="{exposure_bin}" '
                 f'data-run-cell-count="{end_col-start_col}" data-burning="false" '
                 f'x="{px:.2f}" y="{py:.2f}" width="{end_px+end_width-px:.2f}" '
                 f'height="{cell_height:.2f}" fill="{fill}" fill-opacity="{opacity}"/>'
@@ -353,6 +377,7 @@ def _p8_v2_compact_categorical_cells(
         f'<g class="compact-categorical-risk-grid" data-grid-cell-count="{rows*cols}" '
         f'data-rendered-run-count="{len(rectangles)}" '
         f'data-risk-map-provenance="{escape(provenance)}" '
+        f'data-visual-encoding="{"continuous-exposure" if continuous else "categorical-risk"}" '
         'data-encoding="row-run-length" shape-rendering="crispEdges">',
         *rectangles,
         *overlays,
@@ -885,7 +910,8 @@ def render_p8_v2_online_risk_map_svg(
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
         f'viewBox="0 0 {width} {height}" data-risk-map-source="online_sequential_posterior" '
-        'data-fixed-risk-thresholds="true" data-display-completion="conservative-nearest-air">'
+        'data-fixed-risk-thresholds="true" data-display-completion="smooth-nearest-layer-mean" '
+        'data-visual-encoding="continuous-exposure-with-risk-contours">'
     ]
     parts.extend(_p8_v2_svg_defs(registration, encoded))
     parts.append('<rect width="100%" height="100%" fill="white"/>')
@@ -908,7 +934,15 @@ def render_p8_v2_online_risk_map_svg(
             label = f"t={time_s:g} s — sequential posterior"
             provenance = "online_sequential_posterior"
         planning_blocked = raw_levels < 0
-        levels = complete_blocked_risk_levels(raw_levels)
+        display_field = complete_blocked_exposure(field, planning_blocked)
+        levels = exposure_risk_levels(
+            display_field,
+            tuple(
+                float(level.upper_bound)
+                for level in parameters.exposure_levels
+                if level.upper_bound is not None
+            ),
+        )
         parts.append(
             f'<text x="{offset_x+panel_width/2:.1f}" y="{offset_y-10:.1f}" '
             'text-anchor="middle" font-family="sans-serif" font-size="15" '
@@ -927,20 +961,24 @@ def render_p8_v2_online_risk_map_svg(
                     registration,
                     provenance=provenance,
                     planning_blocked_mask=planning_blocked,
+                    field=display_field,
+                    continuous=True,
                 )
             )
         else:
             parts.extend(
                 _p8_v2_categorical_cells(
-                    field,
+                    display_field,
                     levels,
                     parameters.exposure_levels,
                     scene,
                     registration,
                     provenance=provenance,
                     planning_blocked_mask=planning_blocked,
+                    continuous=True,
                 )
             )
+        parts.extend(_p8_v2_contours(levels, scene, registration))
         parts.append(_p8_v2_source_marker(scene, registration))
         parts.append("</g>")
     note_y = (panel_height + title_gap) * 3 + 35
@@ -954,7 +992,7 @@ def render_p8_v2_online_risk_map_svg(
     )
     parts.append(
         f'<text x="24" y="{note_y+60:.1f}" font-family="sans-serif" font-size="15">'
-        'Colored cells are model-predicted planning risk, not burning cells or certified firefighter-safety levels.</text>'
+        'Continuous color is model-predicted exposure; thin lines mark fixed risk bands. Hatched display-completed cells remain planning-blocked.</text>'
     )
     legend_y = note_y + 100
     parts.append(
@@ -1000,7 +1038,15 @@ def render_p8_v2_t300_three_entrance_ingress_svg(
     field = np.asarray(arrays["online_posterior_exposure"][index], dtype=np.float64)
     raw_levels = np.asarray(arrays["online_posterior_risk_level"][index], dtype=np.int8)
     planning_blocked = raw_levels < 0
-    levels = complete_blocked_risk_levels(raw_levels)
+    display_field = complete_blocked_exposure(field, planning_blocked)
+    levels = exposure_risk_levels(
+        display_field,
+        tuple(
+            float(level.upper_bound)
+            for level in parameters.exposure_levels
+            if level.upper_bound is not None
+        ),
+    )
     result = summary["online_ingress_at_t300"]
     comparative = result["comparative_routes"]
     selected = comparative["selected_entrance"]
@@ -1023,7 +1069,8 @@ def render_p8_v2_t300_three_entrance_ingress_svg(
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
         f'viewBox="0 0 {width} {height}" data-planning-time-s="300" '
         'data-planning-field="online_sequential_posterior" '
-        'data-display-completion="conservative-nearest-air">'
+        'data-display-completion="smooth-nearest-layer-mean" '
+        'data-visual-encoding="continuous-exposure-with-risk-contours">'
     ]
     parts.extend(_p8_v2_svg_defs(registration, encoded))
     parts.extend(
@@ -1042,20 +1089,24 @@ def render_p8_v2_t300_three_entrance_ingress_svg(
                 registration,
                 provenance="online_sequential_posterior_t300",
                 planning_blocked_mask=planning_blocked,
+                field=display_field,
+                continuous=True,
             )
         )
     else:
         parts.extend(
             _p8_v2_categorical_cells(
-                field,
+                display_field,
                 levels,
                 parameters.exposure_levels,
                 scene,
                 registration,
                 provenance="online_sequential_posterior_t300",
                 planning_blocked_mask=planning_blocked,
+                continuous=True,
             )
         )
+    parts.extend(_p8_v2_contours(levels, scene, registration))
     parts.append('<g fill="none" stroke="#009E73" stroke-opacity="0.42" stroke-width="8" stroke-linecap="round">')
     for edge in graph.edges:
         route = {"path": [{"row": row, "col": col} for row, col in edge.path]}

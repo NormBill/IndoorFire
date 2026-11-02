@@ -44,8 +44,11 @@
     "handoff_s": 300.0,
     "update_interval_s": 5.0,
     "evaluation_end_s": 480.0,
+    "likelihood_power": 0.05,
+    "minimum_effective_sample_size": 8.0,
+    "regularization": "minimum_uniform_mixture_to_ess_floor",
     "visualization_keyframes_s": [0.0, 30.0, 60.0, 100.0],
-    "semantics": "t=0 is prior-only; each 5 s pre-entry observation recursively updates posterior weights; post-handoff forecasts hold the t=300 posterior fixed"
+    "semantics": "t=0 is prior-only; each 5 s pre-entry observation applies a tempered likelihood and the minimum uniform mixture needed to retain the configured ensemble ESS floor; post-handoff forecasts hold the t=300 posterior fixed"
   },
   "observation_points": {
     "selection_provenance": "registered_geometry_only_frozen_before_reference",

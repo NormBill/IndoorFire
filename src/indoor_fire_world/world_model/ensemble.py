@@ -137,3 +137,50 @@ def weight_diagnostics(weights: NDArray[np.floating]) -> dict[str, float]:
         "effective_sample_size": float(1.0 / np.sum(values**2)),
         "maximum_weight": float(np.max(values)),
     }
+
+
+def regularized_sequential_weights(
+    prior_weights: NDArray[np.floating],
+    likelihood_weights: NDArray[np.floating],
+    *,
+    likelihood_power: float,
+    minimum_effective_sample_size: float,
+) -> tuple[NDArray[np.float64], float]:
+    """Apply one tempered update and the least uniform mixing needed for an ESS floor.
+
+    The discrete candidate ensemble cannot represent arbitrary parameter values.  A
+    repeated point sensor can otherwise collapse it to one candidate and turn small
+    sensor residuals into abrupt field switches.  The returned mixing fraction is
+    explicit experiment metadata, not hidden process noise.
+    """
+    prior = np.asarray(prior_weights, dtype=np.float64)
+    likelihood = np.asarray(likelihood_weights, dtype=np.float64)
+    if prior.ndim != 1 or prior.shape != likelihood.shape or prior.size < 2:
+        raise ValueError("Sequential weights require matching one-dimensional ensembles")
+    if not np.isclose(np.sum(prior), 1.0) or not np.isclose(np.sum(likelihood), 1.0):
+        raise ValueError("Prior and likelihood weights must each sum to one")
+    if not 0.0 < likelihood_power <= 1.0:
+        raise ValueError("Likelihood power must be in (0, 1]")
+    if not 1.0 <= minimum_effective_sample_size <= prior.size:
+        raise ValueError("Minimum ESS must be within the ensemble size")
+    tiny = np.finfo(np.float64).tiny
+    updated = prior * np.power(np.maximum(likelihood, tiny), likelihood_power)
+    updated /= float(np.sum(updated))
+
+    def ess(values: NDArray[np.float64]) -> float:
+        return float(1.0 / np.sum(values**2))
+
+    if ess(updated) >= minimum_effective_sample_size - 1e-12:
+        return updated, 0.0
+    uniform = np.full(prior.size, 1.0 / prior.size, dtype=np.float64)
+    lower, upper = 0.0, 1.0
+    for _ in range(60):
+        fraction = 0.5 * (lower + upper)
+        candidate = (1.0 - fraction) * updated + fraction * uniform
+        if ess(candidate) >= minimum_effective_sample_size:
+            upper = fraction
+        else:
+            lower = fraction
+    regularized = (1.0 - upper) * updated + upper * uniform
+    regularized /= float(np.sum(regularized))
+    return regularized, float(upper)

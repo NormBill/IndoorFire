@@ -161,6 +161,11 @@ def run_p8_v2_suite(config_path: str | Path) -> P8V2SuiteOutput:
                 context.parameters.online_visualization_times_s
             ),
             "posterior_availability_rule": "unavailable only at t=0; recursively updated every 5 s from t=5 through t=300",
+            "likelihood_power": context.parameters.online_likelihood_power,
+            "minimum_effective_sample_size": (
+                context.parameters.online_minimum_effective_sample_size
+            ),
+            "regularization": context.parameters.online_regularization,
             "post_handoff_semantics": "t=300 posterior held fixed for forecasts through t=480",
         },
         "cases": {run_id: output.summary for run_id, output in cases.items()},

@@ -137930,8 +137930,8 @@
             "exit_center_stair": {
               "feasible": true,
               "geometric_length_m": 2.25,
-              "integrated_exposure": 2.25,
-              "integrated_uncertainty": 0.0,
+              "integrated_exposure": 2.2454114433981824,
+              "integrated_uncertainty": 2.25,
               "max_exposure": 1.0,
               "path": [
                 {
@@ -137977,13 +137977,13 @@
               ],
               "path_hash": "595e854c77efa084cc8d86ee4dfaf09b37a5d2685fffbbea1067e7c30cd979ad",
               "rejection_reasons": [],
-              "total_cost": 114.74999999999999
+              "total_cost": 115.08307216990912
             },
             "exit_southeast": {
               "feasible": true,
               "geometric_length_m": 37.25,
-              "integrated_exposure": 4.245862080747022,
-              "integrated_uncertainty": 0.0,
+              "integrated_exposure": 4.060843026144421,
+              "integrated_uncertainty": 8.213560211214016,
               "max_exposure": 1.0,
               "path": [
                 {
@@ -138589,13 +138589,13 @@
               ],
               "path_hash": "cf1664b1fc9ab9248d1084593f77ec242eabafa63000509b5a5ffbf030d66ce6",
               "rejection_reasons": [],
-              "total_cost": 249.54310403735107
+              "total_cost": 242.34554136002455
             },
             "exit_west": {
               "feasible": true,
               "geometric_length_m": 41.0,
-              "integrated_exposure": 4.683781888676124,
-              "integrated_uncertainty": 0.0,
+              "integrated_exposure": 4.255502414177594,
+              "integrated_uncertainty": 15.060434272765397,
               "max_exposure": 1.0,
               "path": [
                 {
@@ -139261,7 +139261,7 @@
               ],
               "path_hash": "6fe535d77d861510bf49a1b1ec421f4ff3654fbf9ec5c598a2c3a9aabdb9a9d8",
               "rejection_reasons": [],
-              "total_cost": 275.1890944338062
+              "total_cost": 257.54022927707103
             }
           },
           "feasible": true,
@@ -139269,8 +139269,8 @@
           "route": {
             "feasible": true,
             "geometric_length_m": 2.25,
-            "integrated_exposure": 2.25,
-            "integrated_uncertainty": 0.0,
+            "integrated_exposure": 2.2454114433981824,
+            "integrated_uncertainty": 2.25,
             "max_exposure": 1.0,
             "path": [
               {
@@ -139316,7 +139316,7 @@
             ],
             "path_hash": "595e854c77efa084cc8d86ee4dfaf09b37a5d2685fffbbea1067e7c30cd979ad",
             "rejection_reasons": [],
-            "total_cost": 114.74999999999999
+            "total_cost": 115.08307216990912
           },
           "selected_entrance": "exit_center_stair",
           "target_id": "geometry_route_high"
@@ -139397,6 +139397,8 @@
       "online_sequential_prediction": {
         "first_update_s": 5.0,
         "last_pre_entry_update_s": 300.0,
+        "likelihood_power": 0.05,
+        "minimum_effective_sample_size": 8.0,
         "observation_point_id": "geometry_route_high",
         "observation_point_provenance": "registered_geometry_only",
         "post_handoff_semantics": "hold the t=300 s posterior weights fixed for no-intervention forecasting",
@@ -139404,10 +139406,12 @@
         "records": [
           {
             "cumulative_observation_count": 0,
+            "likelihood_power": null,
             "phase": "pre_entry",
             "posterior_available": false,
             "posterior_effective_sample_size": null,
             "posterior_reference_exposure_mae": null,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": null,
             "posterior_unavailable_reason": "no_observation_at_initial_state",
             "posterior_weight_hash": null,
@@ -139433,10 +139437,12 @@
           },
           {
             "cumulative_observation_count": 1,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 11.999999290899622,
+            "posterior_effective_sample_size": 11.999999998227617,
             "posterior_reference_exposure_mae": 0.0,
+            "posterior_regularization_fraction": 0.0,
             "posterior_risk_level_counts": {
               "blocked": 2200,
               "critical": 0,
@@ -139446,7 +139452,7 @@
               "minimal": 5800
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "e3e6fbafeceb3fefc9349192dd680463be3bb4daa7eaacb78f3f53aaf2c20f2b",
+            "posterior_weight_hash": "d0dafbecef1dfd0379643e518754bdecbde64129159f3568c7d0f3510bf54a1c",
             "prior_reference_exposure_mae": 0.0,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -139469,10 +139475,12 @@
           },
           {
             "cumulative_observation_count": 2,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 11.999952316283606,
+            "posterior_effective_sample_size": 11.999999881029385,
             "posterior_reference_exposure_mae": 0.0,
+            "posterior_regularization_fraction": 0.0,
             "posterior_risk_level_counts": {
               "blocked": 2200,
               "critical": 0,
@@ -139482,7 +139490,7 @@
               "minimal": 5800
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "06e8efe2feda1d8655adffc4e3beaccb34200b1bf2a9155a3b45026c9504c14b",
+            "posterior_weight_hash": "a698a5443bbe5a0afa01f55871f6d7ab52a64fba3941fb3ac7f15c3d89a6947a",
             "prior_reference_exposure_mae": 0.0,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -139505,10 +139513,12 @@
           },
           {
             "cumulative_observation_count": 3,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 11.995013845079765,
+            "posterior_effective_sample_size": 11.999987779134734,
             "posterior_reference_exposure_mae": 0.0,
+            "posterior_regularization_fraction": 0.0,
             "posterior_risk_level_counts": {
               "blocked": 2200,
               "critical": 0,
@@ -139518,7 +139528,7 @@
               "minimal": 5800
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "e76ac6e5aae6e469a6888d1c2b2ff5422e52883ba200502b67d8ca0be87d4ae7",
+            "posterior_weight_hash": "49058db187791ae7e23609fdb882062115c36833147eaf3ca81e5c382da95d15",
             "prior_reference_exposure_mae": 0.0,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -139541,10 +139551,12 @@
           },
           {
             "cumulative_observation_count": 4,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 11.816663049746305,
+            "posterior_effective_sample_size": 11.999584693546637,
             "posterior_reference_exposure_mae": 0.0,
+            "posterior_regularization_fraction": 0.0,
             "posterior_risk_level_counts": {
               "blocked": 2200,
               "critical": 0,
@@ -139554,7 +139566,7 @@
               "minimal": 5800
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "33aafb2014cbc073387598263bad036a50601c2fbf129f9abd98fa00ab26a943",
+            "posterior_weight_hash": "2fbd4b3b8bcfb61a7864c904e2d38b4ae3e82d2504c14654abf3302a47d7ec98",
             "prior_reference_exposure_mae": 0.0,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -139577,10 +139589,12 @@
           },
           {
             "cumulative_observation_count": 5,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 10.727580667131669,
+            "posterior_effective_sample_size": 11.99725104898908,
             "posterior_reference_exposure_mae": 0.0,
+            "posterior_regularization_fraction": 0.0,
             "posterior_risk_level_counts": {
               "blocked": 2200,
               "critical": 0,
@@ -139590,7 +139604,7 @@
               "minimal": 5800
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "9589648a7db183c1ce74f1864e137499b8ac3ab73b344a2fb7a80198be979912",
+            "posterior_weight_hash": "6eac545255a73d460a755fca014873ae9843b7954f01811977474776d03c8a63",
             "prior_reference_exposure_mae": 0.0,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -139613,10 +139627,12 @@
           },
           {
             "cumulative_observation_count": 6,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 5.2230756772362446,
+            "posterior_effective_sample_size": 11.979042805629064,
             "posterior_reference_exposure_mae": 0.0,
+            "posterior_regularization_fraction": 0.0,
             "posterior_risk_level_counts": {
               "blocked": 2200,
               "critical": 0,
@@ -139626,7 +139642,7 @@
               "minimal": 5800
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "32b92588b136f6f5aea32f807fb6bf1e00aa5ea48da70def9c531b122fd040ce",
+            "posterior_weight_hash": "ae5eee73aad579ba3d36ef5e1e72a5768820a59c2d2fa1ed628f748a4d163296",
             "prior_reference_exposure_mae": 0.0,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -139649,10 +139665,12 @@
           },
           {
             "cumulative_observation_count": 7,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 7.279440005522759,
+            "posterior_effective_sample_size": 11.984057773660368,
             "posterior_reference_exposure_mae": 0.0,
+            "posterior_regularization_fraction": 0.0,
             "posterior_risk_level_counts": {
               "blocked": 2200,
               "critical": 0,
@@ -139662,7 +139680,7 @@
               "minimal": 5800
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "b7f8a8e12725498989b15eec9226d82cde495a9b66644086a3f68ef7703cbe85",
+            "posterior_weight_hash": "9c3889f662b57d1b306b29aa689cf7e94f7c6f195ef42321ded5c3428c3f1ff5",
             "prior_reference_exposure_mae": 0.0,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -139685,10 +139703,12 @@
           },
           {
             "cumulative_observation_count": 8,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 5.266666978343069,
-            "posterior_reference_exposure_mae": 1.5231119432056976e-05,
+            "posterior_effective_sample_size": 11.956394579396601,
+            "posterior_reference_exposure_mae": 5.252499402852709e-07,
+            "posterior_regularization_fraction": 0.0,
             "posterior_risk_level_counts": {
               "blocked": 2200,
               "critical": 0,
@@ -139698,7 +139718,7 @@
               "minimal": 5800
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "aebbf7f7f949b63ebc19fec18cc9ce4838ef659f74433d3e48241ad62493ed1f",
+            "posterior_weight_hash": "20daad211d4cfcdc8acfdc7c32c7b9f1c390c6d362a2847081de70a6830d5074",
             "prior_reference_exposure_mae": 7.745923420353505e-07,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -139721,20 +139741,22 @@
           },
           {
             "cumulative_observation_count": 9,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 4.815432405510772,
-            "posterior_reference_exposure_mae": 4.952852769535589e-05,
+            "posterior_effective_sample_size": 11.901691479632515,
+            "posterior_reference_exposure_mae": 2.7381155234191735e-06,
+            "posterior_regularization_fraction": 0.0,
             "posterior_risk_level_counts": {
               "blocked": 2200,
               "critical": 0,
-              "elevated": 6,
+              "elevated": 0,
               "extreme": 0,
               "high": 0,
-              "minimal": 5794
+              "minimal": 5800
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "6037757c1982bc6d729f0d532ef1f3549b3c72d5662c6bcb689b8fb9621f7224",
+            "posterior_weight_hash": "98f1b699282268dcb105a625bac06ea3c14bbbaf46997d594025d539f532cbad",
             "prior_reference_exposure_mae": 5.913747906702696e-06,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -139757,20 +139779,22 @@
           },
           {
             "cumulative_observation_count": 10,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 4.585687905471568,
-            "posterior_reference_exposure_mae": 8.190628396952132e-05,
+            "posterior_effective_sample_size": 11.897199937723489,
+            "posterior_reference_exposure_mae": 3.1719080700025424e-05,
+            "posterior_regularization_fraction": 0.0,
             "posterior_risk_level_counts": {
               "blocked": 2200,
               "critical": 0,
               "elevated": 5,
               "extreme": 0,
-              "high": 2,
-              "minimal": 5793
+              "high": 0,
+              "minimal": 5795
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "d60d0c0afd6bfb0d3863f59024d8bf9238f8c7eaf9f0da88335d7ec41bfd9a4d",
+            "posterior_weight_hash": "118b99eda5b3615f80ccab663066050b1b139821a0a255bb9b13d7ff16beaa91",
             "prior_reference_exposure_mae": 3.7710672162518885e-05,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -139793,20 +139817,22 @@
           },
           {
             "cumulative_observation_count": 11,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 4.794935878637471,
-            "posterior_reference_exposure_mae": 0.0001293202353169808,
+            "posterior_effective_sample_size": 11.758163118611103,
+            "posterior_reference_exposure_mae": 7.210884918299776e-05,
+            "posterior_regularization_fraction": 0.0,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 2,
+              "critical": 0,
               "elevated": 5,
               "extreme": 0,
-              "high": 5,
-              "minimal": 5788
+              "high": 2,
+              "minimal": 5793
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "ce85738467dc286dc48dfbe83908430861db748d54b92ea74231668275824cee",
+            "posterior_weight_hash": "70043fca47163063e2e424ca26a502734dd5fc4a5e4e38062711ae316829e272",
             "prior_reference_exposure_mae": 8.280245206495678e-05,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -139829,20 +139855,22 @@
           },
           {
             "cumulative_observation_count": 12,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 3.435973871868255,
-            "posterior_reference_exposure_mae": 0.00030898601235440556,
+            "posterior_effective_sample_size": 11.375242295941263,
+            "posterior_reference_exposure_mae": 0.00010256123036353743,
+            "posterior_regularization_fraction": 0.0,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 7,
-              "elevated": 2,
+              "critical": 1,
+              "elevated": 4,
               "extreme": 0,
               "high": 5,
-              "minimal": 5786
+              "minimal": 5790
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "53dc6baea260e2999ea69f4ac86d78cbecf41525130f4da9e8c7bdb354e8dc68",
+            "posterior_weight_hash": "5fedca8d8ef9c5a5c2efc62e70f87c8007424aa55679cfcb5f9389a4c60c5d8c",
             "prior_reference_exposure_mae": 0.0001239309422264869,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -139865,20 +139893,22 @@
           },
           {
             "cumulative_observation_count": 13,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 2.4510119380259066,
-            "posterior_reference_exposure_mae": 0.0005149069357934914,
+            "posterior_effective_sample_size": 10.5935479596297,
+            "posterior_reference_exposure_mae": 0.000123868627529474,
+            "posterior_regularization_fraction": 0.0,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 6,
+              "critical": 5,
               "elevated": 5,
-              "extreme": 6,
-              "high": 2,
-              "minimal": 5781
+              "extreme": 0,
+              "high": 3,
+              "minimal": 5787
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "6809cf31a1d09e1e5d320087deb31080a2815dfee20de40c76caf2d1bba22d8d",
+            "posterior_weight_hash": "436ad30bff76c244aa3a8c352b61b92becf24ae138ad320601c7652d229797f3",
             "prior_reference_exposure_mae": 0.00018332898778242377,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -139901,20 +139931,22 @@
           },
           {
             "cumulative_observation_count": 14,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.4217173606034144,
-            "posterior_reference_exposure_mae": 0.0009117217794299723,
+            "posterior_effective_sample_size": 9.661733659018164,
+            "posterior_reference_exposure_mae": 0.0001327642058095666,
+            "posterior_regularization_fraction": 0.0,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 4,
-              "elevated": 8,
-              "extreme": 9,
-              "high": 7,
-              "minimal": 5772
+              "critical": 7,
+              "elevated": 4,
+              "extreme": 0,
+              "high": 5,
+              "minimal": 5784
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "d3b6c1740a7cd00a382cf186f0e0e7c3f02f11969b485d57bd00b81485a9c006",
+            "posterior_weight_hash": "9f403ac697a58e318fb7decd2ca7bfc215db34174eb36be4d2fd180c526e4597",
             "prior_reference_exposure_mae": 0.00023469958842236988,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -139937,20 +139969,22 @@
           },
           {
             "cumulative_observation_count": 15,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.8815985785067397,
-            "posterior_reference_exposure_mae": 0.00015930753221324938,
+            "posterior_effective_sample_size": 9.324318751441277,
+            "posterior_reference_exposure_mae": 0.00021297061259807325,
+            "posterior_regularization_fraction": 0.0,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 8,
-              "elevated": 7,
+              "critical": 6,
+              "elevated": 6,
               "extreme": 2,
-              "high": 4,
-              "minimal": 5779
+              "high": 5,
+              "minimal": 5781
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "c62bf41d02847df107b62a88ad6d2e9974d90a7ab82fafc8b54916d2b0e15b37",
+            "posterior_weight_hash": "d75beaf7ca887524ee07fdc464c64d56541ff7aa8615b195939afc8d47f34059",
             "prior_reference_exposure_mae": 0.00030691908737683,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -139973,20 +140007,22 @@
           },
           {
             "cumulative_observation_count": 16,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.2690503151361892,
-            "posterior_reference_exposure_mae": 0.0006352119001209624,
+            "posterior_effective_sample_size": 8.432778294215204,
+            "posterior_reference_exposure_mae": 0.00025116769431654025,
+            "posterior_regularization_fraction": 0.0,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 8,
-              "elevated": 6,
-              "extreme": 0,
-              "high": 5,
-              "minimal": 5781
+              "critical": 6,
+              "elevated": 9,
+              "extreme": 6,
+              "high": 3,
+              "minimal": 5776
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "897a1046a458b3ea1f5a0ee0fcd1a11370b10d3e12f1eee9893b7a08a9f8a3e1",
+            "posterior_weight_hash": "687b6115baf131b1f7ce7fc91c59e4f0f833f1f22b071ad7d1e2f2a9a1bac467",
             "prior_reference_exposure_mae": 0.00038029512890972264,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140009,20 +140045,22 @@
           },
           {
             "cumulative_observation_count": 17,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.2976961065156825,
-            "posterior_reference_exposure_mae": 0.0006708482874974301,
+            "posterior_effective_sample_size": 8.0,
+            "posterior_reference_exposure_mae": 0.00023873424058700618,
+            "posterior_regularization_fraction": 0.13575984941301517,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 8,
-              "elevated": 7,
-              "extreme": 3,
-              "high": 5,
-              "minimal": 5777
+              "critical": 6,
+              "elevated": 9,
+              "extreme": 7,
+              "high": 6,
+              "minimal": 5772
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "71f4c9f4fe89b4797f4ae68be997c467e64ebd3c2fffa35b91abd1812a69de4e",
+            "posterior_weight_hash": "68b4922880800b3e5c878f75862f0d2eb258fc64d242f6a65117e29962faa8bb",
             "prior_reference_exposure_mae": 0.00045188999577289727,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140045,20 +140083,22 @@
           },
           {
             "cumulative_observation_count": 18,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0971504502038345,
-            "posterior_reference_exposure_mae": 0.0009298954277244067,
+            "posterior_effective_sample_size": 7.9999999999999964,
+            "posterior_reference_exposure_mae": 0.0002895399175390345,
+            "posterior_regularization_fraction": 0.2455875717561765,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 6,
-              "elevated": 7,
-              "extreme": 6,
-              "high": 5,
-              "minimal": 5776
+              "critical": 7,
+              "elevated": 11,
+              "extreme": 8,
+              "high": 9,
+              "minimal": 5765
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "bf34b7e994e7b2c15edbc11b258e83246509b0467d5d27b981b646e8f011ef0f",
+            "posterior_weight_hash": "027d8543e03fa62f8b7a7e3a4e604db0bfa138f50f9ea0823018dcfde925e922",
             "prior_reference_exposure_mae": 0.0005140804105268952,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140081,20 +140121,22 @@
           },
           {
             "cumulative_observation_count": 19,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.648512007309004,
-            "posterior_reference_exposure_mae": 0.0009731227196740066,
+            "posterior_effective_sample_size": 7.9999999999999964,
+            "posterior_reference_exposure_mae": 0.00022245071513827028,
+            "posterior_regularization_fraction": 0.3455543122601169,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 11,
-              "elevated": 15,
-              "extreme": 18,
-              "high": 11,
-              "minimal": 5745
+              "critical": 7,
+              "elevated": 14,
+              "extreme": 12,
+              "high": 8,
+              "minimal": 5759
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "657f3d8de09bbb10c79616fa6169296e0478705e0e0bb298bc7bc46589fec791",
+            "posterior_weight_hash": "0e953533744159d1c04b66f464dcbeb55f851726ab7481a829bfb3dd595caaf1",
             "prior_reference_exposure_mae": 0.0005704600594965226,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140117,20 +140159,22 @@
           },
           {
             "cumulative_observation_count": 20,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.1627105347706619,
-            "posterior_reference_exposure_mae": 0.0009948174960596392,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.0003913545396897923,
+            "posterior_regularization_fraction": 0.372985028464499,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 7,
-              "elevated": 14,
-              "extreme": 10,
-              "high": 7,
-              "minimal": 5762
+              "critical": 8,
+              "elevated": 11,
+              "extreme": 13,
+              "high": 13,
+              "minimal": 5755
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "d2cd8792033e91bb51c18937aae3cb90a774c8755ba7c63649b17488e3b2419e",
+            "posterior_weight_hash": "a375dd180b8b61572e6a89ffe46ba9a9ad12594bb945dcf28fe2957ec38b2df6",
             "prior_reference_exposure_mae": 0.0006489658469162852,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140153,20 +140197,22 @@
           },
           {
             "cumulative_observation_count": 21,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.336339068071119,
-            "posterior_reference_exposure_mae": 0.0008413085878842075,
+            "posterior_effective_sample_size": 7.9999999999999964,
+            "posterior_reference_exposure_mae": 0.00042140763256931366,
+            "posterior_regularization_fraction": 0.45402664150978395,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 10,
-              "elevated": 14,
-              "extreme": 12,
+              "critical": 13,
+              "elevated": 18,
+              "extreme": 14,
               "high": 11,
-              "minimal": 5753
+              "minimal": 5744
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "7a296221f77caa88d939057f807eee768375c984d513b0560c852358b474100a",
+            "posterior_weight_hash": "f8d12bcc87276d54b902d0c5d6e1b1618dbb1c777818bdae60d5fa8fac27e8ec",
             "prior_reference_exposure_mae": 0.0007438237389638702,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140189,20 +140235,22 @@
           },
           {
             "cumulative_observation_count": 22,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.000092851387123,
-            "posterior_reference_exposure_mae": 0.001360496787703291,
+            "posterior_effective_sample_size": 7.9999999999999964,
+            "posterior_reference_exposure_mae": 0.0006493007561717984,
+            "posterior_regularization_fraction": 0.46766628956831363,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 10,
-              "elevated": 17,
-              "extreme": 12,
-              "high": 10,
-              "minimal": 5751
+              "critical": 12,
+              "elevated": 16,
+              "extreme": 15,
+              "high": 15,
+              "minimal": 5742
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "a9ee8e43943f13852d0b0aced534bb161619eb2b7073f8ae39c2195d8cd6a1dc",
+            "posterior_weight_hash": "38307a89dd536ea71c908c80ad4e6af5c8107243241462a12eb77b6db6a5c580",
             "prior_reference_exposure_mae": 0.0008502541552527463,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140225,20 +140273,22 @@
           },
           {
             "cumulative_observation_count": 23,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0002490328797498,
-            "posterior_reference_exposure_mae": 0.001451166223437825,
+            "posterior_effective_sample_size": 8.0,
+            "posterior_reference_exposure_mae": 0.0006520931702262647,
+            "posterior_regularization_fraction": 0.5389330515043497,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 10,
-              "elevated": 16,
-              "extreme": 14,
-              "high": 16,
-              "minimal": 5744
+              "critical": 16,
+              "elevated": 22,
+              "extreme": 19,
+              "high": 12,
+              "minimal": 5731
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "305a552d3ae7f4faeab73a74ab15c32db9180354eeffc915e742c67d661bbd05",
+            "posterior_weight_hash": "b137d3a6c9dcfc9d60384b22d1a8edc3d3f100ab3095f1c20853a645e992e22d",
             "prior_reference_exposure_mae": 0.0009624792604118223,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140261,20 +140311,22 @@
           },
           {
             "cumulative_observation_count": 24,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.000000040516514,
-            "posterior_reference_exposure_mae": 0.001546473347915201,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.0008971577414606467,
+            "posterior_regularization_fraction": 0.5702856977865292,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 13,
-              "elevated": 19,
-              "extreme": 17,
-              "high": 15,
-              "minimal": 5736
+              "critical": 16,
+              "elevated": 21,
+              "extreme": 20,
+              "high": 18,
+              "minimal": 5725
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "da7d4fedbcc3a08d6f45fcd3c4696c43ed5fa501d960f5e8555cc27d0f1aee22",
+            "posterior_weight_hash": "005e5591c296f333fc05a8e3a3382ef60856e7439639b58ae8ae3af1592c3eee",
             "prior_reference_exposure_mae": 0.0010980521580396957,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140297,20 +140349,22 @@
           },
           {
             "cumulative_observation_count": 25,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0000000001151657,
-            "posterior_reference_exposure_mae": 0.0016308760087071121,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.0010240204995791713,
+            "posterior_regularization_fraction": 0.6222848463394512,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 14,
-              "elevated": 17,
-              "extreme": 20,
-              "high": 20,
-              "minimal": 5729
+              "critical": 18,
+              "elevated": 25,
+              "extreme": 24,
+              "high": 15,
+              "minimal": 5718
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "f8c324cafd8939bfce275e59c64e488bfe6ecb8e0a3c9b64dd5d0556d6858490",
+            "posterior_weight_hash": "ba933eedda0fd61eb201825e223a7eaffcc4acdfa206d0cc439d32c64d70cc3c",
             "prior_reference_exposure_mae": 0.001231728124653116,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140333,20 +140387,22 @@
           },
           {
             "cumulative_observation_count": 26,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0000000000004796,
-            "posterior_reference_exposure_mae": 0.0017126701965567348,
+            "posterior_effective_sample_size": 8.0,
+            "posterior_reference_exposure_mae": 0.0011457332211205306,
+            "posterior_regularization_fraction": 0.638266948801875,
             "posterior_risk_level_counts": {
               "blocked": 2200,
               "critical": 19,
-              "elevated": 19,
-              "extreme": 22,
-              "high": 19,
-              "minimal": 5721
+              "elevated": 23,
+              "extreme": 27,
+              "high": 18,
+              "minimal": 5713
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "17eb35d2be041ad59768e4890a019053b773e2e30124a5c228670dfce2fbab08",
+            "posterior_weight_hash": "f41609bc1e8520c055f29c9937f4064740c26877ae972d86a3a8f77645c8ddf8",
             "prior_reference_exposure_mae": 0.0013573372218299482,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140369,20 +140425,22 @@
           },
           {
             "cumulative_observation_count": 27,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.0017844434037625019,
+            "posterior_effective_sample_size": 7.999999999999998,
+            "posterior_reference_exposure_mae": 0.0013108950674067068,
+            "posterior_regularization_fraction": 0.6646431864520213,
             "posterior_risk_level_counts": {
               "blocked": 2200,
               "critical": 21,
-              "elevated": 15,
-              "extreme": 24,
-              "high": 25,
-              "minimal": 5715
+              "elevated": 23,
+              "extreme": 27,
+              "high": 23,
+              "minimal": 5706
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "e570ad7623ba2947e8736aa4345513205856fd1fbbe55c222ab0ab7b953934e6",
+            "posterior_weight_hash": "512a92fe420b9a8d1942d078a49d6121b052a293dfdb19b78736929cd35c97ef",
             "prior_reference_exposure_mae": 0.0014760589302131922,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140405,20 +140463,22 @@
           },
           {
             "cumulative_observation_count": 28,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.00184382535693173,
+            "posterior_effective_sample_size": 8.000000000000004,
+            "posterior_reference_exposure_mae": 0.0014587784775962225,
+            "posterior_regularization_fraction": 0.6946102461734426,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 24,
-              "elevated": 17,
-              "extreme": 30,
-              "high": 19,
-              "minimal": 5710
+              "critical": 21,
+              "elevated": 26,
+              "extreme": 34,
+              "high": 20,
+              "minimal": 5699
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "ccde351d50be7292ba8e211cc9f6ead71006d22decacf1222017933762ca963b",
+            "posterior_weight_hash": "d295d5f52c82193200c6ba76683db0f89dbf4c20869158663aec51b9b1497f11",
             "prior_reference_exposure_mae": 0.001588677268669111,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140441,20 +140501,22 @@
           },
           {
             "cumulative_observation_count": 29,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.0018994101479354567,
+            "posterior_effective_sample_size": 7.999999999999998,
+            "posterior_reference_exposure_mae": 0.001547062703800388,
+            "posterior_regularization_fraction": 0.7092296183129769,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 28,
-              "elevated": 17,
-              "extreme": 32,
-              "high": 20,
-              "minimal": 5703
+              "critical": 23,
+              "elevated": 21,
+              "extreme": 36,
+              "high": 26,
+              "minimal": 5694
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "9cef2c6f1661f0e070256270103a818225cce5e9866a4b3d439eed4abd234621",
+            "posterior_weight_hash": "d0324a3bfe707bb6ec06697acae4e9c8cb38314e49603ae4086f4edd769cb2fd",
             "prior_reference_exposure_mae": 0.001690885029444121,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140477,20 +140539,22 @@
           },
           {
             "cumulative_observation_count": 30,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.001956939694341319,
+            "posterior_effective_sample_size": 8.000000000000004,
+            "posterior_reference_exposure_mae": 0.0016392271104531768,
+            "posterior_regularization_fraction": 0.7201884377609795,
             "posterior_risk_level_counts": {
               "blocked": 2200,
               "critical": 29,
-              "elevated": 17,
-              "extreme": 38,
-              "high": 19,
-              "minimal": 5697
+              "elevated": 25,
+              "extreme": 39,
+              "high": 20,
+              "minimal": 5687
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "73c6995cace4a2a5b0d39fa0f464bcc52f0215cbd6d8f053eb62476c2811dc6a",
+            "posterior_weight_hash": "b7449b5ecc6404513b658b82ba213fbed47ce7cea5e7059414c52bae745a89b4",
             "prior_reference_exposure_mae": 0.0017957756575354509,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140513,20 +140577,22 @@
           },
           {
             "cumulative_observation_count": 31,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.0020113090918975917,
+            "posterior_effective_sample_size": 8.000000000000004,
+            "posterior_reference_exposure_mae": 0.001631242506443675,
+            "posterior_regularization_fraction": 0.7176063514233793,
             "posterior_risk_level_counts": {
               "blocked": 2200,
               "critical": 29,
-              "elevated": 17,
-              "extreme": 42,
-              "high": 20,
-              "minimal": 5692
+              "elevated": 21,
+              "extreme": 44,
+              "high": 24,
+              "minimal": 5682
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "35ce31205ffc4042b97d58f3fafdd652f03c4377e63b23710a48653b8dc26441",
+            "posterior_weight_hash": "d0bda057e5f7f3fb3b0f43cbd7d466dccceffc71730aaf9f37d01131e3538972",
             "prior_reference_exposure_mae": 0.0018808932143605083,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140549,20 +140615,22 @@
           },
           {
             "cumulative_observation_count": 32,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.0020697829845854557,
+            "posterior_effective_sample_size": 8.000000000000004,
+            "posterior_reference_exposure_mae": 0.001823743055321291,
+            "posterior_regularization_fraction": 0.7373518875221804,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 30,
-              "elevated": 17,
-              "extreme": 48,
-              "high": 20,
-              "minimal": 5685
+              "critical": 31,
+              "elevated": 21,
+              "extreme": 47,
+              "high": 23,
+              "minimal": 5678
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "98d1ad3a51d544070b6260a929c258425419b88c326369ae4307ed02b86dac92",
+            "posterior_weight_hash": "da289398fb2b8ebad485a7e3855580506ee81d043e813174fdeebc679a94c60b",
             "prior_reference_exposure_mae": 0.001977564950697452,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140585,20 +140653,22 @@
           },
           {
             "cumulative_observation_count": 33,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.002141416642266722,
+            "posterior_effective_sample_size": 8.0,
+            "posterior_reference_exposure_mae": 0.0018888899731354697,
+            "posterior_regularization_fraction": 0.7380306947919307,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 29,
-              "elevated": 17,
+              "critical": 31,
+              "elevated": 28,
               "extreme": 54,
               "high": 19,
-              "minimal": 5681
+              "minimal": 5668
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "e3371d03bdbd234fe1deec5de8a5eb5c2e67d0532804358297bbfc0b615b9cfa",
+            "posterior_weight_hash": "bb214d3d18531beb277332049a848713f861b8d92211e30e3207603e0e629ea8",
             "prior_reference_exposure_mae": 0.002084823101817083,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140621,20 +140691,22 @@
           },
           {
             "cumulative_observation_count": 34,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.0022386333631133353,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.0018994652903214085,
+            "posterior_regularization_fraction": 0.7276006241505405,
             "posterior_risk_level_counts": {
               "blocked": 2200,
               "critical": 30,
-              "elevated": 16,
-              "extreme": 60,
-              "high": 17,
-              "minimal": 5677
+              "elevated": 22,
+              "extreme": 58,
+              "high": 24,
+              "minimal": 5666
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "ca81a14e5bf6167f521ae8d5bb27b45049153c906447996e39185d6a83578de8",
+            "posterior_weight_hash": "8adb2bded9cba0172be4bb2aaa3006954d6b597b02b5e4030ec4cee60ddeff9d",
             "prior_reference_exposure_mae": 0.0021929744451669557,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140657,20 +140729,22 @@
           },
           {
             "cumulative_observation_count": 35,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.002358867705872025,
+            "posterior_effective_sample_size": 8.0,
+            "posterior_reference_exposure_mae": 0.0021094111662895185,
+            "posterior_regularization_fraction": 0.7466295763435011,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 30,
-              "elevated": 17,
-              "extreme": 64,
-              "high": 19,
-              "minimal": 5670
+              "critical": 36,
+              "elevated": 28,
+              "extreme": 58,
+              "high": 21,
+              "minimal": 5657
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "a5e5da6e90e5531ba8905781379c96306b9385532de40aa6df77d4a23d47af18",
+            "posterior_weight_hash": "e093f732b8334754a867bc1f1534cf8e2b08401a08d3dc53de3eb5a5807948df",
             "prior_reference_exposure_mae": 0.0022874461631328235,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140693,20 +140767,22 @@
           },
           {
             "cumulative_observation_count": 36,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.0025044356671800002,
+            "posterior_effective_sample_size": 8.000000000000004,
+            "posterior_reference_exposure_mae": 0.002332429069687777,
+            "posterior_regularization_fraction": 0.765742235770297,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 27,
-              "elevated": 17,
-              "extreme": 71,
-              "high": 20,
-              "minimal": 5665
+              "critical": 33,
+              "elevated": 31,
+              "extreme": 66,
+              "high": 18,
+              "minimal": 5652
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "77b28965ff1a9aae8dc6ca1c887b951e963c507fb3bff2e7696c4652510be746",
+            "posterior_weight_hash": "3e7a9cc3124f7ee91c42bc07292fbadc2273a7a2492187ded1da9db08baafbea",
             "prior_reference_exposure_mae": 0.0024174876523769006,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140729,20 +140805,22 @@
           },
           {
             "cumulative_observation_count": 37,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.002650086685173725,
+            "posterior_effective_sample_size": 8.0,
+            "posterior_reference_exposure_mae": 0.0024377981866497175,
+            "posterior_regularization_fraction": 0.7648246360788926,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 26,
-              "elevated": 24,
-              "extreme": 77,
-              "high": 17,
-              "minimal": 5656
+              "critical": 32,
+              "elevated": 30,
+              "extreme": 70,
+              "high": 22,
+              "minimal": 5646
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "f78c41753940e2957543f72fd8b93fa723c299a32131cdea36358ab58d5c36d8",
+            "posterior_weight_hash": "670f3dd4ccddb66fb26a8788b8665991eb7483901313c9b4add3f283a9068970",
             "prior_reference_exposure_mae": 0.0025313194063379444,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140765,20 +140843,22 @@
           },
           {
             "cumulative_observation_count": 38,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.0028224012349072933,
+            "posterior_effective_sample_size": 7.999999999999998,
+            "posterior_reference_exposure_mae": 0.0026261354495747177,
+            "posterior_regularization_fraction": 0.7766517624867837,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 27,
-              "elevated": 21,
-              "extreme": 80,
-              "high": 20,
-              "minimal": 5652
+              "critical": 33,
+              "elevated": 33,
+              "extreme": 74,
+              "high": 24,
+              "minimal": 5636
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "061212284357315061f61011124c62aae2426d2681781254383e7722cf23f166",
+            "posterior_weight_hash": "1d80d3dd00112ee701511e4f53f570af1cacdc3a96a825f8161d075986d4689c",
             "prior_reference_exposure_mae": 0.0026500260866034633,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140801,20 +140881,22 @@
           },
           {
             "cumulative_observation_count": 39,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.0030410153991537055,
+            "posterior_effective_sample_size": 7.9999999999999964,
+            "posterior_reference_exposure_mae": 0.0026179182901008447,
+            "posterior_regularization_fraction": 0.7541508300161383,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 26,
-              "elevated": 22,
-              "extreme": 87,
-              "high": 19,
-              "minimal": 5646
+              "critical": 31,
+              "elevated": 43,
+              "extreme": 82,
+              "high": 21,
+              "minimal": 5623
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "97a20a5d4eaae92ce1d433ba00066b4919f1e6863d60a7fc1b79e5507c3205cf",
+            "posterior_weight_hash": "350da22dc6eb5f4480719bda3c38ad372a3afa1c6d067c134163c1771a4e272d",
             "prior_reference_exposure_mae": 0.0027836136763748774,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140837,20 +140919,22 @@
           },
           {
             "cumulative_observation_count": 40,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.003265419636807268,
+            "posterior_effective_sample_size": 7.9999999999999964,
+            "posterior_reference_exposure_mae": 0.0028803724351391586,
+            "posterior_regularization_fraction": 0.7758669220634199,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 28,
-              "elevated": 27,
-              "extreme": 90,
-              "high": 19,
-              "minimal": 5636
+              "critical": 30,
+              "elevated": 45,
+              "extreme": 85,
+              "high": 23,
+              "minimal": 5617
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "847198101d81693de333547ad6b45353c282f62fc546ac51e3774f5e0b1bc416",
+            "posterior_weight_hash": "9231f5980d1a45689cce873e353082eee23ef35a91ca411763522eeabcde8c65",
             "prior_reference_exposure_mae": 0.0028968843769675216,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140873,20 +140957,22 @@
           },
           {
             "cumulative_observation_count": 41,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.0035094507950983785,
+            "posterior_effective_sample_size": 8.000000000000004,
+            "posterior_reference_exposure_mae": 0.003054256693831263,
+            "posterior_regularization_fraction": 0.7833212467913261,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 25,
-              "elevated": 24,
-              "extreme": 95,
-              "high": 25,
-              "minimal": 5631
+              "critical": 31,
+              "elevated": 46,
+              "extreme": 87,
+              "high": 28,
+              "minimal": 5608
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "655599b715c4ca092b9d3b09cb26fd1dec24c103f88c368b0ac82694a646082d",
+            "posterior_weight_hash": "1eba096b288f335dc49300eab56940c9ee98a999a50a64a5bf4d5034fbf2abc1",
             "prior_reference_exposure_mae": 0.003011123339980326,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140909,20 +140995,22 @@
           },
           {
             "cumulative_observation_count": 42,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.003781423353063932,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.0031705948569310336,
+            "posterior_regularization_fraction": 0.7787306287240021,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 27,
-              "elevated": 31,
-              "extreme": 98,
-              "high": 23,
-              "minimal": 5621
+              "critical": 32,
+              "elevated": 52,
+              "extreme": 93,
+              "high": 28,
+              "minimal": 5595
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "84f1a8e98eba8512f283379d1679f4824578b6e078de1c64bfefe14e2751d301",
+            "posterior_weight_hash": "c62137d37c5b7663bc4182fd75ec604ecd70a49661c865f8b4e64b3d6aa4a565",
             "prior_reference_exposure_mae": 0.003144552912765955,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140945,20 +141033,22 @@
           },
           {
             "cumulative_observation_count": 43,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.00407216460304285,
+            "posterior_effective_sample_size": 7.999999999999995,
+            "posterior_reference_exposure_mae": 0.0033087771334487574,
+            "posterior_regularization_fraction": 0.7755733779158305,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 29,
-              "elevated": 38,
-              "extreme": 101,
-              "high": 23,
-              "minimal": 5609
+              "critical": 33,
+              "elevated": 55,
+              "extreme": 98,
+              "high": 28,
+              "minimal": 5586
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "6f613e5988b3f33b8492dc6f23473bb984a80ebac79256cd1c00577afd302348",
+            "posterior_weight_hash": "ee481a91dbb914df8ede92ee7b2048780483b6863822f397ea3fadcd69c2e0a5",
             "prior_reference_exposure_mae": 0.0033086050417169104,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -140981,20 +141071,22 @@
           },
           {
             "cumulative_observation_count": 44,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.004393051187942078,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.0035575533519319707,
+            "posterior_regularization_fraction": 0.7853119591653199,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 27,
-              "elevated": 33,
-              "extreme": 106,
-              "high": 28,
-              "minimal": 5606
+              "critical": 32,
+              "elevated": 50,
+              "extreme": 101,
+              "high": 36,
+              "minimal": 5581
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "318fc6462419a1231663698520c813658447a3e3216f2a387f6b350dd301ad04",
+            "posterior_weight_hash": "fe2758d9810f07bcb3a5146b3dc4fd19e74dae093bfc3a28e50e018eb83e9d5d",
             "prior_reference_exposure_mae": 0.003483707171744323,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141017,20 +141109,22 @@
           },
           {
             "cumulative_observation_count": 45,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.004771165406408468,
+            "posterior_effective_sample_size": 7.9999999999999964,
+            "posterior_reference_exposure_mae": 0.0037477731780004445,
+            "posterior_regularization_fraction": 0.7848455792784801,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 31,
-              "elevated": 36,
-              "extreme": 108,
-              "high": 29,
-              "minimal": 5596
+              "critical": 33,
+              "elevated": 59,
+              "extreme": 103,
+              "high": 39,
+              "minimal": 5566
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "77de0e8ba8b2cb95a2efc50c553b451e77f69c90933bc1ac2cda8fd12b8d07f2",
+            "posterior_weight_hash": "5846b762f77bd4787eeb78ce82f20eb173e1b0b276d6d0717500b0a41467b6f9",
             "prior_reference_exposure_mae": 0.0036725410264183697,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141053,20 +141147,22 @@
           },
           {
             "cumulative_observation_count": 46,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.005182651673570915,
+            "posterior_effective_sample_size": 7.999999999999998,
+            "posterior_reference_exposure_mae": 0.003937174359140513,
+            "posterior_regularization_fraction": 0.7820075121382977,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 32,
-              "elevated": 40,
-              "extreme": 113,
-              "high": 32,
-              "minimal": 5583
+              "critical": 33,
+              "elevated": 66,
+              "extreme": 108,
+              "high": 40,
+              "minimal": 5553
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "b42315e33310d67c974de0fa6a26e06d2a459ec1ee1429546cc3cff0cf4cf107",
+            "posterior_weight_hash": "6525ef4f7378bb14a1892403caf3a3c7260d5dd37f8ae3a8cd8d2210f9b64aff",
             "prior_reference_exposure_mae": 0.00387309363474491,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141089,20 +141185,22 @@
           },
           {
             "cumulative_observation_count": 47,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.005627909808946666,
+            "posterior_effective_sample_size": 8.000000000000004,
+            "posterior_reference_exposure_mae": 0.004193985821865501,
+            "posterior_regularization_fraction": 0.7841440565748076,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 29,
-              "elevated": 35,
-              "extreme": 119,
-              "high": 39,
-              "minimal": 5578
+              "critical": 37,
+              "elevated": 67,
+              "extreme": 113,
+              "high": 41,
+              "minimal": 5542
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "32e4ba7cfebd3c0d3dff8f1859c33eae5ff9c2d68c776905d84e85a228e79660",
+            "posterior_weight_hash": "a842260917d75b502cfa25f28191a5223b615d2ea1d67b0c2505a96d017bd62a",
             "prior_reference_exposure_mae": 0.004086451583878795,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141125,20 +141223,22 @@
           },
           {
             "cumulative_observation_count": 48,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.006121591299902004,
+            "posterior_effective_sample_size": 8.0,
+            "posterior_reference_exposure_mae": 0.004469404724439802,
+            "posterior_regularization_fraction": 0.7852474361518181,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 33,
-              "elevated": 40,
-              "extreme": 120,
-              "high": 39,
-              "minimal": 5568
+              "critical": 39,
+              "elevated": 81,
+              "extreme": 115,
+              "high": 47,
+              "minimal": 5518
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "c6e08175dc173805e7a423c925748095b3890371dbf348f1da8db98c13fed2e8",
+            "posterior_weight_hash": "d9439ae1a8f3351e4ba64b49985a7c7fc40e471c89a63d02cc423cd44c03f39b",
             "prior_reference_exposure_mae": 0.00431983295100549,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141161,20 +141261,22 @@
           },
           {
             "cumulative_observation_count": 49,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.0067020694617672925,
+            "posterior_effective_sample_size": 8.0,
+            "posterior_reference_exposure_mae": 0.004735412628044991,
+            "posterior_regularization_fraction": 0.7811701338272481,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 36,
-              "elevated": 47,
-              "extreme": 124,
-              "high": 37,
-              "minimal": 5556
+              "critical": 47,
+              "elevated": 88,
+              "extreme": 116,
+              "high": 47,
+              "minimal": 5502
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "238beb5d848496a2f7e52b1fde5e99d461360f7612d3300926bd311fb45c6e3c",
             "prior_reference_exposure_mae": 0.004549963712757292,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141197,20 +141299,22 @@
           },
           {
             "cumulative_observation_count": 50,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.00735234107945242,
+            "posterior_effective_sample_size": 8.0,
+            "posterior_reference_exposure_mae": 0.005171781820840375,
+            "posterior_regularization_fraction": 0.7865468784913949,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 39,
-              "elevated": 43,
-              "extreme": 128,
-              "high": 43,
-              "minimal": 5547
+              "critical": 48,
+              "elevated": 97,
+              "extreme": 122,
+              "high": 45,
+              "minimal": 5488
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "a42550579265ca743529b0aa361c7c5b9650bd91428ca3836a6a9fee36e9a697",
             "prior_reference_exposure_mae": 0.004796880220105573,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141233,20 +141337,22 @@
           },
           {
             "cumulative_observation_count": 51,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.008085049255463841,
+            "posterior_effective_sample_size": 7.999999999999998,
+            "posterior_reference_exposure_mae": 0.005583498756018669,
+            "posterior_regularization_fraction": 0.7848203098968872,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 42,
-              "elevated": 48,
-              "extreme": 132,
-              "high": 44,
-              "minimal": 5534
+              "critical": 49,
+              "elevated": 100,
+              "extreme": 125,
+              "high": 52,
+              "minimal": 5474
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "cf87b26e17cc7761c899db241a66bccfe9cc8035af49af2c836fcc25652797f4",
             "prior_reference_exposure_mae": 0.005115324025552791,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141269,20 +141375,22 @@
           },
           {
             "cumulative_observation_count": 52,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.008919530778880084,
+            "posterior_effective_sample_size": 8.000000000000004,
+            "posterior_reference_exposure_mae": 0.006125906381356126,
+            "posterior_regularization_fraction": 0.786744597707799,
             "posterior_risk_level_counts": {
               "blocked": 2200,
               "critical": 49,
-              "elevated": 56,
-              "extreme": 133,
-              "high": 40,
-              "minimal": 5522
+              "elevated": 124,
+              "extreme": 130,
+              "high": 57,
+              "minimal": 5440
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "b05d8876f36b32af8176b7c67780657e76e9cb4d5f6b802d3eec0d1a0875d622",
             "prior_reference_exposure_mae": 0.005483216907517551,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141305,20 +141413,22 @@
           },
           {
             "cumulative_observation_count": 53,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.009848354463135924,
+            "posterior_effective_sample_size": 7.999999999999998,
+            "posterior_reference_exposure_mae": 0.006709733281297795,
+            "posterior_regularization_fraction": 0.7861215238628927,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 48,
-              "elevated": 60,
-              "extreme": 142,
-              "high": 41,
-              "minimal": 5509
+              "critical": 58,
+              "elevated": 131,
+              "extreme": 132,
+              "high": 57,
+              "minimal": 5422
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "afd28d0d997eb33cf39301353e597c1974baefc4d94522a8340374280dcf0a1a",
             "prior_reference_exposure_mae": 0.00594625255275484,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141341,20 +141451,22 @@
           },
           {
             "cumulative_observation_count": 54,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.010901158933466213,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.007415785454422436,
+            "posterior_regularization_fraction": 0.7865705402314588,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 48,
-              "elevated": 66,
-              "extreme": 145,
-              "high": 51,
-              "minimal": 5490
+              "critical": 57,
+              "elevated": 142,
+              "extreme": 137,
+              "high": 61,
+              "minimal": 5403
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "3f264f4e78a991f3778773ffa11c8d60b4c763ce31837df621bc9747abae1e4f",
             "prior_reference_exposure_mae": 0.006500798812808883,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141377,20 +141489,22 @@
           },
           {
             "cumulative_observation_count": 55,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.012062752855829565,
+            "posterior_effective_sample_size": 7.9999999999999964,
+            "posterior_reference_exposure_mae": 0.008165278623541742,
+            "posterior_regularization_fraction": 0.7867904517795502,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 50,
-              "elevated": 67,
-              "extreme": 149,
-              "high": 54,
-              "minimal": 5480
+              "critical": 66,
+              "elevated": 160,
+              "extreme": 139,
+              "high": 61,
+              "minimal": 5374
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "d7c462976af27c240b408e9476504f530615949052f28d1f9d350058c4b44d90",
             "prior_reference_exposure_mae": 0.007098632062247785,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141413,20 +141527,22 @@
           },
           {
             "cumulative_observation_count": 56,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.013327650524039145,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.008981503795804101,
+            "posterior_regularization_fraction": 0.7867879547023017,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 58,
-              "elevated": 76,
-              "extreme": 153,
-              "high": 53,
-              "minimal": 5460
+              "critical": 67,
+              "elevated": 176,
+              "extreme": 145,
+              "high": 67,
+              "minimal": 5345
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "9876d1216c4adc87bbb53f83ea3ba22cacbe4d873c043dccf1810052eea745ea",
             "prior_reference_exposure_mae": 0.0077678063530676736,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141449,20 +141565,22 @@
           },
           {
             "cumulative_observation_count": 57,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.014695952658936182,
+            "posterior_effective_sample_size": 7.999999999999998,
+            "posterior_reference_exposure_mae": 0.009881803728200073,
+            "posterior_regularization_fraction": 0.786781671302792,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 59,
-              "elevated": 86,
-              "extreme": 159,
-              "high": 57,
-              "minimal": 5439
+              "critical": 64,
+              "elevated": 186,
+              "extreme": 152,
+              "high": 79,
+              "minimal": 5319
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "ac6744ac7587f58e7ec6ef41960c01d9ac0643279500fbc8140e4087d3077ac6",
             "prior_reference_exposure_mae": 0.008492511281426161,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141485,20 +141603,22 @@
           },
           {
             "cumulative_observation_count": 58,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.016177198439067977,
+            "posterior_effective_sample_size": 7.999999999999998,
+            "posterior_reference_exposure_mae": 0.010864905170949206,
+            "posterior_regularization_fraction": 0.7867978989000571,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 53,
-              "elevated": 90,
-              "extreme": 167,
-              "high": 66,
-              "minimal": 5424
+              "critical": 72,
+              "elevated": 202,
+              "extreme": 155,
+              "high": 83,
+              "minimal": 5288
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "15b2f4ad6205f6d66dcb78391a7dc69a04996743371d571ffa4b9edce78180d2",
             "prior_reference_exposure_mae": 0.009298543099805318,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141521,20 +141641,22 @@
           },
           {
             "cumulative_observation_count": 59,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.017768551652400242,
+            "posterior_effective_sample_size": 7.999999999999998,
+            "posterior_reference_exposure_mae": 0.011911694072083897,
+            "posterior_regularization_fraction": 0.7867906153503536,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 61,
-              "elevated": 100,
-              "extreme": 169,
-              "high": 67,
-              "minimal": 5403
+              "critical": 74,
+              "elevated": 223,
+              "extreme": 160,
+              "high": 94,
+              "minimal": 5249
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "85036fd6db3d22ea06dad9bf9d5422e269beb1d007115e5ae9652d24417248da",
             "prior_reference_exposure_mae": 0.010185617692145642,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141557,20 +141679,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": 0.05,
             "phase": "pre_entry",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.019496476761462263,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.013047264856460359,
+            "posterior_regularization_fraction": 0.7867990366068716,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 66,
-              "elevated": 109,
-              "extreme": 175,
-              "high": 74,
-              "minimal": 5376
+              "critical": 77,
+              "elevated": 232,
+              "extreme": 166,
+              "high": 103,
+              "minimal": 5222
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.011148358897027323,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141593,20 +141717,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.021368311570529108,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.014289291904561732,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 67,
-              "elevated": 120,
-              "extreme": 183,
-              "high": 76,
-              "minimal": 5354
+              "critical": 82,
+              "elevated": 253,
+              "extreme": 171,
+              "high": 105,
+              "minimal": 5189
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.012208319301154017,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141629,20 +141755,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.023362940049803146,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.015603908702164168,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 68,
-              "elevated": 118,
-              "extreme": 189,
-              "high": 90,
-              "minimal": 5335
+              "critical": 85,
+              "elevated": 279,
+              "extreme": 175,
+              "high": 117,
+              "minimal": 5144
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.01334053747312871,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141665,20 +141793,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.025472295527182488,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.01697963429427419,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 75,
-              "elevated": 127,
-              "extreme": 192,
-              "high": 97,
-              "minimal": 5309
+              "critical": 92,
+              "elevated": 290,
+              "extreme": 179,
+              "high": 132,
+              "minimal": 5107
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.014526815826727527,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141701,20 +141831,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.02765114892097175,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.01839559055163273,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 81,
-              "elevated": 139,
-              "extreme": 196,
-              "high": 101,
-              "minimal": 5283
+              "critical": 92,
+              "elevated": 321,
+              "extreme": 188,
+              "high": 142,
+              "minimal": 5057
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.015751130809256074,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141737,20 +141869,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.029884313253848896,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.01984142884879653,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 81,
-              "elevated": 153,
-              "extreme": 204,
-              "high": 108,
-              "minimal": 5254
+              "critical": 101,
+              "elevated": 345,
+              "extreme": 192,
+              "high": 153,
+              "minimal": 5009
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.017000347414709033,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141773,20 +141907,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.0322000947236652,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.02133801249242032,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 88,
-              "elevated": 159,
-              "extreme": 207,
-              "high": 121,
-              "minimal": 5225
+              "critical": 106,
+              "elevated": 398,
+              "extreme": 193,
+              "high": 163,
+              "minimal": 4940
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.018283947252335998,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141809,20 +141945,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.034569545289735916,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.022855465716016588,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 94,
-              "elevated": 168,
-              "extreme": 213,
-              "high": 128,
-              "minimal": 5197
+              "critical": 113,
+              "elevated": 416,
+              "extreme": 201,
+              "high": 183,
+              "minimal": 4887
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.019576166002751378,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141845,20 +141983,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.03697436293581076,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.024376590619767227,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 102,
-              "elevated": 184,
-              "extreme": 217,
-              "high": 130,
-              "minimal": 5167
+              "critical": 126,
+              "elevated": 435,
+              "extreme": 202,
+              "high": 187,
+              "minimal": 4850
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.020844715604172684,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141881,20 +142021,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.03940392646796258,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.025901264823038467,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 106,
-              "elevated": 183,
-              "extreme": 221,
-              "high": 141,
-              "minimal": 5149
+              "critical": 131,
+              "elevated": 456,
+              "extreme": 206,
+              "high": 197,
+              "minimal": 4810
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.022105594467458224,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141917,20 +142059,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.04184692235130226,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.027401182774629385,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 116,
-              "elevated": 188,
-              "extreme": 223,
-              "high": 148,
-              "minimal": 5125
+              "critical": 140,
+              "elevated": 467,
+              "extreme": 209,
+              "high": 214,
+              "minimal": 4770
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.023346650750756644,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141953,20 +142097,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.044288367538685876,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.028875824954351433,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 121,
-              "elevated": 197,
-              "extreme": 227,
-              "high": 155,
-              "minimal": 5100
+              "critical": 146,
+              "elevated": 486,
+              "extreme": 211,
+              "high": 226,
+              "minimal": 4731
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.024578108339796997,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -141989,20 +142135,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.04671856202458881,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.03029685047293072,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 125,
-              "elevated": 208,
-              "extreme": 233,
-              "high": 165,
-              "minimal": 5069
+              "critical": 160,
+              "elevated": 494,
+              "extreme": 217,
+              "high": 238,
+              "minimal": 4691
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.02578852790921023,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142025,20 +142173,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.04917138863053314,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.031732218726494225,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 135,
-              "elevated": 209,
-              "extreme": 236,
-              "high": 169,
-              "minimal": 5051
+              "critical": 166,
+              "elevated": 498,
+              "extreme": 218,
+              "high": 257,
+              "minimal": 4661
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.027022457420190604,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142061,20 +142211,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.051645412799623286,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.03316702181227729,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 140,
-              "elevated": 211,
-              "extreme": 241,
-              "high": 181,
-              "minimal": 5027
+              "critical": 174,
+              "elevated": 515,
+              "extreme": 222,
+              "high": 264,
+              "minimal": 4625
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.028274355801456586,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142097,20 +142249,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.0541026908218179,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.034576056290672126,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 144,
-              "elevated": 212,
-              "extreme": 246,
-              "high": 190,
-              "minimal": 5008
+              "critical": 186,
+              "elevated": 516,
+              "extreme": 226,
+              "high": 283,
+              "minimal": 4589
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.029527111487868296,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142133,20 +142287,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.056524396998697,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.035951940934249436,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 148,
-              "elevated": 225,
-              "extreme": 247,
-              "high": 200,
-              "minimal": 4980
+              "critical": 198,
+              "elevated": 515,
+              "extreme": 227,
+              "high": 297,
+              "minimal": 4563
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.030758690244096522,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142169,20 +142325,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.0588843011709904,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.03728002678474121,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 152,
-              "elevated": 237,
-              "extreme": 249,
-              "high": 208,
-              "minimal": 4954
+              "critical": 209,
+              "elevated": 525,
+              "extreme": 227,
+              "high": 311,
+              "minimal": 4528
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.03196741536031909,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142205,20 +142363,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.0611767479086479,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.038553431904582165,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 165,
-              "elevated": 249,
-              "extreme": 251,
-              "high": 210,
-              "minimal": 4925
+              "critical": 215,
+              "elevated": 525,
+              "extreme": 233,
+              "high": 342,
+              "minimal": 4485
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.03313784276312867,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142241,20 +142401,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.06340077738348042,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.03979228477529372,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 169,
-              "elevated": 257,
-              "extreme": 254,
-              "high": 218,
-              "minimal": 4902
+              "critical": 223,
+              "elevated": 534,
+              "extreme": 241,
+              "high": 349,
+              "minimal": 4453
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.03426004774197719,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142277,20 +142439,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.06555521541508683,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.04100160049897809,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 173,
-              "elevated": 280,
-              "extreme": 256,
-              "high": 224,
-              "minimal": 4867
+              "critical": 231,
+              "elevated": 564,
+              "extreme": 245,
+              "high": 356,
+              "minimal": 4404
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.035329765721101,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142313,20 +142477,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.06763595093920512,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.04218775600233453,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 177,
-              "elevated": 298,
-              "extreme": 261,
-              "high": 230,
-              "minimal": 4834
+              "critical": 238,
+              "elevated": 578,
+              "extreme": 247,
+              "high": 373,
+              "minimal": 4364
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.03633636137309693,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142349,20 +142515,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.06964291427742443,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.043342983207591834,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 182,
-              "elevated": 317,
-              "extreme": 266,
-              "high": 234,
-              "minimal": 4801
+              "critical": 246,
+              "elevated": 600,
+              "extreme": 250,
+              "high": 382,
+              "minimal": 4322
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.03728339090870347,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142385,20 +142553,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.07157060647135569,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.04446962129615664,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 186,
-              "elevated": 320,
-              "extreme": 268,
-              "high": 249,
-              "minimal": 4777
+              "critical": 256,
+              "elevated": 613,
+              "extreme": 251,
+              "high": 398,
+              "minimal": 4282
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.038191453142641885,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142421,20 +142591,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.07340852692088726,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.0455582906286204,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 190,
-              "elevated": 341,
-              "extreme": 270,
-              "high": 258,
-              "minimal": 4741
+              "critical": 269,
+              "elevated": 633,
+              "extreme": 256,
+              "high": 396,
+              "minimal": 4246
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.03908455554063859,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142457,20 +142629,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.0751516722364748,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.0465882806082155,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 195,
-              "elevated": 366,
-              "extreme": 273,
-              "high": 267,
-              "minimal": 4699
+              "critical": 275,
+              "elevated": 667,
+              "extreme": 258,
+              "high": 405,
+              "minimal": 4195
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.03995084551225947,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142493,20 +142667,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.0768157959695408,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.047591280084607834,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 201,
-              "elevated": 390,
-              "extreme": 275,
-              "high": 276,
-              "minimal": 4658
+              "critical": 283,
+              "elevated": 690,
+              "extreme": 259,
+              "high": 410,
+              "minimal": 4158
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.04078447827701345,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142529,20 +142705,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.0783879756769249,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.048554560759382887,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 206,
-              "elevated": 409,
-              "extreme": 275,
-              "high": 291,
-              "minimal": 4619
+              "critical": 291,
+              "elevated": 709,
+              "extreme": 263,
+              "high": 413,
+              "minimal": 4124
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.041599874879234285,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142565,20 +142743,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.07986851289134397,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.04946590263570668,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 209,
-              "elevated": 419,
-              "extreme": 276,
-              "high": 307,
-              "minimal": 4589
+              "critical": 300,
+              "elevated": 725,
+              "extreme": 264,
+              "high": 417,
+              "minimal": 4094
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.04237988468893989,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142601,20 +142781,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.08127701686332421,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.05035210846900739,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 218,
-              "elevated": 429,
-              "extreme": 276,
-              "high": 309,
-              "minimal": 4568
+              "critical": 309,
+              "elevated": 743,
+              "extreme": 264,
+              "high": 423,
+              "minimal": 4061
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.043127494148591725,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142637,20 +142819,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.08261281382099392,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.05120349941061525,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 216,
-              "elevated": 449,
-              "extreme": 279,
-              "high": 322,
-              "minimal": 4534
+              "critical": 312,
+              "elevated": 752,
+              "extreme": 274,
+              "high": 428,
+              "minimal": 4034
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.04384525479321913,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142673,20 +142857,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.08388433048333982,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.05200782459213042,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 222,
-              "elevated": 456,
-              "extreme": 280,
-              "high": 333,
-              "minimal": 4509
+              "critical": 317,
+              "elevated": 757,
+              "extreme": 278,
+              "high": 433,
+              "minimal": 4015
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.04452117900137596,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142709,20 +142895,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.08509032039727203,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.05278317016291354,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 231,
-              "elevated": 459,
+              "critical": 321,
+              "elevated": 775,
               "extreme": 282,
-              "high": 338,
-              "minimal": 4490
+              "high": 437,
+              "minimal": 3985
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.04516137114763808,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142745,20 +142933,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.0862375460281861,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.0535144082017314,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 240,
-              "elevated": 464,
-              "extreme": 285,
-              "high": 340,
-              "minimal": 4471
+              "critical": 330,
+              "elevated": 789,
+              "extreme": 288,
+              "high": 432,
+              "minimal": 3961
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.04577225502473142,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142781,20 +142971,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.08732670354800084,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.05420276664746875,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 243,
-              "elevated": 476,
-              "extreme": 286,
-              "high": 345,
-              "minimal": 4450
+              "critical": 332,
+              "elevated": 803,
+              "extreme": 292,
+              "high": 433,
+              "minimal": 3940
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.04635015476241202,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142817,20 +143009,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.08835636324462576,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.05486089259620043,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 242,
-              "elevated": 476,
-              "extreme": 289,
-              "high": 361,
-              "minimal": 4432
+              "critical": 341,
+              "elevated": 821,
+              "extreme": 294,
+              "high": 433,
+              "minimal": 3911
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.046901892695550416,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142853,20 +143047,22 @@
           },
           {
             "cumulative_observation_count": 60,
+            "likelihood_power": null,
             "phase": "post_handoff_forecast",
             "posterior_available": true,
-            "posterior_effective_sample_size": 1.0,
-            "posterior_reference_exposure_mae": 0.08933079439722112,
+            "posterior_effective_sample_size": 8.000000000000002,
+            "posterior_reference_exposure_mae": 0.055472541365723924,
+            "posterior_regularization_fraction": null,
             "posterior_risk_level_counts": {
               "blocked": 2200,
-              "critical": 246,
-              "elevated": 485,
-              "extreme": 292,
-              "high": 365,
-              "minimal": 4412
+              "critical": 348,
+              "elevated": 830,
+              "extreme": 295,
+              "high": 435,
+              "minimal": 3892
             },
             "posterior_unavailable_reason": null,
-            "posterior_weight_hash": "51e59416f7cf0428e65236371602997695e2d7bc0decf01bf97c85afd83fe819",
+            "posterior_weight_hash": "699d4231c7fc2736a309419ebf4ac8eb25b2788aec30eecdc0adec6e8fc03ae1",
             "prior_reference_exposure_mae": 0.047411897946555315,
             "prior_risk_level_counts": {
               "blocked": 2200,
@@ -142888,6 +143084,7 @@
             "time_s": 480.0
           }
         ],
+        "regularization": "minimum_uniform_mixture_to_ess_floor",
         "update_interval_s": 5.0,
         "visualization_keyframes_s": [
           0.0,
@@ -247232,8 +247429,11 @@
     "evaluation_time_count": 97,
     "first_update_s": 5.0,
     "last_pre_entry_update_s": 300.0,
+    "likelihood_power": 0.05,
+    "minimum_effective_sample_size": 8.0,
     "post_handoff_semantics": "t=300 posterior held fixed for forecasts through t=480",
     "posterior_availability_rule": "unavailable only at t=0; recursively updated every 5 s from t=5 through t=300",
+    "regularization": "minimum_uniform_mixture_to_ess_floor",
     "update_interval_s": 5.0,
     "visualization_keyframes_s": [
       0.0,

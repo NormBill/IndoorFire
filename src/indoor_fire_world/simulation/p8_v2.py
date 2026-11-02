@@ -43,6 +43,7 @@ from indoor_fire_world.world_model import (
     UncertaintyField,
     build_candidates,
     posterior_weights,
+    regularized_sequential_weights,
     simulate_candidate_bank,
     weight_diagnostics,
     weighted_forecast,
@@ -1122,6 +1123,8 @@ def attach_online_sequential_evaluation(
     posterior_levels_all: list[NDArray[np.int8]] = []
     availability: list[bool] = []
     update_applied: list[bool] = []
+    regularization_fractions: list[float] = []
+    effective_sample_sizes: list[float] = []
 
     for time_s in context.parameters.online_evaluation_times_s:
         prior_forecast = weighted_forecast(
@@ -1136,6 +1139,7 @@ def attach_online_sequential_evaluation(
             context, reference_hazard.field
         )
         applied = time_s in update_times
+        regularization_fraction = 0.0
         if applied:
             observation = sensor.observe(reference[time_s], point.pose)
             observation = replace(observation, timestamp=time_s)
@@ -1146,8 +1150,14 @@ def attach_online_sequential_evaluation(
                 point.cell,
                 context.parameters.sensor,
             )
-            weights = weights * np.maximum(likelihood, np.finfo(np.float64).tiny)
-            weights /= float(np.sum(weights))
+            weights, regularization_fraction = regularized_sequential_weights(
+                weights,
+                likelihood,
+                likelihood_power=context.parameters.online_likelihood_power,
+                minimum_effective_sample_size=(
+                    context.parameters.online_minimum_effective_sample_size
+                ),
+            )
 
         posterior_available = time_s > 0.0
         posterior_hazard: HazardResult | None = None
@@ -1189,6 +1199,12 @@ def attach_online_sequential_evaluation(
             "posterior_effective_sample_size": None
             if not posterior_available
             else float(1.0 / np.sum(weights**2)),
+            "likelihood_power": context.parameters.online_likelihood_power
+            if applied
+            else None,
+            "posterior_regularization_fraction": regularization_fraction
+            if applied
+            else None,
             "prior_reference_exposure_mae": float(
                 np.mean(np.abs(prior_hazard.field - reference_hazard.field))
             ),
@@ -1221,6 +1237,10 @@ def attach_online_sequential_evaluation(
         reference_levels_all.append(np.asarray(reference_levels))
         availability.append(posterior_available)
         update_applied.append(applied)
+        regularization_fractions.append(regularization_fraction)
+        effective_sample_sizes.append(
+            math.nan if not posterior_available else float(1.0 / np.sum(weights**2))
+        )
         if posterior_hazard is None or posterior_levels is None:
             posterior_fields.append(np.full(shape, np.nan, dtype=np.float64))
             posterior_uncertainties.append(np.full(shape, np.nan, dtype=np.float64))
@@ -1238,6 +1258,11 @@ def attach_online_sequential_evaluation(
         "last_pre_entry_update_s": context.parameters.handoff_time_s,
         "posterior_availability_rule": "unavailable only at t=0; first observation and posterior update occur at t=5 s",
         "post_handoff_semantics": "hold the t=300 s posterior weights fixed for no-intervention forecasting",
+        "likelihood_power": context.parameters.online_likelihood_power,
+        "minimum_effective_sample_size": (
+            context.parameters.online_minimum_effective_sample_size
+        ),
+        "regularization": context.parameters.online_regularization,
         "observation_point_id": point_id,
         "observation_point_provenance": "registered_geometry_only",
         "visualization_keyframes_s": list(
@@ -1253,6 +1278,12 @@ def attach_online_sequential_evaluation(
     )
     primary.arrays["online_update_applied"] = np.asarray(
         update_applied, dtype=np.bool_
+    )
+    primary.arrays["online_posterior_regularization_fraction"] = np.asarray(
+        regularization_fractions, dtype=np.float64
+    )
+    primary.arrays["online_posterior_effective_sample_size"] = np.asarray(
+        effective_sample_sizes, dtype=np.float64
     )
     primary.arrays["online_prior_exposure"] = np.stack(prior_fields)
     primary.arrays["online_synthetic_reference_exposure"] = np.stack(
