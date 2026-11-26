@@ -9,6 +9,15 @@
   "post_action_observation_time_s": 420.0,
   "intervention_staging_node": "center_lower_left",
   "staging_semantics": "configured green-corridor standoff; not the burning microwave cell",
+  "safe_staging_candidate_nodes": [
+    "center_lower_left",
+    "geometry_route_low_control",
+    "geometry_route_near",
+    "geometry_route_mid",
+    "geometry_route_high"
+  ],
+  "safe_staging_selection": "safety_first_among_configured_source_near_green_corridor_nodes",
+  "firefighter_travel_speed_m_s": 1.0,
   "actions": [
     {
       "id": "no_intervention",

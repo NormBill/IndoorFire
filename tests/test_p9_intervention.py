@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import tempfile
 import unittest
 
 import numpy as np
@@ -16,6 +17,9 @@ from indoor_fire_world.simulation.p9_intervention import (
     build_p9_context,
     run_p9_case,
 )
+from indoor_fire_world.visualization.p9_dynamic import (
+    render_p9_dynamic_risk_comparison_html,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,7 +32,10 @@ class P9InterventionTests(unittest.TestCase):
         cls.parameters = load_p9_parameters(CONFIG)
         cls.context = build_p9_context(CONFIG)
         cls.case = run_p9_case(
-            cls.context, "enclosure_breakout", "geometry_route_high"
+            cls.context,
+            "enclosure_breakout",
+            "geometry_route_high",
+            include_dynamic=True,
         )
 
     def test_phase_contract_forbids_pre_handoff_intervention(self) -> None:
@@ -94,18 +101,53 @@ class P9InterventionTests(unittest.TestCase):
 
     def test_intervention_access_is_separate_from_counterfactual_effect(self) -> None:
         access = self.case.summary["intervention_access"]
-        self.assertEqual(access["staging_node"], "center_lower_left")
+        self.assertIn(access["staging_node"], self.parameters.safe_staging_candidate_nodes)
         self.assertIn("not the burning microwave cell", access["staging_semantics"].lower())
         self.assertTrue(access["diagnostic_geometry_only"]["feasible"])
+        self.assertEqual(
+            set(access["strict"]["entrances"]),
+            set(self.context.p8.parameters.entrances),
+        )
+        for entrance in access["diagnostic_geometry_only"]["entrances"].values():
+            self.assertIn(
+                entrance["selected_target_node"],
+                self.parameters.safe_staging_candidate_nodes,
+            )
+            self.assertIsNotNone(entrance["estimated_travel_time_s"])
         if not access["strict"]["feasible"]:
             self.assertEqual(
                 self.case.summary["executed_action_under_strict_access"],
                 "no_intervention",
             )
 
+    def test_dynamic_comparison_is_dense_and_identical_through_handoff(self) -> None:
+        times = self.case.arrays["dynamic_evaluation_times_s"]
+        np.testing.assert_array_equal(times, np.arange(0.0, 485.0, 5.0))
+        no_action = self.case.arrays["dynamic_no_intervention_exposure"]
+        intervention = self.case.arrays["dynamic_intervention_exposure"]
+        np.testing.assert_array_equal(no_action[:61], intervention[:61])
+        self.assertGreater(
+            np.max(np.abs(no_action[61:] - intervention[61:])), 0.0
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            output = render_p9_dynamic_risk_comparison_html(
+                CONFIG,
+                self.case.summary,
+                self.case.arrays,
+                Path(directory) / "p9_dynamic.html",
+            )
+            html = output.read_text(encoding="utf-8")
+            self.assertIn('data-comparison="no-intervention-vs-intervention"', html)
+            self.assertIn('data-frame-count="97"', html)
+            self.assertIn("Compare side by side", html)
+            self.assertIn("300 s handoff", html)
+
     def test_repeated_case_is_deterministic(self) -> None:
         repeated = run_p9_case(
-            self.context, "enclosure_breakout", "geometry_route_high"
+            self.context,
+            "enclosure_breakout",
+            "geometry_route_high",
+            include_dynamic=True,
         )
         self.assertEqual(self.case.summary, repeated.summary)
         for key in self.case.arrays:

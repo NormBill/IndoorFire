@@ -17,6 +17,10 @@ from indoor_fire_world.simulation.p9_intervention import (
     run_p9_case,
 )
 from indoor_fire_world.visualization.p9_svg import render_p9_action_comparison_svg
+from indoor_fire_world.visualization.p9_dynamic import (
+    render_p9_dynamic_risk_comparison_html,
+)
+from indoor_fire_world.visualization.p9_svg import render_p9_safe_staging_routes_svg
 
 
 @dataclass(frozen=True)
@@ -33,10 +37,16 @@ def run_p9_suite(config_path: str | Path) -> P9SuiteOutput:
     ).hexdigest()
     cases: dict[str, P9CaseOutput] = {}
     rows: list[dict[str, Any]] = []
+    primary_id = "enclosure_breakout-geometry_route_high"
     for scenario in context.p8.parameters.scenarios:
         for point in context.p8.parameters.observation_points:
             case_id = f"{scenario.id}-{point.id}"
-            output = run_p9_case(context, scenario.id, point.id)
+            output = run_p9_case(
+                context,
+                scenario.id,
+                point.id,
+                include_dynamic=case_id == primary_id,
+            )
             cases[case_id] = output
             for action in context.parameters.actions:
                 result = output.summary["action_results"][action.id]
@@ -66,7 +76,6 @@ def run_p9_suite(config_path: str | Path) -> P9SuiteOutput:
                         ]["strict"]["feasible"],
                     }
                 )
-    primary_id = "enclosure_breakout-geometry_route_high"
     primary = cases[primary_id]
     summary = {
         "schema_version": 1,
@@ -125,10 +134,24 @@ def write_p9_artifacts(
         output.primary.arrays,
         target / "action_conditioned_risk_comparison.svg",
     )
+    dynamic_path = render_p9_dynamic_risk_comparison_html(
+        config_path,
+        output.primary.summary,
+        output.primary.arrays,
+        target / "intervention_risk_0_480_dynamic.html",
+    )
+    safe_staging_path = render_p9_safe_staging_routes_svg(
+        config_path,
+        output.primary.summary,
+        output.primary.arrays,
+        target / "t300_three_entrance_safe_staging.svg",
+    )
     return {
         "summary": summary_path.resolve(),
         "matrix": matrix_path.resolve(),
         "arrays": arrays_path.resolve(),
         "visualization": figure_path,
+        "dynamic_risk_comparison": dynamic_path,
+        "safe_staging_routes": safe_staging_path,
     }
 

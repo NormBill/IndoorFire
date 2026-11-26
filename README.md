@@ -470,3 +470,9 @@ bash scripts/hpc_validate_p9.sh
 The P9 artifacts are written separately under
 `artifacts/p9_postarrival_intervention/` and include `summary.json`,
 `action_matrix.csv`, `arrays.npz`, and a registered-map action comparison SVG.
+The same run also writes `intervention_risk_0_480_dynamic.html`, whose controls
+switch or compare the no-intervention and selected-intervention risk branches
+after the 300 s handoff, and `t300_three_entrance_safe_staging.svg`. The access
+comparison never routes to the burning microwave cell: each entrance selects
+among configured source-near green-corridor staging nodes using a safety-first
+objective, then reports route length and a simulation-assumed travel time.

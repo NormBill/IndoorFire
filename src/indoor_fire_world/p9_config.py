@@ -22,6 +22,9 @@ class P9Parameters:
     post_action_observation_time_s: float
     intervention_staging_node: str
     staging_semantics: str
+    safe_staging_candidate_nodes: tuple[str, ...]
+    safe_staging_selection: str
+    firefighter_travel_speed_m_s: float
     actions: tuple[InterventionAction, ...]
     assumption_status: str
     scope_exclusions: tuple[str, ...]
@@ -39,6 +42,18 @@ class P9Parameters:
             raise ValueError("P9 v1 post-action observation time must be 420 s")
         if not self.intervention_staging_node or not self.staging_semantics:
             raise ValueError("P9 requires an explicit intervention staging node")
+        if (
+            not self.safe_staging_candidate_nodes
+            or len(set(self.safe_staging_candidate_nodes))
+            != len(self.safe_staging_candidate_nodes)
+        ):
+            raise ValueError("P9 requires unique source-near safe-staging candidates")
+        if not self.safe_staging_selection:
+            raise ValueError("P9 requires explicit safe-staging selection semantics")
+        if not math.isfinite(self.firefighter_travel_speed_m_s) or (
+            self.firefighter_travel_speed_m_s <= 0.0
+        ):
+            raise ValueError("P9 firefighter travel speed must be positive and finite")
         if len(self.actions) != 4 or len({item.id for item in self.actions}) != 4:
             raise ValueError("P9 v1 requires four unique action branches")
         if sum(item.action_type == "no_intervention" for item in self.actions) != 1:
@@ -85,6 +100,11 @@ def load_p9_parameters(config_path: str | Path) -> P9Parameters:
         post_action_observation_time_s=float(data["post_action_observation_time_s"]),
         intervention_staging_node=str(data["intervention_staging_node"]),
         staging_semantics=str(data["staging_semantics"]),
+        safe_staging_candidate_nodes=tuple(
+            str(value) for value in data["safe_staging_candidate_nodes"]
+        ),
+        safe_staging_selection=str(data["safe_staging_selection"]),
+        firefighter_travel_speed_m_s=float(data["firefighter_travel_speed_m_s"]),
         actions=actions,
         assumption_status=str(data["assumption_status"]),
         scope_exclusions=tuple(str(value) for value in data["scope_exclusions"]),

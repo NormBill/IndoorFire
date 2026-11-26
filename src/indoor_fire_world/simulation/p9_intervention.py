@@ -30,7 +30,6 @@ from indoor_fire_world.planning import (
 from indoor_fire_world.sensing import UGVSensor
 from indoor_fire_world.simulation.p8_v2 import (
     P8V2Context,
-    _plan_ingress,
     _route_dict,
     build_p8_v2_context,
 )
@@ -137,7 +136,9 @@ def _pre_entry_weights(
     context: P9Context,
     scenario_id: str,
     observation_id: str,
-) -> tuple[NDArray[np.float64], dict[str, Any]]:
+    *,
+    include_dynamic: bool = False,
+) -> tuple[NDArray[np.float64], dict[str, Any], dict[str, NDArray[Any]]]:
     p8 = context.p8
     point = next(item for item in p8.points if item.id == observation_id)
     reference = p8.reference_banks[scenario_id]
@@ -146,6 +147,19 @@ def _pre_entry_weights(
     seed = int(hashlib.sha256(seed_payload.encode()).hexdigest()[:8], 16)
     sensor = UGVSensor(p8.scene, p8.parameters.sensor, seed)
     max_regularization = 0.0
+    dynamic_times: list[float] = []
+    dynamic_exposure: list[NDArray[np.float64]] = []
+    hazard_model = (
+        PhysicalHazardModel(load_hazard_parameters(p8.parameters.hazard_config))
+        if include_dynamic
+        else None
+    )
+    if hazard_model is not None:
+        initial = weighted_forecast(
+            p8.candidates, p8.candidate_bank, 0.0, weights
+        )
+        dynamic_times.append(0.0)
+        dynamic_exposure.append(hazard_model.compute(initial.mean).field)
     for time_s in p8.parameters.online_update_times_s:
         observation = replace(sensor.observe(reference[time_s], point.pose), timestamp=time_s)
         likelihood = posterior_weights(
@@ -162,11 +176,23 @@ def _pre_entry_weights(
             minimum_effective_sample_size=p8.parameters.online_minimum_effective_sample_size,
         )
         max_regularization = max(max_regularization, fraction)
+        if hazard_model is not None:
+            posterior = weighted_forecast(
+                p8.candidates, p8.candidate_bank, time_s, weights
+            )
+            dynamic_times.append(time_s)
+            dynamic_exposure.append(hazard_model.compute(posterior.mean).field)
+    dynamic: dict[str, NDArray[Any]] = {}
+    if include_dynamic:
+        dynamic = {
+            "times": np.asarray(dynamic_times, dtype=np.float64),
+            "exposure": np.stack(dynamic_exposure),
+        }
     return weights, {
         "effective_sample_size": float(1.0 / np.sum(weights**2)),
         "maximum_regularization_fraction": max_regularization,
         "observation_count": len(p8.parameters.online_update_times_s),
-    }
+    }, dynamic
 
 
 def _risk_counts(context: P9Context, field: NDArray[np.floating]) -> dict[str, int]:
@@ -219,10 +245,202 @@ def _post_action_weights(
     }
 
 
+def _safe_staging_comparison(
+    context: P9Context,
+    exposure: NDArray[np.floating],
+    uncertainty: NDArray[np.floating],
+    *,
+    disable_exposure_gate: bool = False,
+) -> dict[str, Any]:
+    """Choose a safe source-near staging node independently for each entrance."""
+    p8 = context.p8
+    threshold = 1.0 if disable_exposure_gate else p8.parameters.ingress_exposure_threshold
+    parameters = PlanningCostParameters(
+        p8.parameters.base_cost,
+        p8.parameters.exposure_weight,
+        p8.parameters.uncertainty_weight,
+        threshold,
+        notes="P9 safety-first source-near staging comparison",
+    )
+    cost_exposure = (
+        np.minimum(np.asarray(exposure), np.nextafter(1.0, 0.0))
+        if disable_exposure_gate
+        else np.asarray(exposure)
+    )
+    cost = PlanningCostModel(parameters).compute(
+        cost_exposure, uncertainty, p8.scene.navigation
+    )
+    planner = DirectedRoutePlanner(parameters, p8.graph)
+    source = p8.scene.semantic.by_id("microwave")
+    if source.position is None:
+        raise ValueError("Microwave source requires a registered position")
+    for target in context.parameters.safe_staging_candidate_nodes:
+        if target not in p8.graph.nodes:
+            raise ValueError(f"Unknown P9 safe-staging node {target!r}")
+
+    entrances: dict[str, Any] = {}
+    selected_per_entrance: list[tuple[str, str, Any]] = []
+    for entrance_id in sorted(p8.parameters.entrances):
+        target_results: dict[str, Any] = {}
+        feasible: list[tuple[str, Any]] = []
+        for target_id in context.parameters.safe_staging_candidate_nodes:
+            node = p8.graph.nodes[target_id]
+            route = planner.plan(
+                cost.field,
+                cost.forbidden,
+                entrance_id,
+                target_id,
+                p8.scene.navigation,
+                np.asarray(exposure),
+                np.asarray(uncertainty),
+                allow_reverse=True,
+            )
+            source_distance = math.dist(node.position_m, source.position)
+            route_data = _route_dict(route)
+            # Candidate audit records retain reproducible metrics and path hashes;
+            # only the selected route needs the full cell-by-cell path in JSON.
+            route_data.pop("path", None)
+            route_data.update(
+                {
+                    "target_node": target_id,
+                    "target_source_distance_m": source_distance,
+                    "target_exposure": float(np.asarray(exposure)[node.cell]),
+                    "estimated_travel_time_s": (
+                        route.geometric_length_m
+                        / context.parameters.firefighter_travel_speed_m_s
+                        if route.feasible
+                        else None
+                    ),
+                }
+            )
+            target_results[target_id] = route_data
+            if route.feasible:
+                feasible.append((target_id, route))
+        selected = min(
+            feasible,
+            key=lambda item: (
+                item[1].max_hazard,
+                item[1].integrated_hazard,
+                item[1].total_cost,
+                item[1].geometric_length_m,
+                math.dist(p8.graph.nodes[item[0]].position_m, source.position),
+                item[0],
+            ),
+            default=None,
+        )
+        if selected is None:
+            entrances[entrance_id] = {
+                "feasible": False,
+                "selected_target_node": None,
+                "route": _route_dict(
+                    planner.plan(
+                        cost.field,
+                        cost.forbidden,
+                        entrance_id,
+                        context.parameters.safe_staging_candidate_nodes[0],
+                        p8.scene.navigation,
+                        np.asarray(exposure),
+                        np.asarray(uncertainty),
+                        allow_reverse=True,
+                    )
+                ),
+                "estimated_travel_time_s": None,
+                "candidate_targets": target_results,
+            }
+            continue
+        target_id, route = selected
+        selected_per_entrance.append((entrance_id, target_id, route))
+        entrances[entrance_id] = {
+            "feasible": True,
+            "selected_target_node": target_id,
+            "route": _route_dict(route),
+            "estimated_travel_time_s": (
+                route.geometric_length_m
+                / context.parameters.firefighter_travel_speed_m_s
+            ),
+            "candidate_targets": target_results,
+        }
+
+    recommended = min(
+        selected_per_entrance,
+        key=lambda item: (
+            item[2].max_hazard,
+            item[2].integrated_hazard,
+            item[2].total_cost,
+            item[2].geometric_length_m,
+            item[0],
+            item[1],
+        ),
+        default=None,
+    )
+    shortest = min(
+        selected_per_entrance,
+        key=lambda item: (item[2].geometric_length_m, item[0], item[1]),
+        default=None,
+    )
+    lowest_integrated = min(
+        selected_per_entrance,
+        key=lambda item: (
+            item[2].integrated_hazard,
+            item[2].max_hazard,
+            item[0],
+            item[1],
+        ),
+        default=None,
+    )
+    return {
+        "feasible": recommended is not None,
+        "exposure_gate_disabled": disable_exposure_gate,
+        "configured_exposure_threshold": p8.parameters.ingress_exposure_threshold,
+        "candidate_target_nodes": list(context.parameters.safe_staging_candidate_nodes),
+        "target_semantics": (
+            "configured source-near green-corridor staging nodes; the burning "
+            "microwave cell is never a route goal"
+        ),
+        "selection_rule": (
+            "minimum (route max exposure, integrated exposure, planning cost, "
+            "length, source distance, deterministic IDs)"
+        ),
+        "selection_semantics": context.parameters.safe_staging_selection,
+        "travel_speed_m_s": context.parameters.firefighter_travel_speed_m_s,
+        "recommended_entrance": None if recommended is None else recommended[0],
+        "recommended_target_node": None if recommended is None else recommended[1],
+        "recommended_route": (
+            None if recommended is None else _route_dict(recommended[2])
+        ),
+        "shortest_entrance": None if shortest is None else shortest[0],
+        "fastest_entrance": None if shortest is None else shortest[0],
+        "lowest_integrated_exposure_entrance": (
+            None if lowest_integrated is None else lowest_integrated[0]
+        ),
+        "entrances": entrances,
+    }
+
+
+def _dynamic_action_exposure(
+    context: P9Context,
+    action: InterventionAction,
+    weights_300: NDArray[np.floating],
+    weights_420: NDArray[np.floating],
+    hazard_model: PhysicalHazardModel,
+) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
+    """Create a true 5 s action-conditioned posterior sequence after handoff."""
+    p8 = context.p8
+    times = tuple(float(value) for value in np.arange(300.0, 480.0 + 5.0, 5.0))
+    bank = _branch_candidate_bank(p8, action, times)
+    fields: list[NDArray[np.float64]] = []
+    for time_s in times:
+        weights = weights_420 if time_s >= 420.0 else weights_300
+        forecast = weighted_forecast(p8.candidates, bank, time_s, weights)
+        fields.append(hazard_model.compute(forecast.mean).field)
+    return np.asarray(times, dtype=np.float64), np.stack(fields)
+
+
 def _retreat_summary(
     context: P9Context,
     exposure: NDArray[np.floating],
     uncertainty: NDArray[np.floating],
+    start_node: str,
 ) -> dict[str, Any]:
     p8 = context.p8
     parameters = PlanningCostParameters(
@@ -241,7 +459,7 @@ def _retreat_summary(
         exposure,
         uncertainty,
         p8.scene.navigation,
-        context.parameters.intervention_staging_node,
+        start_node,
         p8.parameters.entrances,
     )
     return {
@@ -258,14 +476,19 @@ def run_p9_case(
     context: P9Context,
     scenario_id: str,
     observation_id: str,
+    *,
+    include_dynamic: bool = False,
 ) -> P9CaseOutput:
     p8 = context.p8
     if scenario_id not in {item.id for item in p8.parameters.scenarios}:
         raise ValueError("Unknown P9 synthetic scenario")
     if observation_id not in {item.id for item in p8.points}:
         raise ValueError("Unknown P9 observation point")
-    weights_300, pre_diagnostics = _pre_entry_weights(
-        context, scenario_id, observation_id
+    weights_300, pre_diagnostics, pre_dynamic = _pre_entry_weights(
+        context,
+        scenario_id,
+        observation_id,
+        include_dynamic=include_dynamic,
     )
     hazard_model = PhysicalHazardModel(
         load_hazard_parameters(p8.parameters.hazard_config)
@@ -278,8 +501,35 @@ def run_p9_case(
     arrays: dict[str, NDArray[Any]] = {
         "pre_entry_weights_t300": np.asarray(weights_300),
     }
+    if include_dynamic:
+        arrays["dynamic_pre_entry_times_s"] = pre_dynamic["times"]
+        arrays["dynamic_pre_entry_exposure"] = pre_dynamic["exposure"]
+    no_action = "no_intervention"
+    no_action_forecast = weighted_forecast(
+        p8.candidates,
+        context.candidate_banks[no_action],
+        300.0,
+        weights_300,
+    )
+    exposure_300 = hazard_model.compute(no_action_forecast.mean).field
+    uncertainty_300 = uncertainty_model.compute(no_action_forecast.uncertainty).field
+    strict_access = _safe_staging_comparison(
+        context, exposure_300, uncertainty_300
+    )
+    diagnostic_access = _safe_staging_comparison(
+        context,
+        exposure_300,
+        uncertainty_300,
+        disable_exposure_gate=True,
+    )
+    planning_target = (
+        strict_access["recommended_target_node"]
+        or diagnostic_access["recommended_target_node"]
+        or context.parameters.intervention_staging_node
+    )
     predicted_objectives: dict[str, float] = {}
     oracle_objectives: dict[str, float] = {}
+    post_weights_by_action: dict[str, NDArray[np.float64]] = {}
     for action in context.parameters.actions:
         candidate_bank = context.candidate_banks[action.id]
         reference_bank = context.reference_banks[action.id][scenario_id]
@@ -319,6 +569,7 @@ def run_p9_case(
         post_weights, post_diagnostics = _post_action_weights(
             context, scenario_id, observation_id, action, weights_300
         )
+        post_weights_by_action[action.id] = post_weights
         arrays[f"post_action_weights_{action.id}"] = post_weights
         forecast_480 = weighted_forecast(
             p8.candidates, candidate_bank, 480.0, post_weights
@@ -345,7 +596,7 @@ def run_p9_case(
             "post_action_update": post_diagnostics,
             "risk_counts_t480": _risk_counts(context, post_hazard_480),
             "retreat_t480": _retreat_summary(
-                context, post_hazard_480, post_uncertainty_480
+                context, post_hazard_480, post_uncertainty_480, planning_target
             ),
         }
     predicted_action = min(
@@ -354,29 +605,49 @@ def run_p9_case(
     oracle_action = min(
         oracle_objectives, key=lambda key: (oracle_objectives[key], key)
     )
-    no_action = "no_intervention"
-    no_action_forecast = weighted_forecast(
-        p8.candidates,
-        context.candidate_banks[no_action],
-        300.0,
-        weights_300,
-    )
-    exposure_300 = hazard_model.compute(no_action_forecast.mean).field
-    uncertainty_300 = uncertainty_model.compute(no_action_forecast.uncertainty).field
-    strict_access = _plan_ingress(
-        p8,
-        exposure_300,
-        uncertainty_300,
-        target_node=context.parameters.intervention_staging_node,
-    )
-    diagnostic_access = _plan_ingress(
-        p8,
-        exposure_300,
-        uncertainty_300,
-        target_node=context.parameters.intervention_staging_node,
-        disable_exposure_gate=True,
-    )
-    executed_action = predicted_action if strict_access.feasible else no_action
+    comparison_action = predicted_action
+    if comparison_action == no_action:
+        comparison_action = min(
+            (
+                action.id
+                for action in context.parameters.actions
+                if action.action_type != "no_intervention"
+            ),
+            key=lambda key: (predicted_objectives[key], key),
+        )
+    if include_dynamic:
+        no_times, no_fields = _dynamic_action_exposure(
+            context,
+            next(item for item in context.parameters.actions if item.id == no_action),
+            weights_300,
+            post_weights_by_action[no_action],
+            hazard_model,
+        )
+        intervention_times, intervention_fields = _dynamic_action_exposure(
+            context,
+            next(
+                item
+                for item in context.parameters.actions
+                if item.id == comparison_action
+            ),
+            weights_300,
+            post_weights_by_action[comparison_action],
+            hazard_model,
+        )
+        if not np.array_equal(no_times, intervention_times):
+            raise RuntimeError("P9 comparison timelines must align")
+        pre_times = np.asarray(pre_dynamic["times"])
+        pre_fields = np.asarray(pre_dynamic["exposure"])
+        arrays["dynamic_evaluation_times_s"] = np.concatenate(
+            (pre_times, no_times[1:])
+        )
+        arrays["dynamic_no_intervention_exposure"] = np.concatenate(
+            (pre_fields, no_fields[1:]), axis=0
+        )
+        arrays["dynamic_intervention_exposure"] = np.concatenate(
+            (pre_fields, intervention_fields[1:]), axis=0
+        )
+    executed_action = predicted_action if strict_access["feasible"] else no_action
     summary = {
         "schema_version": 1,
         "scenario_id": scenario_id,
@@ -390,18 +661,19 @@ def run_p9_case(
         },
         "pre_entry_posterior": pre_diagnostics,
         "intervention_access": {
-            "staging_node": context.parameters.intervention_staging_node,
+            "staging_node": strict_access["recommended_target_node"],
             "staging_semantics": context.parameters.staging_semantics,
-            "strict": {
-                "feasible": strict_access.feasible,
-                "selected_entrance": strict_access.selected_entrance,
-                "route": _route_dict(strict_access.route),
-            },
-            "diagnostic_geometry_only": {
-                "feasible": diagnostic_access.feasible,
-                "selected_entrance": diagnostic_access.selected_entrance,
-                "route": _route_dict(diagnostic_access.route),
-            },
+            "strict": strict_access,
+            "diagnostic_geometry_only": diagnostic_access,
+        },
+        "dynamic_risk_comparison": {
+            "available": include_dynamic,
+            "interval_s": 5.0,
+            "comparison_action": comparison_action,
+            "pre_handoff_semantics": "identical sequential posterior through t=300 s",
+            "post_handoff_semantics": (
+                "action-conditioned forecasts with branch-matched t=420 observation updates"
+            ),
         },
         "predicted_selected_action": predicted_action,
         "oracle_selected_action": oracle_action,
