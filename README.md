@@ -439,3 +439,34 @@ Validate Gate 1, Gate 2, and all frozen regressions on HPC with:
 ```bash
 bash scripts/hpc_validate_gate1_gate2.sh
 ```
+
+## P9: post-arrival action-conditioned World Model
+
+P9 is additive and leaves the frozen P8 implementation and artifacts unchanged.
+It enforces a two-phase contract: `0-300 s` is observation-only pre-entry model
+updating, while firefighter intervention is permitted only during `300-480 s`.
+The 300 s boundary is a configurable simulation handoff, not a measured W1
+arrival-time claim.
+
+The first P9 action set contains a no-intervention control and three
+simulation-assumed localized-suppression branches activated at 315, 330, and
+360 s. All branches resume from the exact same t=300 state. Suppression changes
+future microwave-source emissions only; heat, smoke, and CO already in the
+environment continue to transport and decay. Post-action observations are
+evaluated against the matching action-conditioned candidate bank.
+
+Run locally with:
+
+```bash
+python scripts/run_p9_postarrival_intervention.py
+```
+
+HPC validation uses:
+
+```bash
+bash scripts/hpc_validate_p9.sh
+```
+
+The P9 artifacts are written separately under
+`artifacts/p9_postarrival_intervention/` and include `summary.json`,
+`action_matrix.csv`, `arrays.npz`, and a registered-map action comparison SVG.
